@@ -17,6 +17,11 @@ public class DemoGame extends Game {
     int triangleVAO;
     int triangleVBO;
 
+    boolean wasAKeyPressed = false;
+    boolean wasSKeyPressed = false;
+
+    int greenValue = 50;
+
     Shader shader;
 
     float[] triangle = {
@@ -45,9 +50,30 @@ public class DemoGame extends Game {
 
     @Override
     public void update() {
-        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            stop();
-        }
+
+            if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+                stop();
+            }
+
+            if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_A) == GLFW_PRESS && !wasAKeyPressed) {
+                greenValue += 10;
+                wasAKeyPressed = true;
+            } else if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_A) == GLFW_RELEASE) {
+                wasAKeyPressed = false;
+            }
+
+            if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_S) == GLFW_PRESS && !wasSKeyPressed) {
+                greenValue -= 10;
+                wasSKeyPressed = true;
+            } else if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_S) == GLFW_RELEASE) {
+                wasSKeyPressed = false;
+            }
+
+
+
+
+
+        shader.setUniform("greenValue", (float)(greenValue)/100);
     }
 
     @Override
