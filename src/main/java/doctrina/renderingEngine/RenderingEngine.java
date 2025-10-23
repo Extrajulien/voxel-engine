@@ -12,7 +12,7 @@ public class RenderingEngine {
 
     private RenderingEngine() {
         assertGlfwIsInit();
-        window = glfwCreateWindow(800, 600, "LWJGL + Gradle", NULL, NULL);
+        window = glfwCreateWindow(1920,  1080, "LWJGL Window", NULL, NULL);
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
     }
