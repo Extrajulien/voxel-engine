@@ -1,4 +1,4 @@
-package doctrina.renderingEngine;
+package doctrina.rendering;
 
 import org.lwjgl.opengl.GL;
 

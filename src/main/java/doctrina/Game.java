@@ -1,6 +1,6 @@
 package doctrina;
 
-import doctrina.renderingEngine.RenderingEngine;
+import doctrina.rendering.RenderingEngine;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 
@@ -31,6 +31,7 @@ public abstract class Game {
     }
 
     private void run() {
+
         //GameTime time = new GameTime();
         while (renderingEngine.isWindowOpen()) {
             update();
