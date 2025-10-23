@@ -14,9 +14,26 @@ repositories {
 }
 def lwjglVersion = "3.3.4"
 def os = System.getProperty("os.name").toLowerCase()
-def lwjglNatives = os.contains("win") ? "natives-windows" :
-        os.contains("mac") ? "natives-macos" :
-                "natives-linux"
+def arch = System.getProperty("os.arch").toLowerCase()
+def lwjglNatives
+if (os.contains("win")) {
+    lwjglNatives = "natives-windows"
+} else if (os.contains("mac")) {
+    // Distinguish between Intel and Apple Silicon
+    if (arch.contains("aarch64") || arch.contains("arm")) {
+        lwjglNatives = "natives-macos-arm64"
+    } else {
+        lwjglNatives = "natives-macos"
+    }
+} else {
+    lwjglNatives = "natives-linux"
+}
+
+run {
+    if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        jvmArgs "-XstartOnFirstThread"
+    }
+}
 
 dependencies {
 
@@ -25,10 +42,10 @@ dependencies {
     implementation "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
     implementation "org.lwjgl:lwjgl-stb:${lwjglVersion}"
 
-    runtimeOnly "org.lwjgl:lwjgl::${lwjglNatives}"
-    runtimeOnly "org.lwjgl:lwjgl-glfw::${lwjglNatives}"
-    runtimeOnly "org.lwjgl:lwjgl-opengl::${lwjglNatives}"
-    runtimeOnly "org.lwjgl:lwjgl-stb::${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
