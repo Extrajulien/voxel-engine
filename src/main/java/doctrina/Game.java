@@ -34,8 +34,9 @@ public abstract class Game {
         //GameTime time = new GameTime();
         while (renderingEngine.isWindowOpen()) {
             update();
-            draw();
             renderingEngine.clearFrame();
+            draw();
+            renderingEngine.drawOnScreen();
             //time.synchronize();
             glfwPollEvents();
         }
