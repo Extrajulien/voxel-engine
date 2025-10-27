@@ -26,9 +26,10 @@ public class RenderingEngine {
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
         }
 
-        window = glfwCreateWindow(1920,  1080, "LWJGL Window", NULL, NULL);
+        window = glfwCreateWindow(1920,  1080, "Robert", NULL, NULL);
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
+        glEnable(GL_DEPTH_TEST);
     }
 
     public static long getWindow() {
@@ -45,7 +46,7 @@ public class RenderingEngine {
 
 
     public void clearFrame() {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     }
 
