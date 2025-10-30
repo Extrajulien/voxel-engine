@@ -1,10 +1,7 @@
 package demo_game;
 
 import doctrina.Game;
-import doctrina.rendering.Material;
-import doctrina.rendering.RenderingEngine;
-import doctrina.rendering.Shader;
-import doctrina.rendering.Texture;
+import doctrina.rendering.*;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -59,18 +56,15 @@ public class DemoGame extends Game {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer, GL_STATIC_DRAW);
 
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * (Float.BYTES), 0L);
-        glEnableVertexAttribArray(0);
+        VertexAttribute.POSITION.enable();
 
-        glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * (Float.BYTES), 3 * Float.BYTES);
-        glEnableVertexAttribArray(1);
+        VertexAttribute.TEXCOORD.enable();
         glBindVertexArray(0);
 
     }
 
     @Override
     public void update() {
-
     }
 
     @Override
