@@ -26,7 +26,7 @@ public class RenderingEngine {
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
         }
 
-        window = glfwCreateWindow(1920,  1080, "Robert", NULL, NULL);
+        window = glfwCreateWindow(1920,  1080, "Robert Cantaloupe", NULL, NULL);
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
