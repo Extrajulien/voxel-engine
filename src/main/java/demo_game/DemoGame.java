@@ -1,6 +1,7 @@
 package demo_game;
 
 import doctrina.Game;
+import doctrina.rendering.Material;
 import doctrina.rendering.RenderingEngine;
 import doctrina.rendering.Shader;
 import doctrina.rendering.Texture;
@@ -20,12 +21,7 @@ public class DemoGame extends Game {
     int squareVBO;
     int squareEBO;
 
-    boolean wasAKeyPressed = false;
-    boolean wasSKeyPressed = false;
-
-    int greenValue = 50;
-
-    Shader shader;
+    Material dirt;
 
     float[] square = {
             // positions        // texture coords
@@ -39,13 +35,14 @@ public class DemoGame extends Game {
             3,2,1
     };
 
-    Texture texture;
     @Override
     public void initialize() {
 
-        shader = new Shader("src/main/java/demo_game/vertex.glsl", "src/main/java/demo_game/fragment.glsl");
+        Shader shader = new Shader("src/main/java/demo_game/vertex.glsl", "src/main/java/demo_game/fragment.glsl");
         shader.use();
-        texture = new Texture("resources/dirt.jpg");
+        Texture texture = new Texture("game_resources/dirt.jpg");
+
+        dirt = new Material(shader, texture);
 
         squareVAO = glGenVertexArrays();
         glBindVertexArray(squareVAO);
@@ -67,41 +64,19 @@ public class DemoGame extends Game {
 
         glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * (Float.BYTES), 3 * Float.BYTES);
         glEnableVertexAttribArray(1);
+        glBindVertexArray(0);
 
     }
 
     @Override
     public void update() {
 
-            if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-                stop();
-            }
-
-            if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_A) == GLFW_PRESS && !wasAKeyPressed) {
-                greenValue += 10;
-                wasAKeyPressed = true;
-            } else if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_A) == GLFW_RELEASE) {
-                wasAKeyPressed = false;
-            }
-
-            if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_S) == GLFW_PRESS && !wasSKeyPressed) {
-                greenValue -= 10;
-                wasSKeyPressed = true;
-            } else if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_S) == GLFW_RELEASE) {
-                wasSKeyPressed = false;
-            }
-
-
-
-
-
-        shader.setUniform("greenValue", (float)(greenValue)/100);
     }
 
     @Override
     public void draw() {
-        glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
         glBindVertexArray(squareVAO);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        dirt.use();
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
 }
