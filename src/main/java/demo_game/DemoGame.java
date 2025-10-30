@@ -2,35 +2,20 @@ package demo_game;
 
 import doctrina.Game;
 import doctrina.rendering.*;
-import org.lwjgl.BufferUtils;
-
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL15C.*;
-import static org.lwjgl.opengl.GL20C.*;
 import static org.lwjgl.opengl.GL30C.glBindVertexArray;
 import static org.lwjgl.opengl.GL30C.glGenVertexArrays;
 
 public class DemoGame extends Game {
-    int squareVAO;
-    int squareVBO;
-    int squareEBO;
+    int cubeVAO;
 
     Material dirt;
 
-    float[] square = {
-            // positions        // texture coords
-             0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   // top right
-             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,   // bottom right
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,   // bottom left
-            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f    // top left
-    };
-    int[] indices = {
-            0,3,1,
-            3,2,1
-    };
+    Mesh cube;
+
+
 
     @Override
     public void initialize() {
@@ -41,20 +26,10 @@ public class DemoGame extends Game {
 
         dirt = new Material(shader, texture);
 
-        squareVAO = glGenVertexArrays();
-        glBindVertexArray(squareVAO);
-        squareVBO = glGenBuffers();
-        FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(square.length);
-        vertexBuffer.put(square).flip();
-        glBindBuffer(GL_ARRAY_BUFFER, squareVBO);
-        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
-
-        squareEBO = glGenBuffers();
-        IntBuffer elementBuffer = BufferUtils.createIntBuffer(indices.length);
-        elementBuffer.put(indices).flip();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, squareEBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer, GL_STATIC_DRAW);
-
+        cubeVAO = glGenVertexArrays();
+        glBindVertexArray(cubeVAO);
+        cube = new Mesh.Builder().cube().build();
+        cube.bind();
 
         VertexAttribute.POSITION.enable();
 
@@ -65,11 +40,14 @@ public class DemoGame extends Game {
 
     @Override
     public void update() {
+        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            stop();
+        }
     }
 
     @Override
     public void draw() {
-        glBindVertexArray(squareVAO);
+        glBindVertexArray(cubeVAO);
         dirt.use();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
