@@ -2,16 +2,15 @@ package demo_game;
 
 import doctrina.Game;
 import doctrina.rendering.*;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
+import static java.lang.Math.sin;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class DemoGame extends Game {
-
-
-
     private Model cubeModel;
-
-
+    private final Matrix4f projectionMatrix = new Matrix4f().perspective(1, (float)16/9, 0.1f, 1000);
 
     @Override
     public void initialize() {
@@ -34,6 +33,7 @@ public class DemoGame extends Game {
 
     @Override
     public void draw() {
-        cubeModel.draw();
+        float angle = (float)sin (glfwGetTime());
+        cubeModel.draw(new Matrix4f().rotateX(angle).rotateY(angle).rotateZ(angle), new Matrix4f().translate(new Vector3f(0,0,-2f)), projectionMatrix);
     }
 }

@@ -10,7 +10,6 @@ public class Model {
     private final Mesh mesh;
     private final Material material;
     private final int VAO;
-    private Matrix4f modelMatrix = new Matrix4f();
 
     public Model(Mesh mesh, Material material) {
         this.mesh = mesh;
@@ -21,8 +20,12 @@ public class Model {
         unBindVAO();
     }
 
-    public void draw() {
+    public void draw(Matrix4f modelMatrix, Matrix4f viewMatrix,Matrix4f projectionMatrix) {
+        material.setModelMatrix(modelMatrix);
+        material.setViewMatrix(viewMatrix);
+        material.setProjectionMatrix(projectionMatrix);
         bindVAO();
+
         glDrawElements(GL_TRIANGLES, mesh.getIndicesSize(), GL_UNSIGNED_INT, 0);
         unBindVAO();
     }
