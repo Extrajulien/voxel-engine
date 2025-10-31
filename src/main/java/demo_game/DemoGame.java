@@ -4,16 +4,12 @@ import doctrina.Game;
 import doctrina.rendering.*;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL15C.*;
-import static org.lwjgl.opengl.GL30C.glBindVertexArray;
-import static org.lwjgl.opengl.GL30C.glGenVertexArrays;
 
 public class DemoGame extends Game {
-    int cubeVAO;
 
-    Material dirt;
 
-    Mesh cube;
+
+    private Model cubeModel;
 
 
 
@@ -23,19 +19,10 @@ public class DemoGame extends Game {
         Shader shader = new Shader("src/main/java/demo_game/vertex.glsl", "src/main/java/demo_game/fragment.glsl");
         shader.use();
         Texture texture = new Texture("game_resources/dirt.jpg");
+        Material dirt = new Material(shader, texture);
+        Mesh cube = new Mesh.Builder().cube().build();
 
-        dirt = new Material(shader, texture);
-
-        cubeVAO = glGenVertexArrays();
-        glBindVertexArray(cubeVAO);
-        cube = new Mesh.Builder().cube().build();
-        cube.bind();
-
-        VertexAttribute.POSITION.enable();
-
-        VertexAttribute.TEXCOORD.enable();
-        glBindVertexArray(0);
-
+        cubeModel = new Model(cube, dirt);
     }
 
     @Override
@@ -47,8 +34,6 @@ public class DemoGame extends Game {
 
     @Override
     public void draw() {
-        glBindVertexArray(cubeVAO);
-        dirt.use();
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        cubeModel.draw();
     }
 }

@@ -38,6 +38,10 @@ public class Mesh {
         bindEBO();
     }
 
+    public int getIndicesSize() {
+        return indices.length;
+    }
+
     private void bindEBO() {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     }
