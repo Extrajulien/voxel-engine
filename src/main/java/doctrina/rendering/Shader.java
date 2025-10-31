@@ -1,5 +1,7 @@
 package doctrina.rendering;
 
+import org.joml.Matrix4f;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,9 +29,12 @@ public class Shader {
         glUseProgram(shaderProgramId);
     }
 
-    public void setUniform(String uniform, float value) {
-        glUniform1f(glGetUniformLocation(shaderProgramId, uniform), value);
+    public void setUniform(String uniform, Matrix4f matrix) {
+        float[] matrixData = new float[16];
+        matrix.get(matrixData);
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramId, uniform),false,  matrixData);
     }
+
 
     private int compileShader(String shaderFile, int shaderType) throws IOException {
         String fragmentCode = Files.readString(Paths.get(shaderFile));
