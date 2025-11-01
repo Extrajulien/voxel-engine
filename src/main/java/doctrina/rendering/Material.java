@@ -3,8 +3,8 @@ package doctrina.rendering;
 import org.joml.Matrix4f;
 
 public class Material {
-    private Shader shader;
-    private Texture[] textures;
+    private final Shader shader;
+    private final Texture[] textures;
 
     public Material(Shader shader, Texture... textures) {
         this.shader = shader;
