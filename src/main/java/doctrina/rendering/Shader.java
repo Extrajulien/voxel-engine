@@ -35,7 +35,7 @@ public class Shader {
     }
 
 
-    private int compileShader(String shaderFile, int shaderType) throws IOException {
+    private int compileShader(String shaderFile, int shaderType) {
         String fragmentCode = getResourcesShaderCode(shaderFile);
         int shader = glCreateShader(shaderType);
         glShaderSource(shader, fragmentCode);
