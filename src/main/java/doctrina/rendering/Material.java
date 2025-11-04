@@ -12,10 +12,13 @@ public class Material {
     }
 
     public void use() {
+        shader.use();
+    }
+
+    public void bindTextures() {
         for (Texture texture : textures) {
             texture.bind();
         }
-        shader.use();
     }
 
     public void setModelMatrix(Matrix4f matrix) {

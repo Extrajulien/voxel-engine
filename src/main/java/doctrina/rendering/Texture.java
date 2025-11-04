@@ -13,6 +13,7 @@ public class Texture {
             assignImageToTexture(image);
             setTextureWrap();
             setScalingFilters();
+            unBind();
         }
     }
 
@@ -22,6 +23,10 @@ public class Texture {
 
     public void bind() {
         glBindTexture(GL_TEXTURE_2D, textureID);
+    }
+
+    public void unBind() {
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     private void setScalingFilters() {

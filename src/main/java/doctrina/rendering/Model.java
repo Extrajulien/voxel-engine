@@ -24,6 +24,7 @@ public class Model {
         material.setModelMatrix(modelMatrix);
         material.setViewMatrix(viewMatrix);
         material.setProjectionMatrix(projectionMatrix);
+        material.bindTextures();
         bindVAO();
 
         glDrawElements(GL_TRIANGLES, mesh.getIndicesSize(), GL_UNSIGNED_INT, 0);
