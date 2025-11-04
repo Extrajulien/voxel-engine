@@ -47,9 +47,9 @@ public class Image implements AutoCloseable {
         IntBuffer width = BufferUtils.createIntBuffer(1);
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer nbChannels = BufferUtils.createIntBuffer(1);
-        String tempTexturePath = generateTempFile(fileName);
-        this.data = stbi_load(tempTexturePath, width, height, nbChannels, 0);
-        deleteTempFile(tempTexturePath);
+        try (TempImage tempImage = new TempImage(fileName)) {
+            this.data = stbi_load(tempImage.getPath(), width, height, nbChannels, 0);
+        }
         this.width = width.get(0);
         this.height = height.get(0);
         this.format = getImageFormat(nbChannels.get(0));
@@ -65,26 +65,41 @@ public class Image implements AutoCloseable {
         return GL_RED;
     }
 
-    private String generateTempFile(String file) throws RuntimeException {
-        Path temp;
-        InputStream iStream = Objects.requireNonNull(
-                getClass().getResourceAsStream("/textures/" + file)
-        );
-        try {
-            temp = Files.createTempFile(file, null);
-            Files.copy(iStream, temp, StandardCopyOption.REPLACE_EXISTING);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to make Temporary image");
+    private static class TempImage implements AutoCloseable {
+
+        private final String path;
+        @Override
+        public void close() {
+            deleteTempFile(path);
         }
 
-        return temp.toString();
-    }
+        public TempImage(String resourceFile) {
+            this.path = generateTempFile(resourceFile);
+        }
 
-    private void deleteTempFile(String filePath) {
-        try {
-            Files.delete(Path.of(filePath));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to delete Temporary image");
+        public String getPath() {
+            return path;
+        }
+
+        private String generateTempFile(String file) throws RuntimeException {
+            Path temp;
+            InputStream iStream = Objects.requireNonNull(getClass().getResourceAsStream("/textures/" + file));
+            try {
+                temp = Files.createTempFile(file, null);
+                Files.copy(iStream, temp, StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to make Temporary image");
+            }
+
+            return temp.toString();
+        }
+
+        private void deleteTempFile(String filePath) {
+            try {
+                Files.delete(Path.of(filePath));
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to delete Temporary image");
+            }
         }
     }
 }
