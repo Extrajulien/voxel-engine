@@ -15,7 +15,7 @@ public class DemoGame extends Game {
     @Override
     public void initialize() {
 
-        Shader shader = new Shader("src/main/java/demo_game/vertex.glsl", "src/main/java/demo_game/fragment.glsl");
+        Shader shader = new Shader("vertex.glsl", "fragment.glsl");
         shader.use();
         Texture texture = new Texture("game_resources/dirt.jpg");
         Material dirt = new Material(shader, texture);

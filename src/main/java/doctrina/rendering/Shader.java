@@ -3,8 +3,8 @@ package doctrina.rendering;
 import org.joml.Matrix4f;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.lwjgl.opengl.GL20C.*;
 
@@ -17,7 +17,6 @@ public class Shader {
             int vertexShader =  compileShader(vertexShaderFile, GL_VERTEX_SHADER);
             int fragmentShader = compileShader(fragmentShaderFile, GL_FRAGMENT_SHADER);
             linkShadersToProgram();
-
             glDeleteShader(vertexShader);
             glDeleteShader(fragmentShader);
         } catch (Exception e) {
@@ -37,7 +36,7 @@ public class Shader {
 
 
     private int compileShader(String shaderFile, int shaderType) throws IOException {
-        String fragmentCode = Files.readString(Paths.get(shaderFile));
+        String fragmentCode = getResourcesShaderCode(shaderFile);
         int shader = glCreateShader(shaderType);
         glShaderSource(shader, fragmentCode);
         glCompileShader(shader);
@@ -69,6 +68,20 @@ public class Shader {
                 return "Unknown";
             }
         }
+    }
+
+    private String getResourcesShaderCode(String shaderFile) {
+        String fragmentCode = "";
+        try (InputStream in = getClass().getResourceAsStream("/shaders/" + shaderFile)) {
+            if (in == null) {
+                throw new IOException("Shader resource not found: " + shaderFile);
+            }
+            fragmentCode = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        }
+        catch (Exception e) {
+            System.err.println("Wrong Shader File");
+        }
+        return fragmentCode;
     }
 
     private void linkShadersToProgram() {
