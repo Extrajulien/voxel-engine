@@ -46,8 +46,8 @@ public class Texture {
             System.err.println("ERROR Failed to load image: " + STBImage.stbi_failure_reason());
             System.exit(1);
         }
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0),
-                0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0),
+                0, getImageFormat(nbChannels.get(0)), GL_UNSIGNED_BYTE, imageData);
         glGenerateMipmap(GL_TEXTURE_2D);
 
         stbi_image_free(imageData);
@@ -85,4 +85,16 @@ public class Texture {
             System.exit(1);
         }
     }
+
+    private int getImageFormat(int nbChannels) {
+        if (nbChannels == 3) {
+            return GL_RGB;
+        }
+        if (nbChannels == 4) {
+            return GL_RGBA;
+        }
+        return GL_RED;
+    }
+
+
 }
