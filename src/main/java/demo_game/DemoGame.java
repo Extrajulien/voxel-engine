@@ -17,7 +17,7 @@ public class DemoGame extends Game {
 
         Shader shader = new Shader("vertex.glsl", "fragment.glsl");
         shader.use();
-        Texture texture = new Texture("game_resources/dirt.jpg");
+        Texture texture = new Texture("dirt.jpg");
         Material dirt = new Material(shader, texture);
         Mesh cube = new Mesh.Builder().cube().build();
 
