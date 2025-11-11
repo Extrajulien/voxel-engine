@@ -1,13 +1,10 @@
 package demo_game;
 
 import doctrina.Game;
+import doctrina.Input.Key;
 import doctrina.rendering.*;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static org.lwjgl.glfw.GLFW.*;
 
 public class DemoGame extends Game {
     private Model cubeModel;
@@ -32,21 +29,21 @@ public class DemoGame extends Game {
 
     @Override
     public void update() {
-        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        if (Key.ESCAPE.isPressed(RenderingEngine.getWindow())) {
             stop();
         }
 
-        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_W) == GLFW_PRESS) {
+        if (Key.W.isPressed(RenderingEngine.getWindow())) {
             camZ -= (1 * deltaTime());
         }
-        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_S) == GLFW_PRESS) {
+        if (Key.S.isPressed(RenderingEngine.getWindow())) {
             camZ += (1 * deltaTime());
         }
 
-        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
+        if (Key.A.isPressed(RenderingEngine.getWindow())) {
             camX -= (1 * deltaTime());
         }
-        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_D) == GLFW_PRESS) {
+        if (Key.D.isPressed(RenderingEngine.getWindow())) {
             camX += (1 * deltaTime());
         }
 
