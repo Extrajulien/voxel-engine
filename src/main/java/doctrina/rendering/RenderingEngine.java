@@ -65,9 +65,6 @@ public class RenderingEngine {
         return renderingEngine;
     }
 
-
-
-
     private void initializeGLFW() throws IllegalStateException {
         if (!glfwInit()) throw new IllegalStateException("Failed to init GLFW");
     }
