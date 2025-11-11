@@ -5,13 +5,16 @@ import doctrina.rendering.*;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class DemoGame extends Game {
     private Model cubeModel;
-    private Model toasterCube;
+    private float camX = 0;
+    private float camZ = 0;
     private final Matrix4f projectionMatrix = new Matrix4f().perspective(1, (float)16/9, 0.1f, 1000);
+    private Matrix4f viewMatrix;
 
     @Override
     public void initialize() {
@@ -20,12 +23,11 @@ public class DemoGame extends Game {
         shader.use();
         Texture dirtTex = new Texture("dirt.jpg");
         Texture toasterTex = new Texture("toaster.png");
-        Material dirt = new Material(shader, toasterTex);
-        Material toaster = new Material(shader, dirtTex);
+        Material dirt = new Material(shader, dirtTex);
+        Material toaster = new Material(shader, toasterTex);
         Mesh cube = new Mesh.Builder().cube().build();
 
         cubeModel = new Model(cube, dirt);
-        toasterCube = new Model(cube, toaster);
     }
 
     @Override
@@ -33,12 +35,30 @@ public class DemoGame extends Game {
         if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
             stop();
         }
+
+        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_W) == GLFW_PRESS) {
+            camZ -= (1 * deltaTime());
+        }
+        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_S) == GLFW_PRESS) {
+            camZ += (1 * deltaTime());
+        }
+
+        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
+            camX -= (1 * deltaTime());
+        }
+        if (glfwGetKey(RenderingEngine.getWindow(), GLFW_KEY_D) == GLFW_PRESS) {
+            camX += (1 * deltaTime());
+        }
+
+        viewMatrix = new Matrix4f().lookAt(
+                new Vector3f(camX, 0.0f, camZ),
+                new Vector3f(0.0f, 0.0f, 0.0f),
+                new Vector3f(0.0f, 1.0f, 0.0f)
+        );
     }
 
     @Override
     public void draw() {
-        float angle = (float)sin (glfwGetTime());
-        cubeModel.draw(new Matrix4f().rotateX(angle).rotateY(angle).rotateZ(angle), new Matrix4f().translate(new Vector3f(0,0,-2f)), projectionMatrix);
-        toasterCube.draw(new Matrix4f(), new Matrix4f().translate(new Vector3f(0,0,-2f)), projectionMatrix);
+        cubeModel.draw(new Matrix4f(), viewMatrix, projectionMatrix);
     }
 }
