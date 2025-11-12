@@ -21,8 +21,6 @@ public abstract class Game {
 
     public final void start() {
         renderingEngine = RenderingEngine.getInstance();
-        time = new GameTime();
-        time.setFpsTarget(120);
         initialize();
         run();
         conclude();
@@ -37,8 +35,8 @@ public abstract class Game {
     }
 
     private void run() {
-
-        //GameTime time = new GameTime();
+        time = new GameTime();
+        time.setFpsTarget(120);
         while (renderingEngine.isWindowOpen()) {
             update();
             renderingEngine.clearFrame();
