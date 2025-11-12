@@ -50,13 +50,9 @@ public enum Key {
     SPACE(GLFW_KEY_SPACE),
     ESCAPE(GLFW_KEY_ESCAPE);
 
-    final int glfwKeyCode;
+    public final int glfwKeyCode;
 
     Key(int keyCode) {
         glfwKeyCode = keyCode;
-    }
-
-    public boolean isPressed(long window) {
-        return glfwGetKey(window, glfwKeyCode) == GLFW_PRESS;
     }
 }
