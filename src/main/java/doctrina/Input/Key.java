@@ -1,5 +1,7 @@
 package doctrina.Input;
 
+import java.util.HashMap;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public enum Key {
@@ -41,6 +43,19 @@ public enum Key {
     EIGHT(GLFW_KEY_8),
     NINE(GLFW_KEY_9),
 
+    F1(GLFW_KEY_F1),
+    F2(GLFW_KEY_F2),
+    F3(GLFW_KEY_F3),
+    F4(GLFW_KEY_F4),
+    F5(GLFW_KEY_F5),
+    F6(GLFW_KEY_F6),
+    F7(GLFW_KEY_F7),
+    F8(GLFW_KEY_F8),
+    F9(GLFW_KEY_F9),
+    F10(GLFW_KEY_F10),
+    F11(GLFW_KEY_F11),
+    F12(GLFW_KEY_F12),
+
     LEFT_CONTROL(GLFW_KEY_LEFT_CONTROL),
     RIGHT_CONTROL(GLFW_KEY_RIGHT_CONTROL),
     LEFT_SHIFT(GLFW_KEY_LEFT_SHIFT),
@@ -52,7 +67,22 @@ public enum Key {
 
     public final int glfwKeyCode;
 
+    private static final HashMap<Integer, Key> lookup = generateLookup();
+
     Key(int keyCode) {
         glfwKeyCode = keyCode;
+    }
+
+    public Key fromInt(int glfwKeyCode) {
+        return lookup.get(glfwKeyCode);
+    }
+
+
+    private static HashMap generateLookup() {
+        HashMap<Integer, Key> lookup = new HashMap<>();
+        for (Key key : values()) {
+            lookup.put(key.glfwKeyCode, key);
+        }
+        return lookup;
     }
 }

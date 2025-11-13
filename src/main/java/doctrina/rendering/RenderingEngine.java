@@ -1,13 +1,13 @@
 package doctrina.rendering;
 
+import org.joml.Vector2i;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class RenderingEngine {
-    private static long window;
+    private static Window window;
     private static RenderingEngine renderingEngine;
 
     private RenderingEngine() {
@@ -26,22 +26,21 @@ public class RenderingEngine {
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
         }
 
-        window = glfwCreateWindow(1920,  1080, "Robert Cantaloupe", NULL, NULL);
-        glfwMakeContextCurrent(window);
+        window = new Window(new Vector2i(1920,  1080), "Robert Cantaloupe");
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
     }
 
-    public static long getWindow() {
+    public static Window getWindow() {
         return window;
     }
 
     public boolean isWindowOpen() {
-        return !glfwWindowShouldClose(window);
+        return !glfwWindowShouldClose(window.getId());
     }
 
     public void closeWindow() {
-        glfwSetWindowShouldClose(window, true);
+        glfwSetWindowShouldClose(window.getId(), true);
     }
 
 
@@ -51,7 +50,7 @@ public class RenderingEngine {
     }
 
     public void drawOnScreen() {
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(window.getId());
     }
 
     public void stop() {

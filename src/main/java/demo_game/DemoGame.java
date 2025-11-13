@@ -35,21 +35,25 @@ public class DemoGame extends Game {
 
     @Override
     public void update() {
-        if (keyboard.isPressed(Key.ESCAPE)) {
+        if (keyboard.isDown(Key.ESCAPE)) {
             stop();
         }
 
-        if (keyboard.isPressed(Key.W)) {
+        if (keyboard.isDown(Key.F11)) {
+            toggleFullscreen(true);
+        }
+
+        if (keyboard.isDown(Key.W)) {
             camZ -= (float) (cameraSpeed * deltaTime());
         }
-        if (keyboard.isPressed(Key.S)) {
+        if (keyboard.isDown(Key.S)) {
             camZ += (float) (cameraSpeed * deltaTime());
         }
 
-        if (keyboard.isPressed(Key.A)) {
+        if (keyboard.isDown(Key.A)) {
             camX -= (float) (cameraSpeed * deltaTime());
         }
-        if (keyboard.isPressed(Key.D)) {
+        if (keyboard.isDown(Key.D)) {
             camX += (float) (cameraSpeed * deltaTime());
         }
 

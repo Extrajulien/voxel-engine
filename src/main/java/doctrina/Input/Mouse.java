@@ -10,7 +10,7 @@ public class Mouse {
     private Vector2d position;
 
     public Mouse() {
-        glfwSetCursorPosCallback(RenderingEngine.getWindow(), cursorCallback);
+        glfwSetCursorPosCallback(RenderingEngine.getWindow().getId(), cursorCallback);
         position = new Vector2d();
     }
 
@@ -26,15 +26,15 @@ public class Mouse {
     }
 
     public boolean isPressed(MouseButton button) {
-        return glfwGetMouseButton(RenderingEngine.getWindow(), button.glfwKeyCode) == GLFW_PRESS;
+        return glfwGetMouseButton(RenderingEngine.getWindow().getId(), button.glfwKeyCode) == GLFW_PRESS;
     }
 
 
     public void captureCursor() {
-        glfwSetInputMode(RenderingEngine.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(RenderingEngine.getWindow().getId(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
     public void freeCursor() {
-        glfwSetInputMode(RenderingEngine.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(RenderingEngine.getWindow().getId(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 }

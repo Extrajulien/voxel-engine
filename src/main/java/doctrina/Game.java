@@ -19,6 +19,10 @@ public abstract class Game {
         return time.deltaTime();
     }
 
+    public final void toggleFullscreen(boolean fullscreen) {
+        RenderingEngine.getWindow().toggleFullscreen(fullscreen);
+    }
+
     public final void start() {
         renderingEngine = RenderingEngine.getInstance();
         initialize();
