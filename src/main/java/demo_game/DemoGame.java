@@ -10,6 +10,7 @@ public class DemoGame extends Game {
     Mouse mouse;
     Keyboard keyboard;
     private Model cubeModel;
+    private boolean isFullscreen = false;
     private float camX = 0;
     private float camY = 0;
     private float camZ = 0;
@@ -39,8 +40,9 @@ public class DemoGame extends Game {
             stop();
         }
 
-        if (keyboard.isDown(Key.F11)) {
-            toggleFullscreen(true);
+        if (keyboard.isPressed(Key.F)) {
+            isFullscreen = !isFullscreen;
+            toggleFullscreen(isFullscreen);
         }
 
         if (keyboard.isDown(Key.W)) {
