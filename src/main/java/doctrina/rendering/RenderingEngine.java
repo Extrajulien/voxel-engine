@@ -29,6 +29,10 @@ public class RenderingEngine {
         window = new Window(new Vector2i(1920,  1080), "Robert Cantaloupe");
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
+
+        glfwSetFramebufferSizeCallback(window.getId(), (win, width, height) -> {
+            glViewport(0, 0, width, height);
+        });
     }
 
     public static Window getWindow() {
@@ -63,6 +67,8 @@ public class RenderingEngine {
         }
         return renderingEngine;
     }
+
+
 
     private void initializeGLFW() throws IllegalStateException {
         if (!glfwInit()) throw new IllegalStateException("Failed to init GLFW");
