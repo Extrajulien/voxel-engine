@@ -11,16 +11,13 @@ public class DemoGame extends Game {
     Keyboard keyboard;
     private Model cubeModel;
     private boolean isFullscreen = false;
-    private float camX = 0;
-    private float camY = 0;
-    private float camZ = 0;
+    private Camera camera;
     private float cameraSpeed = 2;
     private final Matrix4f projectionMatrix = new Matrix4f().perspective(1, (float)16/9, 0.1f, 1000);
     private Matrix4f viewMatrix;
 
     @Override
     public void initialize() {
-
         Shader shader = new Shader("vertex.glsl", "fragment.glsl");
         shader.use();
         Texture dirtTex = new Texture("dirt.jpg");
@@ -28,51 +25,31 @@ public class DemoGame extends Game {
         Material dirt = new Material(shader, dirtTex);
         Material toaster = new Material(shader, toasterTex);
         Mesh cube = new Mesh.Builder().cube().build();
-        mouse = new Mouse();
+        mouse = new Mouse(0.1f);
         keyboard = new Keyboard();
+        camera = new Camera(mouse, keyboard);
+        camera.setSpeed(cameraSpeed);
+        camera.setSensitivity(0.1);
 
         cubeModel = new Model(cube, dirt);
     }
 
     @Override
     public void update() {
+
         if (keyboard.isDown(Key.ESCAPE)) {
             stop();
         }
 
-        if (keyboard.isPressed(Key.F)) {
+        if (keyboard.isPressed(Key.F11)) {
             isFullscreen = !isFullscreen;
             toggleFullscreen(isFullscreen);
         }
 
-        if (keyboard.isDown(Key.W)) {
-            camZ -= (float) (cameraSpeed * deltaTime());
-        }
-        if (keyboard.isDown(Key.S)) {
-            camZ += (float) (cameraSpeed * deltaTime());
-        }
 
-        if (keyboard.isDown(Key.A)) {
-            camX -= (float) (cameraSpeed * deltaTime());
-        }
-        if (keyboard.isDown(Key.D)) {
-            camX += (float) (cameraSpeed * deltaTime());
-        }
-
-        if (mouse.isPressed(MouseButton.LEFT)) {
-            camY += (float) (cameraSpeed * deltaTime());
-            mouse.freeCursor();
-        }
-        if (mouse.isPressed(MouseButton.RIGHT)) {
-            camY -= (float) (cameraSpeed * deltaTime());
-            mouse.captureCursor();
-        }
-
-        viewMatrix = new Matrix4f().lookAt(
-                new Vector3f(camX, camY, camZ),
-                new Vector3f(0.0f, 0.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f)
-        );
+        camera.updateCamera();
+        mouse.clearDelta();
+        viewMatrix = camera.getViewMatrix();
     }
 
     @Override
