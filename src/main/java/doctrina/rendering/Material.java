@@ -1,6 +1,7 @@
 package doctrina.rendering;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class Material {
     private final Shader shader;
@@ -31,5 +32,9 @@ public class Material {
 
     public void setProjectionMatrix(Matrix4f matrix) {
         shader.setUniform("projection", matrix);
+    }
+
+    public void setUniform(Uniform uniform, Vector3f vector3f) {
+        shader.setUniform(uniform.getUniformName(), vector3f);
     }
 }

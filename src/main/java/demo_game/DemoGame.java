@@ -1,5 +1,6 @@
 package demo_game;
 
+import doctrina.Entities.Entity;
 import doctrina.Game;
 import doctrina.Input.*;
 import doctrina.rendering.*;
@@ -15,10 +16,11 @@ public class DemoGame extends Game {
     private float cameraSpeed = 2;
     private final Matrix4f projectionMatrix = new Matrix4f().perspective(1, (float)16/9, 0.1f, 1000);
     private Matrix4f viewMatrix;
+    private Entity cubeEntity;
 
     @Override
     public void initialize() {
-        Shader shader = new Shader("vertex.glsl", "fragment.glsl");
+        Shader shader = new Shader("vertex.glsl", "imageFragment.glsl");
         shader.use();
         Texture dirtTex = new Texture("dirt.jpg");
         Texture toasterTex = new Texture("toaster.png");
@@ -32,6 +34,9 @@ public class DemoGame extends Game {
         camera.setSensitivity(0.1);
 
         cubeModel = new Model(cube, dirt);
+        cubeEntity = new EntityTest(cubeModel);
+        cubeEntity.moveTo(0,0,-5);
+        mouse.captureCursor();
     }
 
     @Override
@@ -54,6 +59,8 @@ public class DemoGame extends Game {
 
     @Override
     public void draw() {
-        cubeModel.draw(new Matrix4f(), viewMatrix, projectionMatrix);
+
+        cubeEntity.draw(viewMatrix, projectionMatrix);
+        cubeEntity.drawHitBox(viewMatrix, projectionMatrix);
     }
 }

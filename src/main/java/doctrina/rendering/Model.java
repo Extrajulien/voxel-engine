@@ -21,13 +21,26 @@ public class Model {
     }
 
     public void draw(Matrix4f modelMatrix, Matrix4f viewMatrix,Matrix4f projectionMatrix) {
+        glEnable(GL_DEPTH_TEST);
+        material.use();
         material.setModelMatrix(modelMatrix);
         material.setViewMatrix(viewMatrix);
         material.setProjectionMatrix(projectionMatrix);
         material.bindTextures();
         bindVAO();
-
         glDrawElements(GL_TRIANGLES, mesh.getIndicesSize(), GL_UNSIGNED_INT, 0);
+        unBindVAO();
+    }
+
+    public void drawBoundingBox(Matrix4f modelMatrix, Matrix4f viewMatrix,Matrix4f projectionMatrix) {
+        glDisable(GL_DEPTH_TEST);
+        material.use();
+        material.setModelMatrix(modelMatrix);
+        material.setViewMatrix(viewMatrix);
+        material.setProjectionMatrix(projectionMatrix);
+        bindVAO();
+
+        glDrawElements(GL_LINES, mesh.getIndicesSize(), GL_UNSIGNED_INT, 0);
         unBindVAO();
     }
 
@@ -35,7 +48,7 @@ public class Model {
         glBindVertexArray(VAO);
     }
 
-    // just there to prevent the outer world from messing with it
+    // just there to prevent the outer world from accidentally messing with it
     private void unBindVAO() {
         glBindVertexArray(0);
     }

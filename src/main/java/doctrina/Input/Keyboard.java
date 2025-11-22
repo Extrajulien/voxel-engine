@@ -3,13 +3,11 @@ package doctrina.Input;
 import doctrina.rendering.RenderingEngine;
 import org.lwjgl.glfw.GLFWKeyCallbackI;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Keyboard {
-    //linked list for fast modification
     private final LinkedList<Key> pressedKeys = new LinkedList<>();
 
     public Keyboard() {
@@ -29,13 +27,9 @@ public class Keyboard {
         return false;
     }
 
-    public boolean isReleased(Key key) {
-
-        return true;
-    }
-
     private final GLFWKeyCallbackI keyCallback = (window, key, scancode, action, mods) -> {
         Key keyboardKey= Key.fromInt(key);
+        if (keyboardKey == null) return;
         if (action == GLFW_PRESS) {
             keyboardKey.press();
             pressedKeys.add(keyboardKey);

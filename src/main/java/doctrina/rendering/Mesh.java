@@ -136,6 +136,40 @@ public class Mesh {
             return this;
         }
 
+        public Builder boundingBox() {
+
+            this.vertices = new float[] {
+                    // 0: front bottom-left
+                    -0.5f, -0.5f,  0.5f,  0f, 0f,
+                    // 1: front bottom-right
+                    0.5f, -0.5f,  0.5f,  1f, 0f,
+                    // 2: front top-right
+                    0.5f,  0.5f,  0.5f,  1f, 1f,
+                    // 3: front top-left
+                    -0.5f,  0.5f,  0.5f,  0f, 1f,
+
+                    // 4: back bottom-right
+                    0.5f, -0.5f, -0.5f,  0f, 0f,
+                    // 5: back bottom-left
+                    -0.5f, -0.5f, -0.5f,  1f, 0f,
+                    // 6: back top-left
+                    -0.5f,  0.5f, -0.5f,  1f, 1f,
+                    // 7: back top-right
+                    0.5f,  0.5f, -0.5f,  0f, 1f
+            };
+
+            this.indices = new int[] {
+                    // front square
+                    0,1,  1,2,  2,3,  3,0,
+                    // back square
+                    4,5,  5,6,  6,7,  7,4,
+                    // connecting edges
+                    0,5,  1,4,  3,6,  2,7
+            };
+
+            return this;
+        }
+
         public Mesh build() {
             return new Mesh(this);
         }
