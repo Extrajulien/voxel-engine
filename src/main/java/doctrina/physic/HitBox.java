@@ -1,45 +1,66 @@
 package doctrina.physic;
 
 import doctrina.Entities.Entity;
+import doctrina.debug.Color;
 import doctrina.debug.DebugUniform;
 import doctrina.rendering.*;
 import org.joml.Matrix4f;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL11C.glLineWidth;
 
 public class HitBox {
     protected Vector3f position;
-    protected Vector3d dimension;
+    protected Vector3f dimension;
     private final static Mesh cube = new Mesh.Builder().boundingBox().build();
     private final static Material material = new Material(new Shader("vertex.glsl", "colorFragment.glsl"));
     private final static Model bounds = new Model(cube, material);
     private Matrix4f modelMatrix;
     private Vector3f color;
 
-    public HitBox(Entity entity, Vector3d dimension) {
-        this(entity, dimension, new Vector3f(0,0,255.0f));
+    public HitBox(Entity entity, Vector3f dimension) {
+        this(entity, dimension, new Vector3f(255.0f,255.0f,255.0f));
     }
 
-    public HitBox(Entity entity, Vector3d dimension, Vector3f color) {
-        this.color = color.div(255);
+    public HitBox(Entity entity, Vector3f dimension, Vector3f color) {
+        this.color = getColorFromRange(color);
+        attachColorToShader();
         this.position = entity.getPosition();
         this.modelMatrix = new Matrix4f().translate(position);
+        this.modelMatrix.scale(dimension);
     }
 
-    public void updatePosition(Entity entity) {
+    public void setDimension() {
+        this.dimension = new Vector3f(dimension);
+    }
+
+    public void moveToEntity(Entity entity) {
         this.position = entity.getPosition();
-        this.modelMatrix = new Matrix4f().translate(position);
+        this.modelMatrix.translate(position);
+    }
+
+    public void setColor(Vector3f color) {
+        this.color = getColorFromRange(color);
+        attachColorToShader();
+    }
+
+    public void setColor(Color color) {
+        this.color = color.getValue();
+        attachColorToShader();
     }
 
     public void drawBounds(Matrix4f viewMatrix, Matrix4f projectionMatrix) {
-        glLineWidth(2.0f);
+        glLineWidth(1.0f);
         material.use();
-        material.setUniform(DebugUniform.HITBOX_COLOR, color);
         bounds.drawBoundingBox(modelMatrix, viewMatrix, projectionMatrix);
     }
 
+    private Vector3f getColorFromRange(Vector3f color) {
+        return color.div(255);
+    }
 
+    private void attachColorToShader() {
+        material.setUniform(DebugUniform.HITBOX_COLOR, color);
+    }
 
 }
