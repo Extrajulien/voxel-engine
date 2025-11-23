@@ -28,8 +28,12 @@ public class Camera {
         worldUp = new Vector3f(0,1,0);
     }
 
-    public void move(Vector3f pos) {
+    public void moveTo(Vector3f pos) {
         position = pos;
+    }
+
+    public void move(Vector3f pos) {
+        position = position.add(pos);
     }
 
     public Matrix4f getViewMatrix() {

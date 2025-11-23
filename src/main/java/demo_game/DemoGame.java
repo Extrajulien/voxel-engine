@@ -51,6 +51,13 @@ public class DemoGame extends Game {
             toggleFullscreen(isFullscreen);
         }
 
+        if (keyboard.isDown(Key.W)) {
+            camera.move(new Vector3f (0,0, (float) -deltaTime()));
+        }
+
+        if (keyboard.isDown(Key.S)) {
+            camera.move(new Vector3f (0,0, (float) deltaTime()));
+        }
 
         camera.updateCamera();
         mouse.clearDelta();
