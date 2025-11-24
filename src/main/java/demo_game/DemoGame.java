@@ -11,6 +11,7 @@ public class DemoGame extends Game {
     Keyboard keyboard;
     private boolean isFullscreen = false;
     private Camera camera;
+    private Camera camera2;
     private Entity cubeEntity;
 
     @Override
@@ -27,6 +28,10 @@ public class DemoGame extends Game {
         camera = new Camera(mouse);
         camera.setSensitivity(1);
         camera.moveTo(new Vector3f(0,0,5));
+
+        camera2 = new Camera(mouse);
+        camera2.moveTo(new Vector3f(2,0,0));
+        camera2.setSensitivity(1);
 
         Model cubeModel = new Model(cube, dirt);
         cubeEntity = new EntityTest(cubeModel);
@@ -54,6 +59,14 @@ public class DemoGame extends Game {
             camera.move(new Vector3f (0,0, (float) deltaTime()));
         }
 
+        if (keyboard.isDown(Key.ARROW_UP)) {
+            camera2.move(new Vector3f (0,0, (float) -deltaTime()));
+        }
+
+        if (keyboard.isDown(Key.ARROW_DOWN)) {
+            camera2.move(new Vector3f (0,0, (float) deltaTime()));
+        }
+
         if (mouse.isPressed(MouseButton.RIGHT)) {
             mouse.freeCursor();
         }
@@ -63,6 +76,7 @@ public class DemoGame extends Game {
         }
 
         camera.updateCamera();
+        camera2.updateCamera();
         mouse.clearDelta();
     }
 
@@ -72,5 +86,6 @@ public class DemoGame extends Game {
         cubeEntity.draw(camera);
         cubeEntity.drawHitBox(camera);
 
+        cubeEntity.draw(camera2);
     }
 }
