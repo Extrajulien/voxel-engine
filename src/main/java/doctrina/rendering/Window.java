@@ -16,7 +16,7 @@ public class Window {
 
 
     public Window(Vector2i size, String name) {
-        this.size = new Vector2i();
+        this.size = size;
         this.pos = new Vector2i();
         this.window = glfwCreateWindow(size.x,  size.y, name, NULL, NULL);
         glfwMakeContextCurrent(window);
@@ -35,6 +35,10 @@ public class Window {
             return;
         }
         glfwSetWindowMonitor(window, 0, pos.x, pos.y, size.x, size.y, 0);
+    }
+
+    public Vector2i getSize() {
+        return size;
     }
 
     public long getId() {
