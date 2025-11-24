@@ -40,7 +40,7 @@ public abstract class Game {
 
     private void run() {
         time = new GameTime();
-        time.setFpsTarget(120);
+        time.setFpsTarget(300);
         while (renderingEngine.isWindowOpen()) {
             update();
             renderingEngine.clearFrame();

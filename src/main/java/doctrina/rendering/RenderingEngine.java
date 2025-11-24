@@ -28,6 +28,7 @@ public class RenderingEngine {
 
         window = new Window(new Vector2i(1920,  1080), "Robert Cantaloupe");
         GL.createCapabilities();
+        glfwSwapInterval(0);
         glEnable(GL_DEPTH_TEST);
 
         glfwSetFramebufferSizeCallback(window.getId(), (win, width, height) -> {
@@ -66,6 +67,10 @@ public class RenderingEngine {
             renderingEngine = new RenderingEngine();
         }
         return renderingEngine;
+    }
+
+    public static float getAspectRatio() {
+        return (float)window.getSize().x / (float)window.getSize().y;
     }
 
 
