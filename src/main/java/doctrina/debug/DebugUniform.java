@@ -7,12 +7,16 @@ import static org.lwjgl.opengl.GL20C.glGetUniformLocation;
 public enum DebugUniform implements Uniform {
     HITBOX_COLOR("hitboxColor");
 
+    private final static int NO_LOCATION = -1;
+    private static Shader shader;
+    private static boolean isInitialized = false;
+
     final String uniformName;
-    int uniformLocation;
+
+    int uniformLocation = NO_LOCATION;
 
     DebugUniform(String name) {
         uniformName = name;
-
     }
 
     @Override
@@ -20,15 +24,30 @@ public enum DebugUniform implements Uniform {
         return uniformName;
     }
 
+    public static boolean isIsInitialized() {
+        return isInitialized;
+    }
+
     @Override
     public int getUniformLocation() {
-        return 0;
+        if (uniformLocation == NO_LOCATION) {
+            throw new NullPointerException("Uniform location is not tied to shader program");
+        }
+        return uniformLocation;
+    }
+
+    @Override
+    public boolean isCorrectShader(Shader shader) {
+        return DebugUniform.shader == shader;
     }
 
     @Override
     public void loadPositionLUT(Shader shader) {
+        isInitialized = true;
+        DebugUniform.shader = shader;
+        int programId = shader.getShaderProgramId();
         for (DebugUniform uniform : DebugUniform.values()) {
-            //uniform.uniformLocation = glGetUniformLocation(shaderProgramId, uniform.uniformName);
+            uniform.uniformLocation = glGetUniformLocation(programId, uniform.uniformName);
         }
     }
 }

@@ -3,6 +3,7 @@ package demo_game;
 import doctrina.Entities.Entity;
 import doctrina.Game;
 import doctrina.Input.*;
+import doctrina.debug.DebugUniform;
 import doctrina.rendering.*;
 import org.joml.Vector3f;
 
@@ -30,8 +31,9 @@ public class DemoGame extends Game {
         camera.moveTo(new Vector3f(0,0,5));
 
         camera2 = new Camera(mouse);
-        camera2.moveTo(new Vector3f(2,0,0));
+        camera2.moveTo(new Vector3f(0,3,5));
         camera2.setSensitivity(1);
+        camera2.setVerticalFOV(20);
 
         Model cubeModel = new Model(cube, dirt);
         cubeEntity = new EntityTest(cubeModel);

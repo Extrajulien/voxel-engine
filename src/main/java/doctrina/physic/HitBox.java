@@ -13,7 +13,8 @@ public class HitBox {
     protected Vector3f position;
     protected Vector3f dimension;
     private final static Mesh cube = new Mesh.Builder().boundingBox().build();
-    private final static Material material = new Material(new Shader("vertex.glsl", "colorFragment.glsl"));
+    private final static Shader shader = new Shader("vertex.glsl", "colorFragment.glsl");
+    private final static Material material = new Material(shader);
     private final static Model bounds = new Model(cube, material);
     private Matrix4f modelMatrix;
     private Vector3f color;
@@ -60,6 +61,12 @@ public class HitBox {
     }
 
     private void attachColorToShader() {
+        if (!DebugUniform.isIsInitialized()) {
+            DebugUniform.HITBOX_COLOR.loadPositionLUT(shader);
+        }
+        if (!DebugUniform.HITBOX_COLOR.isCorrectShader(shader)) {
+            throw new RuntimeException("DebugUniform is not using the correct shader");
+        }
         material.setUniform(DebugUniform.HITBOX_COLOR, color);
     }
 

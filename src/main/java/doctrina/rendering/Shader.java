@@ -1,13 +1,10 @@
 package doctrina.rendering;
 
 import org.joml.Matrix4f;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
-import org.lwjgl.BufferUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.FloatBuffer;
 import java.nio.charset.StandardCharsets;
 
 import static org.lwjgl.opengl.GL20C.*;
@@ -28,6 +25,10 @@ public class Shader {
         }
     }
 
+    public int getShaderProgramId() {
+        return shaderProgramId;
+    }
+
     public void use() {
         glUseProgram(shaderProgramId);
     }
@@ -38,8 +39,8 @@ public class Shader {
         glUniformMatrix4fv(glGetUniformLocation(shaderProgramId, uniform),false,  matrixData);
     }
 
-    public void setUniform(String uniform, Vector3f vector3f) {
-        glUniform3f(glGetUniformLocation(shaderProgramId, uniform), vector3f.x, vector3f.y, vector3f.z);
+    public void setUniform(Uniform uniform, Vector3f vector3f) {
+        glUniform3f(uniform.getUniformLocation(), vector3f.x, vector3f.y, vector3f.z);
     }
 
 

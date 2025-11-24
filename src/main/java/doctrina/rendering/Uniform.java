@@ -8,4 +8,5 @@ public interface Uniform {
     public String getUniformName();
     public int getUniformLocation();
     public void loadPositionLUT(Shader shader);
+    public boolean isCorrectShader(Shader shader);
 }

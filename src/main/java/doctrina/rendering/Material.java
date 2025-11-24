@@ -35,6 +35,10 @@ public class Material {
     }
 
     public void setUniform(Uniform uniform, Vector3f vector3f) {
-        shader.setUniform(uniform.getUniformName(), vector3f);
+        shader.setUniform(uniform, vector3f);
+    }
+
+    public void bindUniform(Uniform uniform) {
+        uniform.loadPositionLUT(shader);
     }
 }
