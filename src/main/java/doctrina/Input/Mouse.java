@@ -3,25 +3,30 @@ package doctrina.Input;
 import doctrina.rendering.RenderingEngine;
 import org.joml.Vector2d;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;
+import org.lwjgl.glfw.GLFWScrollCallbackI;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Mouse {
     private Vector2d position;
     private Vector2d delta;
+    private Vector2d scrollOffset;
     private float sensitivity;
     private double deadZone = 0.4;
 
     public Mouse(float sensitivity) {
         glfwSetCursorPosCallback(RenderingEngine.getWindow().getId(), cursorCallback);
-        position = new Vector2d(0,0);
-        delta = new Vector2d();
+        glfwSetScrollCallback(RenderingEngine.getWindow().getId(), scrollCallback);
+        position = makeEmptyVector2d();
+        delta = makeEmptyVector2d();
+        scrollOffset = makeEmptyVector2d();
+
         this.sensitivity = sensitivity;
     }
 
-    private final GLFWCursorPosCallbackI cursorCallback = (window, xpos, ypos) -> {
-        double rawDX = xpos - this.position.x;
-        double rawDY = ypos - this.position.y;
+    private final GLFWCursorPosCallbackI cursorCallback = (window, xPos, yPos) -> {
+        double rawDX = xPos - this.position.x;
+        double rawDY = yPos - this.position.y;
 
         // deadzone on raw input
         if (Math.abs(rawDX) < deadZone) rawDX = 0;
@@ -32,21 +37,27 @@ public class Mouse {
         this.delta.y = rawDY * sensitivity;
 
         // update last position
-        this.position.set(xpos, ypos);
+        this.position.set(xPos, yPos);
     };
 
+    private final GLFWScrollCallbackI scrollCallback = (window, xOffset, yOffset) -> {
+        scrollOffset = new Vector2d(xOffset, yOffset);
+    };
 
-
-    public Vector2d getCursorPosition() {
-        return position;
+    public double getAxis(MouseAxis axis) {
+        return switch (axis) {
+            case SCROLL_X -> scrollOffset.x;
+            case SCROLL_Y -> scrollOffset.y;
+            case DELTA_X -> delta.x;
+            case DELTA_Y -> delta.y;
+            case POSITION_X -> position.x;
+            case POSITION_Y -> position.y;
+        };
     }
 
-    public Vector2d getCursorDelta() {
-        return delta;
-    }
-
-    public void clearDelta() {
+    public void update() {
         delta.zero();
+        scrollOffset.zero();
     }
     public boolean isPressed(MouseButton button) {
         return glfwGetMouseButton(RenderingEngine.getWindow().getId(), button.glfwKeyCode) == GLFW_PRESS;
@@ -68,5 +79,9 @@ public class Mouse {
 
     public void freeCursor() {
         glfwSetInputMode(RenderingEngine.getWindow().getId(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+
+    private Vector2d makeEmptyVector2d() {
+        return new Vector2d(0,0);
     }
 }

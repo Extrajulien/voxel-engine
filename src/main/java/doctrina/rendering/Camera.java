@@ -47,8 +47,8 @@ public class Camera {
     }
 
     public void updateCamera() {
-        yaw += mouse.getCursorDelta().x * sensitivity;
-        double rawPitch = mouse.getCursorDelta().y * sensitivity;
+        yaw += mouse.getAxis(MouseAxis.DELTA_X) * sensitivity;
+        double rawPitch = mouse.getAxis(MouseAxis.DELTA_Y) * sensitivity;
 
         pitch -= rawPitch;
         if (pitch < -90) {
