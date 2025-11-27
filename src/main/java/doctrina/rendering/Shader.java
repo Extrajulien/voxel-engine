@@ -1,5 +1,7 @@
 package doctrina.rendering;
 
+import doctrina.Uniform.EngineUniform;
+import doctrina.Uniform.Uniform;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -9,10 +11,12 @@ import java.nio.charset.StandardCharsets;
 
 import static org.lwjgl.opengl.GL20C.*;
 
-public class Shader {
+public class Shader<U extends Enum<U> & Uniform> {
     private int shaderProgramId;
+    private final ShaderLUT<U> uniformLocationLUT;
+    public final Class<U> Uniform;
 
-    public Shader(String vertexShaderFile, String fragmentShaderFile) {
+    public Shader(Class<U> enumClass, String vertexShaderFile, String fragmentShaderFile) {
         try {
             shaderProgramId = glCreateProgram();
             int vertexShader =  compileShader(vertexShaderFile, GL_VERTEX_SHADER);
@@ -23,6 +27,10 @@ public class Shader {
         } catch (Exception e) {
             stopProgram();
         }
+
+        uniformLocationLUT = new ShaderLUT<>(enumClass, shaderProgramId);
+        this.Uniform = enumClass;
+
     }
 
     public int getShaderProgramId() {
@@ -33,14 +41,20 @@ public class Shader {
         glUseProgram(shaderProgramId);
     }
 
-    public void setUniform(String uniform, Matrix4f matrix) {
+    public void setUniform(U uniform, Matrix4f matrix) {
         float[] matrixData = new float[16];
         matrix.get(matrixData);
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgramId, uniform),false,  matrixData);
+        glUniformMatrix4fv(uniformLocationLUT.getLocation(uniform),false,  matrixData);
     }
 
-    public void setUniform(Uniform uniform, Vector3f vector3f) {
-        glUniform3f(uniform.getUniformLocation(), vector3f.x, vector3f.y, vector3f.z);
+    public void setUniform(EngineUniform uniform, Matrix4f matrix) {
+        float[] matrixData = new float[16];
+        matrix.get(matrixData);
+        glUniformMatrix4fv(uniformLocationLUT.getLocation(uniform),false,  matrixData);
+    }
+
+    public void setUniform(U uniform, Vector3f vector3f) {
+        glUniform3f(uniformLocationLUT.getLocation(uniform), vector3f.x, vector3f.y, vector3f.z);
     }
 
 

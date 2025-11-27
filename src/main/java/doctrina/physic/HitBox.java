@@ -2,7 +2,7 @@ package doctrina.physic;
 
 import doctrina.Entities.Entity;
 import doctrina.debug.Color;
-import doctrina.debug.DebugUniform;
+import doctrina.Uniform.HitboxUniform;
 import doctrina.rendering.*;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -13,9 +13,8 @@ public class HitBox {
     protected Vector3f position;
     protected Vector3f dimension;
     private final static Mesh cube = new Mesh.Builder().boundingBox().build();
-    private final static Shader shader = new Shader("vertex.glsl", "colorFragment.glsl");
-    private final static Material material = new Material(shader);
-    private final static Model bounds = new Model(cube, material);
+    private Material<HitboxUniform> material;
+    private final Model<HitboxUniform> bounds;
     private Matrix4f modelMatrix;
     private Vector3f color;
 
@@ -24,6 +23,8 @@ public class HitBox {
     }
 
     public HitBox(Entity entity, Vector3f dimension, Vector3f color) {
+        createMaterial();
+        bounds = new Model<>(cube, material);
         this.color = getColorFromRange(color);
         attachColorToShader();
         this.position = entity.getPosition();
@@ -46,6 +47,7 @@ public class HitBox {
     }
 
     public void setColor(Color color) {
+        material.use();
         this.color = color.getValue();
         attachColorToShader();
     }
@@ -61,13 +63,11 @@ public class HitBox {
     }
 
     private void attachColorToShader() {
-        if (!DebugUniform.isIsInitialized()) {
-            DebugUniform.HITBOX_COLOR.loadPositionLUT(shader);
-        }
-        if (!DebugUniform.HITBOX_COLOR.isCorrectShader(shader)) {
-            throw new RuntimeException("DebugUniform is not using the correct shader");
-        }
-        material.setUniform(DebugUniform.HITBOX_COLOR, color);
+        material.setUniform(HitboxUniform.HITBOX_COLOR, color);
     }
 
+    private void createMaterial() {
+        Shader<HitboxUniform> shader = new Shader<>(HitboxUniform.class, "vertex.glsl", "colorFragment.glsl");
+        material = new Material<>(shader);
+    }
 }

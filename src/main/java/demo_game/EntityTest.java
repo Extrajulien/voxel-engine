@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 
 public class EntityTest extends Entity {
     public EntityTest(Model model) {
-        super(model, new Vector3f(1,1,1));
+        super(model, new Vector3f(0.7f, 1.8f, 0.7f));
         hitbox.setColor(Color.ORANGE);
     }
 }

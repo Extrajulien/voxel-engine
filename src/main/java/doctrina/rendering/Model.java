@@ -1,17 +1,18 @@
 package doctrina.rendering;
 
+import doctrina.Uniform.Uniform;
 import org.joml.Matrix4f;
 
 import static org.lwjgl.opengl.GL11C.*;
 import static org.lwjgl.opengl.GL30C.glBindVertexArray;
 import static org.lwjgl.opengl.GL30C.glGenVertexArrays;
 
-public class Model {
+public class Model<U extends Enum<U> & Uniform> {
     private final Mesh mesh;
-    private final Material material;
+    private final Material<U> material;
     private final int VAO;
 
-    public Model(Mesh mesh, Material material) {
+    public Model(Mesh mesh, Material<U> material) {
         this.mesh = mesh;
         this.material = material;
         VAO = glGenVertexArrays();

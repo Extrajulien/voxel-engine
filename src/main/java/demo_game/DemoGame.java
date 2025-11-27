@@ -17,12 +17,10 @@ public class DemoGame extends Game {
 
     @Override
     public void initialize() {
-        Shader shader = new Shader("vertex.glsl", "imageFragment.glsl");
+        Shader<CubeUniform> shader = new Shader<>(CubeUniform.class, "vertex.glsl", "imageFragment.glsl");
         shader.use();
         Texture dirtTex = new Texture("dirt.jpg");
-        Texture toasterTex = new Texture("toaster.png");
-        Material dirt = new Material(shader, dirtTex);
-        Material toaster = new Material(shader, toasterTex);
+        Material<CubeUniform> dirt = new Material<>(shader, dirtTex);
         Mesh cube = new Mesh.Builder().cube().build();
         mouse = new Mouse(0.1f);
         keyboard = new Keyboard();
