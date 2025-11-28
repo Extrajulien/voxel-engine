@@ -5,6 +5,11 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class Camera {
+    protected float fpsCamYTranslation = 0f;
+    protected float fpsCamRadius = 1f;
+    protected float maxPitch = 85f;
+    protected float minPitch = -85f;
+
     private double yaw = -90;
     private double pitch = 0;
     private double sensitivity = 0.1;
@@ -13,8 +18,6 @@ public class Camera {
     private final Vector3f worldUp;
     private final Matrix4f projectionMatrix;
     private final Matrix4f viewMatrix;
-    private final float fpsCamYTranslation = 0.5f;
-    private final float fpsCamRadius = 0.5f;
     private CameraMode mode;
     private Vector3f center = new Vector3f();
     private Vector3f lookingDirection = new Vector3f();
@@ -80,11 +83,11 @@ public class Camera {
         double rawPitch = delta * sensitivity;
 
         pitch -= rawPitch;
-        if (pitch < -90) {
-            pitch = -89.9999;
+        if (pitch <= minPitch) {
+            pitch = minPitch;
         }
-        if (pitch > 90) {
-            pitch = 89.9999;
+        if (pitch >= maxPitch) {
+            pitch = maxPitch;
         }
     }
 
