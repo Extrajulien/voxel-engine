@@ -1,9 +1,10 @@
 package demo_game;
 
+import demo_game.Inputs.GameKMController;
+import demo_game.Uniforms.CubeUniform;
 import doctrina.Entities.Entity;
 import doctrina.Game;
 import doctrina.Input.*;
-import doctrina.debug.DebugUniform;
 import doctrina.rendering.*;
 import org.joml.Vector3f;
 
@@ -11,9 +12,10 @@ public class DemoGame extends Game {
     Mouse mouse;
     Keyboard keyboard;
     private boolean isFullscreen = false;
-    private Camera camera;
-    private Camera camera2;
+    private Player player;
     private Entity cubeEntity;
+    private World world;
+    private GameKMController controller;
 
     @Override
     public void initialize() {
@@ -22,20 +24,21 @@ public class DemoGame extends Game {
         Texture dirtTex = new Texture("dirt.jpg");
         Material<CubeUniform> dirt = new Material<>(shader, dirtTex);
         Mesh cube = new Mesh.Builder().cube().build();
+        Model<CubeUniform> cubeModel = new Model<>(cube, dirt);
+        cubeEntity = new EntityTest(cubeModel);
+
+        world = new World(0);
+
+
+
         mouse = new Mouse(0.1f);
         keyboard = new Keyboard();
-        camera = new Camera(mouse);
-        camera.setSensitivity(1);
-        camera.moveTo(new Vector3f(0,0,5));
+        controller = new GameKMController(keyboard, mouse);
 
-        camera2 = new Camera(mouse);
-        camera2.moveTo(new Vector3f(0,3,5));
-        camera2.setSensitivity(1);
-        camera2.setVerticalFOV(20);
 
-        Model cubeModel = new Model(cube, dirt);
-        cubeEntity = new EntityTest(cubeModel);
-        cubeEntity.moveTo(0,0,0);
+        player = new Player(controller);
+
+        cubeEntity.moveTo(0,0,-5);
         mouse.captureCursor();
     }
 
@@ -51,22 +54,6 @@ public class DemoGame extends Game {
             toggleFullscreen(isFullscreen);
         }
 
-        if (keyboard.isDown(Key.W)) {
-            camera.move(new Vector3f (0,0, (float) -deltaTime()));
-        }
-
-        if (keyboard.isDown(Key.S)) {
-            camera.move(new Vector3f (0,0, (float) deltaTime()));
-        }
-
-        if (keyboard.isDown(Key.ARROW_UP)) {
-            camera2.move(new Vector3f (0,0, (float) -deltaTime()));
-        }
-
-        if (keyboard.isDown(Key.ARROW_DOWN)) {
-            camera2.move(new Vector3f (0,0, (float) deltaTime()));
-        }
-
         if (mouse.isPressed(MouseButton.RIGHT)) {
             mouse.freeCursor();
         }
@@ -75,17 +62,16 @@ public class DemoGame extends Game {
             mouse.captureCursor();
         }
 
-        camera.updateCamera();
-        camera2.updateCamera();
-        mouse.clearDelta();
+        player.update(deltaTime());
+        controller.update();
     }
 
     @Override
     public void draw() {
 
-        cubeEntity.draw(camera);
-        cubeEntity.drawHitBox(camera);
+        cubeEntity.draw(player.getCameraView());
+        cubeEntity.drawHitBox(player.getCameraView());
 
-        cubeEntity.draw(camera2);
+        player.drawHitBox(player.getCameraView());
     }
 }

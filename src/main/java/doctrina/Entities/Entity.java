@@ -1,7 +1,7 @@
 package doctrina.Entities;
 
 import doctrina.physic.HitBox;
-import doctrina.rendering.Camera;
+import doctrina.rendering.CameraView;
 import doctrina.rendering.Model;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -11,7 +11,7 @@ public abstract class Entity {
     private final Model model;
 
     protected Vector3f position;
-    private Matrix4f modelMatrix;
+    protected Matrix4f modelMatrix;
 
     public Entity(Model model, Vector3f hitboxDimension) {
         position = new Vector3f(0);
@@ -20,19 +20,17 @@ public abstract class Entity {
         hitbox = new HitBox(this, hitboxDimension);
     }
 
-    public void draw(Camera camera) {
-        model.draw(modelMatrix, camera.getViewMatrix(), camera.getProjectionMatrix());
+    public void draw(CameraView data) {
+        model.draw(modelMatrix, data.viewMatrix(), data.projectionMatrix());
     }
 
-    public final void drawHitBox(Camera camera) {
-        hitbox.drawBounds(camera.getViewMatrix(), camera.getProjectionMatrix());
+    public final void drawHitBox(CameraView data) {
+        hitbox.drawBounds(data.viewMatrix(), data.projectionMatrix());
     }
 
     public final Vector3f getPosition() {
         return position;
     }
-
-
 
     public final void moveTo(Vector3f position) {
         moveTo(position.x, position.y, position.z);
@@ -43,10 +41,11 @@ public abstract class Entity {
         hitbox.moveToEntity(this);
     }
 
-    public final void move(Vector3f position) {
-        this.position.add(position);
-        modelMatrix.translate(position.x, position.y, position.z);
-        hitbox.moveToEntity(this);
+    public void enableGravity() {
+
     }
 
+    public void setGravity(float unitSquareBySeconds) {
+
+    }
 }

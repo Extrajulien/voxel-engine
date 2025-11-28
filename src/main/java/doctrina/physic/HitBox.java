@@ -28,8 +28,8 @@ public class HitBox {
         this.color = getColorFromRange(color);
         attachColorToShader();
         this.position = entity.getPosition();
-        this.modelMatrix = new Matrix4f().translate(position);
-        this.modelMatrix.scale(dimension);
+        this.dimension = dimension;
+        updateModelMatrix();
     }
 
     public void setDimension() {
@@ -38,10 +38,14 @@ public class HitBox {
 
     public void moveToEntity(Entity entity) {
         this.position = entity.getPosition();
-        this.modelMatrix.translate(position);
+    }
+
+    public void update() {
+        updateModelMatrix();
     }
 
     public void setColor(Vector3f color) {
+        material.use();
         this.color = getColorFromRange(color);
         attachColorToShader();
     }
@@ -69,5 +73,10 @@ public class HitBox {
     private void createMaterial() {
         Shader<HitboxUniform> shader = new Shader<>(HitboxUniform.class, "vertex.glsl", "colorFragment.glsl");
         material = new Material<>(shader);
+    }
+
+    private void updateModelMatrix() {
+        this.modelMatrix = new Matrix4f().translate(position);
+        this.modelMatrix.scale(dimension);
     }
 }

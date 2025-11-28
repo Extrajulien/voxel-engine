@@ -1,6 +1,6 @@
 package doctrina.rendering;
 
-import doctrina.Input.*;
+import doctrina.Entities.Entity;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -8,47 +8,76 @@ public class Camera {
     private double yaw = -90;
     private double pitch = 0;
     private double sensitivity = 0.1;
+    private Vector3f origin;
     private Vector3f position;
     private final Vector3f worldUp;
     private final Matrix4f projectionMatrix;
     private final Matrix4f viewMatrix;
+    private final float fpsCamYTranslation = 0.5f;
+    private final float fpsCamRadius = 0.5f;
+    private CameraMode mode;
+    private Vector3f center = new Vector3f();
+    private Vector3f lookingDirection = new Vector3f();
     private float fovY;
-    private final Mouse mouse;
+    private float orbitalRadius = 2;
 
-    public Camera(Mouse mouse) {
-        this.mouse = mouse;
-        position = new Vector3f(0,0,0);
+    public Camera(Entity entity, CameraMode mode) {
+        this.mode = mode;
+        origin = entity.getPosition();
         worldUp = new Vector3f(0,1,0);
         fovY = (float) Math.toRadians(90);
         projectionMatrix  = new Matrix4f();
         computeProjectionMatrix();
         viewMatrix = new Matrix4f();
-        computeViewMatrix();
+        updateValues();
     }
 
-    public void moveTo(Vector3f pos) {
-        position = pos;
+    protected void moveTo(Vector3f pos) {
+        origin = pos;
     }
 
     public void move(Vector3f pos) {
-        position = position.add(pos);
+        origin = origin.add(pos);
     }
 
-    public Matrix4f getViewMatrix() {
-        return viewMatrix;
+    public CameraView GetCameraView() {
+        return new CameraView(viewMatrix, projectionMatrix);
     }
 
-    public Matrix4f getProjectionMatrix() {
-        return projectionMatrix;
+    public Vector3f getOrigin() {
+        return origin;
+    }
+
+    public void setMode(CameraMode mode) {
+        this.mode = mode;
+    }
+
+    public CameraMode getMode() {
+        return mode;
+    }
+
+    public Vector3f getLookDirectionUnitVector() {
+        return lookingDirection;
     }
 
     public void setSensitivity(double sensitivity) {
         this.sensitivity = sensitivity;
     }
 
-    public void updateCamera() {
-        yaw += mouse.getAxis(MouseAxis.DELTA_X) * sensitivity;
-        double rawPitch = mouse.getAxis(MouseAxis.DELTA_Y) * sensitivity;
+    public Vector3f getWorldUp() {
+        return worldUp;
+    }
+
+    public void update() {
+        updateValues();
+    }
+
+    protected void addYaw(float delta) {
+        yaw += delta * sensitivity;
+    }
+
+    protected void addPitch(float delta) {
+        double rawPitch = delta * sensitivity;
 
         pitch -= rawPitch;
         if (pitch < -90) {
@@ -57,10 +86,9 @@ public class Camera {
         if (pitch > 90) {
             pitch = 89.9999;
         }
-        computeViewMatrix();
     }
 
-    public void setVerticalFOV(float angleDegrees) {
+    protected void setVerticalFOV(float angleDegrees) {
         fovY = (float) Math.toRadians(angleDegrees);
         computeProjectionMatrix();
     }
@@ -72,10 +100,61 @@ public class Camera {
     private void computeViewMatrix() {
         viewMatrix.setLookAt(
                 position,
-                new Vector3f(
-                        position.x + (float) (Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch))),
-                        position.y + (float) (Math.sin(Math.toRadians(pitch))),
-                        position.z + (float) (Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)))),
+                center,
                 worldUp);
+    }
+
+
+
+
+    private void updateCenter() {
+        center = new Vector3f(
+                position.x + (float) (Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch))),
+                position.y + (float) (Math.sin(Math.toRadians(pitch))),
+                position.z + (float) (Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)))
+        );
+    }
+
+    private void updateCameraDirection() {
+        lookingDirection = new Vector3f(center).sub(position).normalize();
+    }
+
+    private void translateCamera() {
+        switch (mode) {
+            case FPS -> {
+                fpsTranslation();
+                return;
+            }
+            case ORBITAL -> {
+                orbitalTranslation();
+                return;
+            }
+        }
+    }
+
+    private void updateValues() {
+        translateCamera();
+        updateCenter();
+        updateCameraDirection();
+        computeViewMatrix();
+    }
+
+
+
+    private void orbitalTranslation() {
+        position = new Vector3f(
+                (float) (origin.x + -orbitalRadius * Math.cos(Math.toRadians(pitch)) * Math.cos(Math.toRadians(yaw))),
+                (float) (origin.y + -orbitalRadius * Math.sin(Math.toRadians(pitch))),
+                (float) (origin.z + -orbitalRadius * Math.cos(Math.toRadians(pitch)) * Math.sin(Math.toRadians(yaw)))
+        );
+    }
+
+
+    private void fpsTranslation() {
+        position = new Vector3f(
+                (float) (origin.x + fpsCamRadius * Math.cos(Math.toRadians(yaw))),
+                origin.y + fpsCamYTranslation,
+                (float) (origin.z + fpsCamRadius * Math.sin(Math.toRadians(yaw)))
+        );
     }
 }
