@@ -29,7 +29,7 @@ public class HitBox {
         attachColorToShader();
         this.position = entity.getPosition();
         this.dimension = dimension;
-        updateModelMatrix();
+        initializeModelMatrix();
     }
 
     public void setDimension() {
@@ -41,8 +41,10 @@ public class HitBox {
     }
 
     public void update() {
-        updateModelMatrix();
+        initializeModelMatrix();
     }
+
+
 
     public void setColor(Vector3f color) {
         material.use();
@@ -57,7 +59,7 @@ public class HitBox {
     }
 
     public void drawBounds(Matrix4f viewMatrix, Matrix4f projectionMatrix) {
-        glLineWidth(1.0f);
+        glLineWidth(2.0f);
         material.use();
         bounds.drawBoundingBox(modelMatrix, viewMatrix, projectionMatrix);
     }
@@ -75,8 +77,8 @@ public class HitBox {
         material = new Material<>(shader);
     }
 
-    private void updateModelMatrix() {
-        this.modelMatrix = new Matrix4f().translate(position);
+    private void initializeModelMatrix() {
+        this.modelMatrix = new Matrix4f().setTranslation(position);
         this.modelMatrix.scale(dimension);
     }
 }

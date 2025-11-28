@@ -10,9 +10,7 @@ public class World {
     public World(long seed) {
 
     }
-/*
     public void loadChunks(Player player) {
 
     }
-*/
 }

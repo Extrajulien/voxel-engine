@@ -36,9 +36,9 @@ public abstract class Entity {
         moveTo(position.x, position.y, position.z);
     }
     public final void moveTo(float x, float y, float z) {
-        this.position = new Vector3f(x,y,z);
-        modelMatrix = new Matrix4f().translate(position.x, position.y, position.z);
-        hitbox.moveToEntity(this);
+        this.position.set(x,y,z);
+        modelMatrix.setTranslation(position.x, position.y, position.z);
+        hitbox.update();
     }
 
     public void enableGravity() {

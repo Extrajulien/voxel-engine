@@ -72,6 +72,8 @@ public class DemoGame extends Game {
         cubeEntity.draw(player.getCameraView());
         cubeEntity.drawHitBox(player.getCameraView());
 
+        player.draw(player.getCameraView());
         player.drawHitBox(player.getCameraView());
+
     }
 }

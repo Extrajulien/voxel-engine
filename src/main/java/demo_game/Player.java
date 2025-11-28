@@ -11,7 +11,7 @@ import org.joml.Vector3f;
 
 public class Player extends ControllableEntity<Action, Axis> {
     private final int CHUNK_LOADING_RADIUS = 2;
-    private final GameCamera camera;
+    private final PlayerCamera camera;
     private Vector3f currentSpeed;
     private float sprintSpeed = 6;
     private boolean isSprinting = false;
@@ -21,10 +21,10 @@ public class Player extends ControllableEntity<Action, Axis> {
 
     public Player(Controller<Action, Axis> controller) {
         super(model, new Vector3f(0.7f, 1.8f, 0.7f), controller);
-        this.camera = new GameCamera(controller, this);
+        this.camera = new PlayerCamera(controller, this);
         walkSpeed = 3;
         currentSpeed = new Vector3f();
-        hitbox.setColor(Color.RED);
+        hitbox.setColor(Color.WHITE);
     }
 
     public void move(Vector3f direction) {
@@ -36,13 +36,9 @@ public class Player extends ControllableEntity<Action, Axis> {
 
 
     public void update(double deltaTime) {
-        super.update(deltaTime);
-
         handleInputs(deltaTime);
 
-
         this.move(currentSpeed);
-        hitbox.update();
         camera.update();
     }
 
@@ -71,7 +67,7 @@ public class Player extends ControllableEntity<Action, Axis> {
         if (controller.isDown(Action.MOVE_WEST)) {
             direction.add(camera.getLookDirectionUnitVector().cross(camera.getWorldUp()).negate());
         }
-        if (direction.equals(0,0,0)) {
+        if (!isMoving()) {
             currentSpeed.zero();
             return;
         }
@@ -91,7 +87,7 @@ public class Player extends ControllableEntity<Action, Axis> {
             isSprinting = true;
         }
 
-        if (!isMoving() && !controller.isDown(Action.SPRINT)) {
+        if (!controller.isDown(Action.MOVE_NORTH)) {
             isSprinting = false;
         }
     }
@@ -108,4 +104,5 @@ public class Player extends ControllableEntity<Action, Axis> {
         return controller.isDown(Action.MOVE_NORTH) ||  controller.isDown(Action.MOVE_SOUTH)
                 || controller.isDown(Action.MOVE_EAST) || controller.isDown(Action.MOVE_WEST);
     }
+
 }
