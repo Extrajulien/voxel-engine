@@ -21,7 +21,7 @@ public enum MouseButton {
         return lookup.get(glfwKeyCode);
     }
 
-    private static HashMap generateLookup() {
+    private static HashMap<Integer, MouseButton> generateLookup() {
         HashMap<Integer, MouseButton> lookup = new HashMap<>();
         for (MouseButton button : values()) {
             lookup.put(button.glfwKeyCode, button);

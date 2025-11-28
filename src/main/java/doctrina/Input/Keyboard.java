@@ -3,12 +3,14 @@ package doctrina.Input;
 import doctrina.rendering.RenderingEngine;
 import org.lwjgl.glfw.GLFWKeyCallbackI;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Keyboard {
-    private final LinkedList<Key> pressedKeys = new LinkedList<>();
+    private final ArrayList<Key> pressedKeys = new ArrayList<>();
+    private final ArrayList<Key> downKeys = new ArrayList<>();
+    private final ArrayList<Key> releasedKeys = new ArrayList<>();
 
     public Keyboard() {
         glfwSetKeyCallback(RenderingEngine.getWindow().getId(), keyCallback);
@@ -16,28 +18,35 @@ public class Keyboard {
 
 
     public boolean isDown(Key key) {
-        return pressedKeys.contains(key);
+        return downKeys.contains(key);
     }
 
     public boolean isPressed(Key key) {
-        if (key.isPressed()) {
-            key.release();
-            return true;
-        }
-        return false;
+        return pressedKeys.contains(key);
     }
+
+    public boolean isReleased(Key key) {
+        return releasedKeys.contains(key);
+    }
+
+    public void update() {
+        pressedKeys.clear();
+        releasedKeys.clear();
+    }
+
+
 
     private final GLFWKeyCallbackI keyCallback = (window, key, scancode, action, mods) -> {
         Key keyboardKey= Key.fromInt(key);
         if (keyboardKey == null) return;
         if (action == GLFW_PRESS) {
-            keyboardKey.press();
             pressedKeys.add(keyboardKey);
+            downKeys.add(keyboardKey);
             return;
         }
         if (action == GLFW_RELEASE) {
-            keyboardKey.release();
-            pressedKeys.remove(keyboardKey);
+            downKeys.remove(keyboardKey);
+            releasedKeys.add(keyboardKey);
         }
     };
 }

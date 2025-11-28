@@ -71,37 +71,19 @@ public enum Key {
     ESCAPE(GLFW_KEY_ESCAPE);
 
     public final int glfwKeyCode;
-    private boolean isPressed;
 
     private static final HashMap<Integer, Key> lookup = generateLookup();
 
     Key(int keyCode) {
         glfwKeyCode = keyCode;
-        isPressed = false;
-    }
-
-    public void press() {
-        isPressed = true;
-    }
-
-    public void release() {
-        isPressed = false;
-    }
-
-    public boolean isPressed() {
-        return isPressed;
     }
 
     public static Key fromInt(int glfwKeyCode) {
         return lookup.get(glfwKeyCode);
     }
 
-    public static int maxSize() {
-        return GLFW_KEY_LAST;
-    }
 
-
-    private static HashMap generateLookup() {
+    private static HashMap<Integer, Key> generateLookup() {
         HashMap<Integer, Key> lookup = new HashMap<>();
         for (Key key : values()) {
             lookup.put(key.glfwKeyCode, key);
