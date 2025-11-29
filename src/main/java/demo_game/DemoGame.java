@@ -6,7 +6,6 @@ import doctrina.Entities.Entity;
 import doctrina.Game;
 import doctrina.Input.*;
 import doctrina.rendering.*;
-import org.joml.Vector3f;
 
 public class DemoGame extends Game {
     Mouse mouse;
@@ -21,13 +20,14 @@ public class DemoGame extends Game {
     public void initialize() {
         Shader<CubeUniform> shader = new Shader<>(CubeUniform.class, "vertex.glsl", "imageFragment.glsl");
         shader.use();
-        Texture dirtTex = new Texture("dirt.jpg");
+        Texture dirtTex = new Texture("toaster.png");
         Material<CubeUniform> dirt = new Material<>(shader, dirtTex);
         Mesh cube = new Mesh.Builder().cube().build();
         Model<CubeUniform> cubeModel = new Model<>(cube, dirt);
         cubeEntity = new EntityTest(cubeModel);
 
         world = new World(0);
+        world.loadChunks(player);
 
 
 

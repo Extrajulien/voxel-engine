@@ -1,11 +1,9 @@
 package demo_game;
 
-import org.joml.Vector3f;
-
 import java.util.ArrayList;
 
 public class World {
-    ArrayList<Chunk> chunks;
+    ArrayList<ArrayList<ArrayList<Chunk>>> chunks;
 
     public World(long seed) {
 

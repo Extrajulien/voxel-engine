@@ -13,8 +13,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
 import static org.lwjgl.opengl.GL11C.*;
-import static org.lwjgl.stb.STBImage.stbi_image_free;
-import static org.lwjgl.stb.STBImage.stbi_load;
+import static org.lwjgl.stb.STBImage.*;
 
 public class Image implements AutoCloseable {
     private ByteBuffer data;
@@ -23,6 +22,7 @@ public class Image implements AutoCloseable {
     private int format;
 
     public Image(String fileName) {
+        stbi_set_flip_vertically_on_load(true);
         loadImage(fileName);
     }
 
@@ -84,6 +84,9 @@ public class Image implements AutoCloseable {
         private String generateTempFile(String file) throws RuntimeException {
             Path temp;
             InputStream iStream = Objects.requireNonNull(getClass().getResourceAsStream("/textures/" + file));
+            if (file.contains("/")) {
+                file = file.substring(file.lastIndexOf("/") + 1);
+            }
             try {
                 temp = Files.createTempFile(file, null);
                 Files.copy(iStream, temp, StandardCopyOption.REPLACE_EXISTING);
