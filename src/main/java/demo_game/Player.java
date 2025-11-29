@@ -12,9 +12,11 @@ import org.joml.Vector3f;
 public class Player extends ControllableEntity<Action, Axis> {
     private final int CHUNK_LOADING_RADIUS = 2;
     private final PlayerCamera camera;
+    private final Inventory inventory;
     private Vector3f currentSpeed;
     private float sprintSpeed = 6;
     private boolean isSprinting = false;
+
 
     private final static Model<CubeUniform> model = Models.makePlayer();
 
@@ -25,6 +27,7 @@ public class Player extends ControllableEntity<Action, Axis> {
         walkSpeed = 3;
         currentSpeed = new Vector3f();
         hitbox.setColor(Color.WHITE);
+        inventory = new Inventory();
     }
 
     public void move(Vector3f direction) {
@@ -38,8 +41,12 @@ public class Player extends ControllableEntity<Action, Axis> {
     public void update(double deltaTime) {
         handleInputs(deltaTime);
 
-        this.move(currentSpeed);
-        camera.update();
+
+        if (!inventory.isOpen()) {
+            this.move(currentSpeed);
+            camera.update();
+        }
+
     }
 
     public CameraView getCameraView() {
@@ -50,6 +57,13 @@ public class Player extends ControllableEntity<Action, Axis> {
         setSprintFromInput();
         setSpeedFromInputs(deltaTime);
         setCameraModeFromInputs();
+        if (controller.isPressed(Action.INVENTORY_TOGGLE)) {
+            if (inventory.isOpen()) {
+                closeInventory();
+            } else {
+                openInventory();
+            }
+        }
     }
 
 
@@ -103,6 +117,16 @@ public class Player extends ControllableEntity<Action, Axis> {
     private boolean isMoving() {
         return controller.isDown(Action.MOVE_NORTH) ||  controller.isDown(Action.MOVE_SOUTH)
                 || controller.isDown(Action.MOVE_EAST) || controller.isDown(Action.MOVE_WEST);
+    }
+
+    private void openInventory() {
+
+        inventory.open(controller);
+    }
+
+    private void closeInventory() {
+
+        inventory.close(controller);
     }
 
 }

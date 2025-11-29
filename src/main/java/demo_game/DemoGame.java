@@ -1,5 +1,6 @@
 package demo_game;
 
+import demo_game.Inputs.Action;
 import demo_game.Inputs.GameKMController;
 import demo_game.Uniforms.CubeUniform;
 import doctrina.Entities.Entity;
@@ -45,21 +46,13 @@ public class DemoGame extends Game {
     @Override
     public void update() {
 
-        if (keyboard.isDown(Key.ESCAPE)) {
+        if (controller.isPressed(Action.QUIT)) {
             stop();
         }
 
-        if (keyboard.isPressed(Key.F11)) {
+        if (controller.isPressed(Action.TOGGLE_FULLSCREEN)) {
             isFullscreen = !isFullscreen;
             toggleFullscreen(isFullscreen);
-        }
-
-        if (mouse.isPressed(MouseButton.RIGHT)) {
-            mouse.freeCursor();
-        }
-
-        if (mouse.isPressed(MouseButton.LEFT)) {
-            mouse.captureCursor();
         }
 
         player.update(deltaTime());

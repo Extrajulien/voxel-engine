@@ -71,6 +71,14 @@ public abstract class KeyboardMouseController<A extends Enum<A>, X extends Enum<
         return false;
     }
 
+    public final void captureCursor() {
+        mouse.captureCursor();
+    }
+
+    public final void freeCursor() {
+        mouse.freeCursor();
+    }
+
     protected abstract void setBindings();
 
     protected void addToKeyboardAction(A action, Key key) {
