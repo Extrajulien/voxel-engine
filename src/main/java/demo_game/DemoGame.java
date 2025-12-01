@@ -2,6 +2,7 @@ package demo_game;
 
 import demo_game.Inputs.Action;
 import demo_game.Inputs.GameKMController;
+import demo_game.Player.Player;
 import demo_game.Uniforms.CubeUniform;
 import doctrina.Entities.Entity;
 import doctrina.Game;

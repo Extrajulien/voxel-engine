@@ -1,5 +1,7 @@
 package demo_game;
 
+import demo_game.Player.Player;
+
 import java.util.ArrayList;
 
 public class World {
