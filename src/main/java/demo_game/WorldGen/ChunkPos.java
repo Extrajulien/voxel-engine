@@ -1,4 +1,4 @@
-package demo_game.World;
+package demo_game.WorldGen;
 
 import org.joml.Vector3i;
 

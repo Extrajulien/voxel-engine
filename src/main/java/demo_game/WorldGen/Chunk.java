@@ -1,6 +1,8 @@
-package demo_game.World;
+package demo_game.WorldGen;
 
 import demo_game.BlockType;
+import doctrina.Utils.Range1d;
+import doctrina.Utils.Range3d;
 import org.joml.RoundingMode;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
@@ -12,18 +14,34 @@ public class Chunk {
 
     public Chunk(ChunkPos worldPosition) {
         worldPos = new Vector3i(worldPosition.x(), worldPosition.y(), worldPosition.z());
-        worldPos.mul(SIZE, SIZE, SIZE);
     }
 
     public int getMinY() {
-        return worldPos.y;
+        return worldPos.y * SIZE;
     }
 
     public int getMaxY() {
-        return worldPos.y + SIZE - 1;
+        return worldPos.y * SIZE + SIZE - 1;
     }
 
     public static Vector3i positionToChunkCoordinate(Vector3f worldPosition) {
         return new Vector3i(worldPosition, RoundingMode.TRUNCATE).div(SIZE);
+    }
+
+    /**
+     * returns the position of the chunk in the chunk coordinate system
+     */
+    public Vector3i getChunkPos() {
+        return worldPos;
+    }
+
+    public Range3d getBlocksRange() {
+        return new Range3d(new Range1d(0, SIZE - 1), new Range1d(0, SIZE - 1),
+                new Range1d(0, SIZE - 1));
+    }
+    public void fill(BlockType fillerBlock) {
+        for (Vector3i pos : getBlocksRange()) {
+            blocks[pos.x][pos.y][pos.z] = fillerBlock;
+        }
     }
 }
