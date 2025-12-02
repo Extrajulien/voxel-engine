@@ -4,6 +4,7 @@ import demo_game.Inputs.Action;
 import demo_game.Inputs.GameKMController;
 import demo_game.Player.Player;
 import demo_game.Uniforms.CubeUniform;
+import demo_game.World.World;
 import doctrina.Entities.Entity;
 import doctrina.Game;
 import doctrina.Input.*;
@@ -28,8 +29,7 @@ public class DemoGame extends Game {
         Model<CubeUniform> cubeModel = new Model<>(cube, dirt);
         cubeEntity = new EntityTest(cubeModel);
 
-        world = new World(0);
-        world.loadChunks(player);
+
 
 
 
@@ -40,12 +40,16 @@ public class DemoGame extends Game {
 
         player = new Player(controller);
 
+        world = new World(0);
+        world.loadChunks(player);
+
         cubeEntity.moveTo(0,0,-5);
         mouse.captureCursor();
     }
 
     @Override
     public void update() {
+        world.loadChunks(player);
 
         if (controller.isPressed(Action.QUIT)) {
             stop();
