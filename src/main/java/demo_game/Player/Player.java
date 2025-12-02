@@ -37,9 +37,7 @@ public final class Player extends ControllableEntity<Action, Axis> {
     }
 
     public void update(double deltaTime) {
-        /*
-        modelMatrix.setRotationXYZ(0, (float) ( Math.acos(new Vector3f(camera.getLookDirectionUnitVector().x, 0, camera.getLookDirectionUnitVector().z).normalize().dot(1,0,0)) ), 0);
-        */
+
         movementHandler.update(deltaTime);
         handleInputs(deltaTime);
 
@@ -50,6 +48,16 @@ public final class Player extends ControllableEntity<Action, Axis> {
             camera.update();
         }
 
+    }
+
+    public int getChunkLoadingRadius() {
+        return CHUNK_LOADING_RADIUS;
+    }
+
+    @Override
+    public void draw(CameraView data) {
+        rotatePlayerModelWithCamera();
+        super.draw(data);
     }
 
     public CameraView getCameraView() {
@@ -91,5 +99,12 @@ public final class Player extends ControllableEntity<Action, Axis> {
 
     void setSprinting(boolean sprinting) {
         isSprinting = sprinting;
+    }
+
+    private void rotatePlayerModelWithCamera() {
+        Vector3f lookingDirectionXZ = new Vector3f(camera.getLookDirectionUnitVector().x, 0, camera.getLookDirectionUnitVector().z).normalize();
+        float yRotation =  (float) Math.atan2(lookingDirectionXZ.x, lookingDirectionXZ.z);
+        modelMatrix.setRotationXYZ(0, yRotation , 0);
+
     }
 }
