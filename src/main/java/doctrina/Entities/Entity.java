@@ -24,7 +24,7 @@ public abstract class Entity {
         model.draw(modelMatrix, data.viewMatrix(), data.projectionMatrix());
     }
 
-    public final void drawHitBox(CameraView data) {
+    public void drawHitBox(CameraView data) {
         hitbox.drawBounds(data.viewMatrix(), data.projectionMatrix());
     }
 

@@ -14,7 +14,7 @@ public final class PlayerCamera extends Camera {
         super(player, CameraMode.FPS);
         this.controller = player.getController();
         setSensitivity(1);
-        setFpsCamRadius(0.6f);
+        setFpsCamRadius(0f);
         setFpsCamYTranslation(0.7f);
     }
 

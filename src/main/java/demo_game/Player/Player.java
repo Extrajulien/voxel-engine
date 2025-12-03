@@ -73,8 +73,17 @@ public final class Player extends ControllableEntity<Action, Axis> {
 
     @Override
     public void draw(CameraView data) {
-        rotatePlayerModelWithCamera();
-        super.draw(data);
+        if (camera.getMode() != CameraMode.FPS) {
+            rotatePlayerModelWithCamera();
+            super.draw(data);
+        }
+    }
+
+    @Override
+    public void drawHitBox(CameraView data) {
+        if (camera.getMode() != CameraMode.FPS) {
+            super.drawHitBox(data);
+        }
     }
 
     public CameraView getCameraView() {
