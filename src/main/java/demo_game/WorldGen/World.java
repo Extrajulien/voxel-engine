@@ -17,10 +17,11 @@ public class World {
         chunkMeshes = new HashMap<>();
         terrainGenerator = new TerrainGenerator(seed);
         playerChunk = new Vector3i(Chunk.positionToChunkCoordinate(player.getPosition()));
+        CreateChunksNearPlayer(player);
     }
     public void loadChunks(Player player) {
         if (!playerChunk.equals(Chunk.positionToChunkCoordinate(player.getPosition()))) {
-            playerChunk = new Vector3i(Chunk.positionToChunkCoordinate(player.getPosition()));
+            playerChunk.set(Chunk.positionToChunkCoordinate(player.getPosition()));
             CreateChunksNearPlayer(player);
         }
     }
