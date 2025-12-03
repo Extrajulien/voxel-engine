@@ -1,9 +1,11 @@
 package doctrina.rendering;
 
+import doctrina.Utils.ArrayListToArray;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL15C.*;
 import static org.lwjgl.opengl.GL15C.GL_STATIC_DRAW;
@@ -24,6 +26,11 @@ public class Mesh {
         this.indices = indices;
         createVBO();
         createEBO();
+    }
+
+    public Mesh(ArrayList<Float> vertices, ArrayList<Integer> indices) {
+        this(ArrayListToArray.toFloatArray(vertices),
+                ArrayListToArray.toIntArray(indices));
     }
 
     public Mesh(Builder builder) {

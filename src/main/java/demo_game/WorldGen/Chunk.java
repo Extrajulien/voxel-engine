@@ -9,7 +9,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public class Chunk {
-    private final static int SIZE = 16;
+    public final static int SIZE = 16;
     private final BlockType[][][] blocks;
     private final Vector3i worldPos; // world pos is the x,y,z corner
     private long solidBlocks;
@@ -17,6 +17,7 @@ public class Chunk {
     public Chunk(ChunkPos worldPosition) {
         worldPos = new Vector3i(worldPosition.x(), worldPosition.y(), worldPosition.z());
         blocks = new BlockType[SIZE][SIZE][SIZE];
+        fill(BlockType.AIR);
         solidBlocks = 0;
     }
 
@@ -46,7 +47,7 @@ public class Chunk {
     public void fill(BlockType fillerBlock) {
         for (Vector3i pos : getBlocksRange()) {
             blocks[pos.x][pos.y][pos.z] = fillerBlock;
-            if (fillerBlock.isSolid()) {
+            if (!fillerBlock.isTransparent()) {
                 ++solidBlocks;
             }
         }
@@ -65,11 +66,11 @@ public class Chunk {
     }
 
     public void setBlockType(int x, int y, int z, BlockType blockType) {
-        if (!blocks[x][y][z].isSolid() && blockType.isSolid()) {
+        if (blocks[x][y][z].isTransparent() && !blockType.isTransparent()) {
             ++solidBlocks;
         }
 
-        if (blocks[x][y][z].isSolid() && !blockType.isSolid()) {
+        if (!blocks[x][y][z].isTransparent() && blockType.isTransparent()) {
             --solidBlocks;
         }
 
@@ -80,10 +81,10 @@ public class Chunk {
         setBlockType(pos.x, pos.y, pos.z, blockType);
     }
 
-    public Range2d getXZBlocksRange() {
+    public Range2d getWorldXZBlocksRange() {
         return new Range2d(
                 new Range1d((long) worldPos.x * SIZE, (long) worldPos.x * SIZE + SIZE - 1),
-                new Range1d((long) worldPos.y * SIZE, (long) worldPos.y * SIZE + SIZE - 1)
+                new Range1d((long) worldPos.z * SIZE, (long) worldPos.z * SIZE + SIZE - 1)
         );
     }
 

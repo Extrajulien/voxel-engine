@@ -16,7 +16,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public final class Player extends ControllableEntity<Action, Axis> {
-    private final int CHUNK_LOADING_RADIUS = 5;
+    private final int CHUNK_LOADING_RADIUS = 4;
     private final PlayerCamera camera;
     private final PlayerMovementHandler movementHandler;
     private final Inventory inventory;

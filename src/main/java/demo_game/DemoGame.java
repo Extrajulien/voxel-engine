@@ -37,7 +37,7 @@ public class DemoGame extends Game {
 
         world = new World(0, player);
 
-        cubeEntity.moveTo(0,0,-5);
+        cubeEntity.moveTo(0,0,0);
         mouse.captureCursor();
     }
 

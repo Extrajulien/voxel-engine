@@ -26,6 +26,30 @@ public class Range3d implements Iterable<Vector3i> {
                 && rangeZ.isNumberInRange(num.z);
     }
 
+    public long getMaxY() {
+        return rangeY.getHigherThreshold();
+    }
+
+    public long getMinY() {
+        return rangeY.getLowerThreshold();
+    }
+
+    public long getMaxX() {
+        return rangeX.getHigherThreshold();
+    }
+
+    public long getMinX() {
+        return rangeX.getLowerThreshold();
+    }
+
+    public long getMaxZ() {
+        return rangeZ.getHigherThreshold();
+    }
+
+    public long getMinZ() {
+        return rangeZ.getLowerThreshold();
+    }
+
     @NotNull
     @Override
     public Iterator<Vector3i> iterator() {
