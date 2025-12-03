@@ -11,7 +11,7 @@ public class ChunkMesh {
     private final static Texture dirtBlock = new Texture("block/dirt.jpg");
     private final static Shader<WorldUniform> shader = new Shader<>(WorldUniform.class, "vertex.glsl", "WorldFragment.glsl");
     private final Material<WorldUniform> material = new Material<>(shader, dirtBlock);
-    private Mesh mesh = new Mesh.Builder().cube().build();
+    private Mesh mesh;
     private Model<WorldUniform> chunkModel;
     private final Chunk chunk;
 
@@ -20,7 +20,9 @@ public class ChunkMesh {
         this.chunk = chunk;
 
 
-
+        if (!chunk.isEmpty()) {
+            mesh = new Mesh.Builder().cube().build();
+        }
 
 
         if (mesh != null) {
