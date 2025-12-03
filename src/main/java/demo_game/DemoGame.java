@@ -29,19 +29,13 @@ public class DemoGame extends Game {
         Model<CubeUniform> cubeModel = new Model<>(cube, dirt);
         cubeEntity = new EntityTest(cubeModel);
 
-
-
-
-
         mouse = new Mouse(0.1f);
         keyboard = new Keyboard();
         controller = new GameKMController(keyboard, mouse);
 
-
         player = new Player(controller);
 
-        world = new World(0);
-        world.loadChunks(player);
+        world = new World(0, player);
 
         cubeEntity.moveTo(0,0,-5);
         mouse.captureCursor();
@@ -66,7 +60,7 @@ public class DemoGame extends Game {
 
     @Override
     public void draw() {
-
+        world.draw(player);
         cubeEntity.draw(player.getCameraView());
         cubeEntity.drawHitBox(player.getCameraView());
 

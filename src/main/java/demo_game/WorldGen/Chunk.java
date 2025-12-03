@@ -8,7 +8,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public class Chunk {
-    private final static int SIZE = 32;
+    private final static int SIZE = 16;
     private final BlockType[][][] blocks = new BlockType[SIZE][SIZE][SIZE];
     private final Vector3i worldPos; // world pos is the x,y,z corner
 
@@ -44,4 +44,18 @@ public class Chunk {
             blocks[pos.x][pos.y][pos.z] = fillerBlock;
         }
     }
+
+    public BlockType[][][] getBlocks() {
+        return blocks;
+    }
+
+    public BlockType getBlock(Vector3i vec) {
+        return getBlock(vec.x, vec.y, vec.z);
+    }
+
+    public BlockType getBlock(int x, int y, int z) {
+        return blocks[x][y][z];
+    }
+
+
 }

@@ -16,12 +16,12 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public final class Player extends ControllableEntity<Action, Axis> {
-    private final int CHUNK_LOADING_RADIUS = 2;
+    private final int CHUNK_LOADING_RADIUS = 5;
     private final PlayerCamera camera;
     private final PlayerMovementHandler movementHandler;
     private final Inventory inventory;
     private Vector3f currentSpeed;
-    private float sprintSpeed = 6;
+    private float sprintSpeed = 32;
     private boolean isSprinting = false;
     private final static Model<CubeUniform> model = Models.makePlayer();
 
@@ -124,4 +124,6 @@ public final class Player extends ControllableEntity<Action, Axis> {
         modelMatrix.setRotationXYZ(0, yRotation , 0);
 
     }
+
+
 }
