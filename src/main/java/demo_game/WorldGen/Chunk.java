@@ -17,15 +17,15 @@ public class Chunk {
     public Chunk(ChunkPos worldPosition) {
         worldPos = new Vector3i(worldPosition.x(), worldPosition.y(), worldPosition.z());
         blocks = new BlockType[SIZE][SIZE][SIZE];
-        fill(BlockType.AIR);
         solidBlocks = 0;
+        fill(BlockType.AIR);
     }
 
-    public int getMinY() {
+    public int getWorldSpaceMinY() {
         return worldPos.y * SIZE;
     }
 
-    public int getMaxY() {
+    public int getWorldSpaceMaxY() {
         return worldPos.y * SIZE + SIZE - 1;
     }
 
@@ -34,7 +34,7 @@ public class Chunk {
     }
 
     /**
-     * returns the position of the chunk in the chunk coordinate system
+     * returns the position of the chunk in Chunk space
      */
     public Vector3i getChunkPos() {
         return worldPos;

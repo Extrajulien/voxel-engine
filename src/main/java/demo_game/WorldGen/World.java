@@ -5,7 +5,6 @@ import org.joml.Vector3i;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 public class World {
     Map<ChunkPos, Chunk> chunks;
@@ -20,7 +19,7 @@ public class World {
         playerChunk = new Vector3i(Chunk.positionToChunkCoordinate(player.getPosition()));
     }
     public void loadChunks(Player player) {
-        if (playerChunk != Chunk.positionToChunkCoordinate(player.getPosition())) {
+        if (!playerChunk.equals(Chunk.positionToChunkCoordinate(player.getPosition()))) {
             playerChunk = new Vector3i(Chunk.positionToChunkCoordinate(player.getPosition()));
             CreateChunksNearPlayer(player);
         }
@@ -39,21 +38,26 @@ public class World {
                 createChunk(chunkPos);
             }
         }
+        for (Vector3i pos : player.getChunkLoadingRange()) {
+            ChunkPos chunkPos = new ChunkPos(pos);
+            createChunkMesh(chunkPos);
+        }
     }
 
     private void createChunk(ChunkPos chunkPos) {
         Chunk chunk = new Chunk(chunkPos);
         terrainGenerator.CreateChunk(chunk);
         chunks.put(chunkPos, chunk);
-        updateChunkMesh(chunkPos);
     }
 
-    private void updateChunkMesh(ChunkPos chunkPos) {
+    private void createChunkMesh(ChunkPos chunkPos) {
         if (chunks.get(chunkPos).isEmpty()) {
             return;
         }
-        ChunkMesh mesh = new ChunkMesh(chunks.get(chunkPos), findNeighboringChunks(chunkPos));
-        chunkMeshes.put(chunkPos, mesh);
+        if (!chunkMeshes.containsKey(chunkPos)) {
+            ChunkMesh mesh = new ChunkMesh(chunks.get(chunkPos), findNeighboringChunks(chunkPos));
+            chunkMeshes.put(chunkPos, mesh);
+        }
     }
 
 

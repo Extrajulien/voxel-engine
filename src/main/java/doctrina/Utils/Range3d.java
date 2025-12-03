@@ -22,8 +22,12 @@ public class Range3d implements Iterable<Vector3i> {
     }
 
     public boolean isPointInRange(Vector3i num) {
-        return rangeX.isNumberInRange(num.x) && rangeY.isNumberInRange(num.y)
-                && rangeZ.isNumberInRange(num.z);
+        return isPointInRange(num.x, num.y, num.z);
+    }
+
+    public boolean isPointInRange(int x, int y, int z) {
+        return rangeX.isNumberInRange(x) && rangeY.isNumberInRange(y)
+                && rangeZ.isNumberInRange(z);
     }
 
     public long getMaxY() {

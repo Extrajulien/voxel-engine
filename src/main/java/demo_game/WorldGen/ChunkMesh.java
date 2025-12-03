@@ -30,17 +30,10 @@ public class ChunkMesh {
             BlockType block = chunk.getBlockType(pos);
 
             if (!block.isTransparent()) {
-                if (getBlockAbove(pos, surroundingChunks).isTransparent()) {
-                    generateTopFace(pos);
-                }
-                if (getBlockUnder(pos, surroundingChunks).isTransparent()) {
-                    generateBottomFace(pos);
-                }
-                if (getBlockEast(pos, surroundingChunks).isTransparent()) {
-                    generateEastFace(pos);
-                }
-                if (getBlockWest(pos, surroundingChunks).isTransparent()) {
-                    generateWestFace(pos);
+                for (Direction direction : Direction.values()) {
+                    if (getNeighboringBlock(pos, surroundingChunks, direction).isTransparent()) {
+                        generateFace(pos, direction);
+                    }
                 }
             }
         }
@@ -66,44 +59,59 @@ public class ChunkMesh {
         }
     }
 
-    private BlockType getBlockAbove(Vector3i pos, NeighboringChunks neighbors) {
-        int x = pos.x;
-        int y = pos.y;
-        int z = pos.z;
+    private BlockType getNeighboringBlock(Vector3i position, NeighboringChunks neighbors, Direction direction) {
+        int x = position.x + direction.x;
+        int y = position.y + direction.y;
+        int z = position.z + direction.z;
 
-        if (y + 1 <= chunk.getBlocksRange().getMaxY()) {
-            return chunk.getBlockType(x, y + 1, z);
+        if (chunk.getBlocksRange().isPointInRange(x, y, z)) {
+            return chunk.getBlockType(x, y, z);
         }
 
-        Chunk top = neighbors.get(NeighboringChunks.Direction.TOP);
-        if (top == null) {
+        Chunk neighbor = neighbors.get(direction);
+        if (neighbor == null) {
             return BlockType.AIR;
         }
+        x = wrapNumAroundChunk(x);
+        y = wrapNumAroundChunk(y);
+        z = wrapNumAroundChunk(z);
 
-        if (0 < top.getBlocksRange().getMaxY()) {
-            return top.getBlockType(x, 0, z);
+        return neighbor.getBlockType(x, y, z);
+    }
+
+    private int wrapNumAroundChunk(int number) {
+        if (number >= Chunk.SIZE) {
+            number -= Chunk.SIZE;
+        }
+        if (number < 0) {
+            number += Chunk.SIZE;
         }
 
-        return BlockType.AIR;
+        return number;
     }
 
     private BlockType getBlockUnder(Vector3i position, NeighboringChunks surroundingChunks) {
-        if (!chunk.getBlocksRange().isPointInRange(new Vector3i(position.x, position.y-1, position.z))) {
-            if (surroundingChunks.get(NeighboringChunks.Direction.BOTTOM) == null) {
-                return BlockType.AIR;
-            }
-            return surroundingChunks.get(NeighboringChunks.Direction.BOTTOM).getBlockType(new Vector3i(position.x, Chunk.SIZE-1, position.z));
+        int x = position.x;
+        int y = position.y;
+        int z = position.z;
+        if (chunk.getBlocksRange().getMinY() <= y - 1) {
+            return chunk.getBlockType(x, y - 1, z);
         }
 
-        return chunk.getBlockType(new Vector3i(position.x, position.y - 1, position.z));
+        Chunk bottom = surroundingChunks.get(Direction.BOTTOM);
+        if (bottom == null) {
+            return BlockType.AIR;
+        }
+
+        return bottom.getBlockType(x, (int) bottom.getBlocksRange().getMaxY(), z);
     }
 
     private BlockType getBlockEast(Vector3i position, NeighboringChunks surroundingChunks) {
         if (!chunk.getBlocksRange().isPointInRange(new Vector3i(position.x + 1, position.y, position.z))) {
-            if (surroundingChunks.get(NeighboringChunks.Direction.EAST) == null) {
+            if (surroundingChunks.get(Direction.EAST) == null) {
                 return BlockType.AIR;
             }
-            return surroundingChunks.get(NeighboringChunks.Direction.EAST).getBlockType(new Vector3i(0, position.y, position.z));
+            return surroundingChunks.get(Direction.EAST).getBlockType(new Vector3i(0, position.y, position.z));
         }
 
         return chunk.getBlockType(new Vector3i(position.x + 1, position.y, position.z));
@@ -111,68 +119,46 @@ public class ChunkMesh {
 
     private BlockType getBlockWest(Vector3i position, NeighboringChunks surroundingChunks) {
         if (!chunk.getBlocksRange().isPointInRange(new Vector3i(position.x - 1, position.y, position.z))) {
-            if (surroundingChunks.get(NeighboringChunks.Direction.WEST) == null) {
+            if (surroundingChunks.get(Direction.WEST) == null) {
                 return BlockType.AIR;
             }
-            return surroundingChunks.get(NeighboringChunks.Direction.WEST).getBlockType(new Vector3i(Chunk.SIZE-1, position.y, position.z));
+            return surroundingChunks.get(Direction.WEST).getBlockType(new Vector3i(Chunk.SIZE-1, position.y, position.z));
         }
 
         return chunk.getBlockType(new Vector3i(position.x - 1, position.y, position.z));
     }
 
+    private void generateFace(Vector3i blockPos, Direction direction) {
+        float x = blockPos.x;
+        float y = blockPos.y;
+        float z = blockPos.z;
 
-    private void generateTopFace(Vector3i pos) {
-        generateYFace(new Vector3i(pos.x, pos.y + 1, pos.z));
-    }
+        int startIndex = vertices.size() / 5;
 
-    private void generateBottomFace(Vector3i pos) {
-        generateYFace(pos);
-    }
+        vertices.add(x + direction.getBottomLeftCorner().x);
+        vertices.add(y + direction.getBottomLeftCorner().y);
+        vertices.add(z + direction.getBottomLeftCorner().z);
+        vertices.add(0f);
+        vertices.add(0f);
 
-    private void generateEastFace(Vector3i pos) {
-        generateXFace(new Vector3i(pos.x + 1, pos.y, pos.z));
-    }
-
-    private void generateWestFace(Vector3i pos) {
-        generateXFace(pos);
-    }
-
-    private void generateYFace(Vector3i pos) {
-        float x = pos.x;
-        float y = pos.y; // top face plane
-        float z = pos.z;
-
-        int startIndex = vertices.size() / 5; // each vertex = 5 floats
-
-        // v0 (bottom-left in UV space)
-        vertices.add(x);      // x
-        vertices.add(y);      // y
-        vertices.add(z);      // z
-        vertices.add(0f);     // u
-        vertices.add(0f);     // v
-
-        // v1 (bottom-right)
-        vertices.add(x + 1);
-        vertices.add(y);
-        vertices.add(z);
+        vertices.add(x + direction.getBottomRightCorner().x);
+        vertices.add(y + direction.getBottomRightCorner().y);
+        vertices.add(z + direction.getBottomRightCorner().z);
         vertices.add(1f);
         vertices.add(0f);
 
-        // v2 (top-right)
-        vertices.add(x + 1);
-        vertices.add(y);
-        vertices.add(z + 1);
+        vertices.add(x + direction.getTopRightCorner().x);
+        vertices.add(y + direction.getTopRightCorner().y);
+        vertices.add(z + direction.getTopRightCorner().z);
         vertices.add(1f);
         vertices.add(1f);
 
-        // v3 (top-left)
-        vertices.add(x);
-        vertices.add(y);
-        vertices.add(z + 1);
+        vertices.add(x + direction.getTopLeftCorner().x);
+        vertices.add(y + direction.getTopLeftCorner().y);
+        vertices.add(z + direction.getTopLeftCorner().z);
         vertices.add(0f);
         vertices.add(1f);
 
-        // Indices (two triangles)
         indices.add(startIndex + 0);
         indices.add(startIndex + 1);
         indices.add(startIndex + 2);
@@ -181,50 +167,4 @@ public class ChunkMesh {
         indices.add(startIndex + 3);
         indices.add(startIndex + 0);
     }
-
-    private void generateXFace(Vector3i pos) {
-        float x = pos.x;
-        float y = pos.y;
-        float z = pos.z;
-
-        int startIndex = vertices.size() / 5; // each vertex = 5 floats
-
-        // v0 (bottom-left)
-        vertices.add(x);
-        vertices.add(y);
-        vertices.add(z);
-        vertices.add(0f); // u
-        vertices.add(0f); // v
-
-        // v1 (bottom-right)
-        vertices.add(x);
-        vertices.add(y);
-        vertices.add(z + 1);
-        vertices.add(1f);
-        vertices.add(0f);
-
-        // v2 (top-right)
-        vertices.add(x);
-        vertices.add(y + 1);
-        vertices.add(z + 1);
-        vertices.add(1f);
-        vertices.add(1f);
-
-        // v3 (top-left)
-        vertices.add(x);
-        vertices.add(y + 1);
-        vertices.add(z);
-        vertices.add(0f);
-        vertices.add(1f);
-
-        // Indices
-        indices.add(startIndex + 0);
-        indices.add(startIndex + 1);
-        indices.add(startIndex + 2);
-
-        indices.add(startIndex + 2);
-        indices.add(startIndex + 3);
-        indices.add(startIndex + 0);
-    }
-
 }

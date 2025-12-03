@@ -15,7 +15,7 @@ public class TerrainGenerator {
         Range2d range = chunk.getWorldXZBlocksRange();
 
 
-        if (chunk.getChunkPos().equals(0,-1,0) || chunk.getChunkPos().equals(0,0,0) || chunk.getChunkPos().equals(0,-1,2)) {
+        if (chunk.getChunkPos().equals(0,-1,0) || chunk.getChunkPos().equals(0,0,0) || chunk.getChunkPos().equals(1,0,0)) {
             chunk.fill(BlockType.DIRT);
             chunk.setBlockType(10, 15, 10, BlockType.AIR);
             chunk.setBlockType(10, 0, 10, BlockType.AIR);

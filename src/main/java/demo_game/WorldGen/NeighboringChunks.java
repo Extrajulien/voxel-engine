@@ -17,13 +17,4 @@ public record NeighboringChunks(Chunk top, Chunk bottom, Chunk north, Chunk sout
             case WEST -> west;
         };
     }
-
-    public enum Direction {
-        TOP,
-        BOTTOM,
-        NORTH,
-        SOUTH,
-        EAST,
-        WEST
-    }
 }
