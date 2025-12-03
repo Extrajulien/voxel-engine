@@ -49,7 +49,9 @@ public class World {
     }
 
     private void updateChunkMesh(ChunkPos chunkPos) {
-
+        if (chunks.get(chunkPos).isEmpty()) {
+            return;
+        }
         ChunkMesh mesh = new ChunkMesh(chunks.get(chunkPos), findNeighboringChunks(chunkPos));
         chunkMeshes.put(chunkPos, mesh);
     }
