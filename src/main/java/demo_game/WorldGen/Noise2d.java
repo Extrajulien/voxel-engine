@@ -12,7 +12,7 @@ public class Noise2d implements Iterable<Integer> {
     private final Range1d valueRanges;
 
     public Noise2d(int[][] values) {
-        range = new Range2d(new Range1d(0, values.length), new Range1d(0, values[0].length));
+        range = new Range2d(new Range1d(0, values.length-1), new Range1d(0, values[0].length-1));
         this.values = values;
         valueRanges = getValueRanges();
     }
@@ -23,6 +23,10 @@ public class Noise2d implements Iterable<Integer> {
 
     public Range1d getValuesRange() {
         return valueRanges;
+    }
+
+    public int[][] getValues() {
+        return values;
     }
 
 

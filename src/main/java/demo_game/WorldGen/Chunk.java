@@ -11,14 +11,17 @@ import org.joml.Vector3i;
 public class Chunk {
     private final static int SIZE_POWER_OF_2 = 4;
     public final static int SIZE = (int) Math.pow(2, SIZE_POWER_OF_2);
+
     private final BlockType[][][] blocks;
     private final Vector3i worldPos; // world pos is the x,y,z corner
+    private final Range3d worldSpaceRange;
     private long solidBlocks;
 
     public Chunk(ChunkPos worldPosition) {
         worldPos = new Vector3i(worldPosition.x(), worldPosition.y(), worldPosition.z());
         blocks = new BlockType[SIZE][SIZE][SIZE];
         solidBlocks = 0;
+        worldSpaceRange = createWorldSpaceRange();
         fill(BlockType.AIR);
     }
 
@@ -28,6 +31,10 @@ public class Chunk {
 
     public int getWorldSpaceMaxY() {
         return worldPos.y * SIZE + SIZE - 1;
+    }
+
+    public Range1d getWorldSpaceYRange() {
+        return worldSpaceRange.rangeY();
     }
 
     public static Vector3i positionToChunk(Vector3f worldPosition) {
@@ -92,6 +99,15 @@ public class Chunk {
 
     public static int posWorldWrapToChunk(int number) {
         return number & SIZE-1;
+    }
+
+
+    private Range3d createWorldSpaceRange() {
+        return new Range3d(
+            new Range1d((long) worldPos.x * SIZE, (long) worldPos.x * SIZE + SIZE - 1),
+            new Range1d((long) worldPos.y * SIZE, (long) worldPos.y * SIZE + SIZE - 1),
+            new Range1d((long) worldPos.z * SIZE, (long) worldPos.z * SIZE + SIZE - 1)
+        );
     }
 
 

@@ -11,6 +11,7 @@ public class Camera {
     private float fpsCamRadius = 1f;
     private float maxPitch = 85f;
     private float minPitch = -85f;
+    private final float farPlane = 10000f;
     private float fovY;
 
     private double yaw = -90;
@@ -111,7 +112,7 @@ public class Camera {
     }
 
     private void computeProjectionMatrix() {
-        this.projectionMatrix.setPerspective(fovY, RenderingEngine.getAspectRatio(), 0.1f, 1000);
+        this.projectionMatrix.setPerspective(fovY, RenderingEngine.getAspectRatio(), 0.1f, farPlane);
     }
 
     private void computeViewMatrix() {

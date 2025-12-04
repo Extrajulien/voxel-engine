@@ -10,7 +10,7 @@ import org.joml.Vector3i;
 import java.util.ArrayList;
 
 public class ChunkMesh {
-    private final static Texture dirtBlock = new Texture("block/dirt.jpg");
+    private final static Texture dirtBlock = new Texture(BlockType.DIRT.getTexturePaths()[0]);
     private final static Shader<WorldUniform> shader = new Shader<>(WorldUniform.class, "vertex.glsl", "WorldFragment.glsl");
     private final Material<WorldUniform> material = new Material<>(shader, dirtBlock);
     private final ArrayList<Float> vertices;
