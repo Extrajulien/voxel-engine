@@ -16,11 +16,11 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public final class Player extends ControllableEntity<Action, Axis> {
-    private final int CHUNK_LOADING_RADIUS = 4;
+    private final int CHUNK_LOADING_RADIUS = 7;
     private final PlayerCamera camera;
     private final PlayerMovementHandler movementHandler;
     private final Inventory inventory;
-    private Vector3f currentSpeed;
+    private final Vector3f currentSpeed;
     private float sprintSpeed = 32;
     private boolean isSprinting = false;
     private final static Model<CubeUniform> model = Models.makePlayer();
@@ -64,7 +64,7 @@ public final class Player extends ControllableEntity<Action, Axis> {
     }
 
     private Vector3i getChunkPos() {
-        return Chunk.positionToChunkCoordinate(position);
+        return Chunk.positionToChunk(position);
     }
 
     public int getChunkLoadingRadius() {
@@ -103,7 +103,7 @@ public final class Player extends ControllableEntity<Action, Axis> {
     private void updateSpeedFromMovement(double deltaTime) {
         Vector3f direction = movementHandler.getMovementDirection();
         float speed = isSprinting ? sprintSpeed : walkSpeed;
-        currentSpeed.set(direction.x, 0, direction.z).mul(speed * (float) deltaTime);
+        currentSpeed.set(direction).mul(speed * (float) deltaTime);
     }
 
     private void openInventory() {

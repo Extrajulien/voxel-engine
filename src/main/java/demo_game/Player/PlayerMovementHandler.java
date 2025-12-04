@@ -30,7 +30,8 @@ public final class PlayerMovementHandler {
 
     public boolean isMoving() {
         return controller.isDown(Action.MOVE_NORTH) ||  controller.isDown(Action.MOVE_SOUTH)
-                || controller.isDown(Action.MOVE_EAST) || controller.isDown(Action.MOVE_WEST);
+                || controller.isDown(Action.MOVE_EAST) || controller.isDown(Action.MOVE_WEST)
+                || controller.isDown(Action.CROUCH) || controller.isDown(Action.JUMP);
     }
 
     private void updateCameraModeFromInputs() {
@@ -54,13 +55,21 @@ public final class PlayerMovementHandler {
             direction.add(camera.getLookDirectionUnitVector().cross(camera.getWorldUp()).negate());
         }
 
+        if (controller.isDown(Action.CROUCH)) {
+            direction.add(0, -1, 0);
+        }
+
+        if (controller.isDown(Action.JUMP)) {
+            direction.add(0,1,0);
+        }
+
         // prevent division by zero
         if (!isMoving()) {
             movementDirection.zero();
             return;
         }
 
-        movementDirection.set(direction.x, 0, direction.z).normalize();
+        movementDirection.set(direction.x, direction.y, direction.z).normalize();
     }
 
     private void updateSprintFromInput() {

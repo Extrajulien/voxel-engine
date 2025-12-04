@@ -4,6 +4,7 @@ public enum Action {
     QUIT,
     TOGGLE_FULLSCREEN,
     JUMP,
+    CROUCH,
     MOVE_NORTH,
     MOVE_SOUTH,
     MOVE_EAST,

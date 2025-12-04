@@ -22,6 +22,7 @@ public class GameKMController extends KeyboardMouseController<Action, Axis> {
         addToKeyboardAction(Action.JUMP, Key.SPACE);
         addToKeyboardAction(Action.QUIT, Key.ESCAPE);
         addToKeyboardAction(Action.TOGGLE_FULLSCREEN, Key.F11);
+        addToKeyboardAction(Action.CROUCH, Key.LEFT_SHIFT);
     }
 
     @Override
