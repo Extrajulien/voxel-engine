@@ -8,6 +8,7 @@ import demo_game.WorldGen.World;
 import doctrina.Entities.Entity;
 import doctrina.Game;
 import doctrina.Input.*;
+import doctrina.Utils.Range1d;
 import doctrina.rendering.*;
 
 public class DemoGame extends Game {

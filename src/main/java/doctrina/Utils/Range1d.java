@@ -24,6 +24,22 @@ public class Range1d implements Iterable<Long> {
         return num >= low && num <= high;
     }
 
+    public boolean hasRange(Range1d other) {
+        return low <= other.low && high >= other.high;
+    }
+
+    public boolean isIntersectingRange(Range1d other) {
+        return !(low > other.high || high < other.low);
+    }
+
+    public boolean isGreater(Range1d other) {
+        return low > other.high;
+    }
+
+    public boolean isLower(Range1d other) {
+        return high < other.low;
+    }
+
     public long getLowerThreshold() {
         return low;
     }

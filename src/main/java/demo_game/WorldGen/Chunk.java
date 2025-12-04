@@ -9,7 +9,8 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public class Chunk {
-    public final static int SIZE = 16;
+    private final static int SIZE_POWER_OF_2 = 4;
+    public final static int SIZE = (int) Math.pow(2, SIZE_POWER_OF_2);
     private final BlockType[][][] blocks;
     private final Vector3i worldPos; // world pos is the x,y,z corner
     private long solidBlocks;
@@ -29,7 +30,7 @@ public class Chunk {
         return worldPos.y * SIZE + SIZE - 1;
     }
 
-    public static Vector3i positionToChunkCoordinate(Vector3f worldPosition) {
+    public static Vector3i positionToChunk(Vector3f worldPosition) {
         return new Vector3i(worldPosition, RoundingMode.TRUNCATE).div(SIZE);
     }
 
@@ -83,9 +84,14 @@ public class Chunk {
 
     public Range2d getWorldXZBlocksRange() {
         return new Range2d(
-                new Range1d((long) worldPos.x * SIZE, (long) worldPos.x * SIZE + SIZE - 1),
-                new Range1d((long) worldPos.z * SIZE, (long) worldPos.z * SIZE + SIZE - 1)
+                new Range1d((long) worldPos.x * SIZE, (long) worldPos.x * SIZE + SIZE -1),
+                new Range1d((long) worldPos.z * SIZE, (long) worldPos.z * SIZE + SIZE -1)
         );
+    }
+
+
+    public static int posWorldWrapToChunk(int number) {
+        return number & SIZE-1;
     }
 
 

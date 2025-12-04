@@ -19,6 +19,30 @@ public class Range2d implements Iterable<Vector2i> {
         return rangeX.isNumberInRange(num.x) && rangeY.isNumberInRange(num.y);
     }
 
+    public Range1d getRangeX() {
+        return rangeX;
+    }
+
+    public Range1d getRangeY() {
+        return rangeY;
+    }
+
+    public long getMaxY() {
+        return rangeY.getHigherThreshold();
+    }
+
+    public long getMinY() {
+        return rangeY.getLowerThreshold();
+    }
+
+    public long getMaxX() {
+        return rangeX.getHigherThreshold();
+    }
+
+    public long getMinX() {
+        return rangeX.getLowerThreshold();
+    }
+
     @NotNull
     @Override
     public Iterator<Vector2i> iterator() {
