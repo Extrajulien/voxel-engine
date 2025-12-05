@@ -90,44 +90,6 @@ public class ChunkMesh {
         return number;
     }
 
-    private BlockType getBlockUnder(Vector3i position, NeighboringChunks surroundingChunks) {
-        int x = position.x;
-        int y = position.y;
-        int z = position.z;
-        if (chunk.getBlocksRange().getMinY() <= y - 1) {
-            return chunk.getBlockType(x, y - 1, z);
-        }
-
-        Chunk bottom = surroundingChunks.get(Direction.BOTTOM);
-        if (bottom == null) {
-            return BlockType.AIR;
-        }
-
-        return bottom.getBlockType(x, (int) bottom.getBlocksRange().getMaxY(), z);
-    }
-
-    private BlockType getBlockEast(Vector3i position, NeighboringChunks surroundingChunks) {
-        if (!chunk.getBlocksRange().isPointInRange(new Vector3i(position.x + 1, position.y, position.z))) {
-            if (surroundingChunks.get(Direction.EAST) == null) {
-                return BlockType.AIR;
-            }
-            return surroundingChunks.get(Direction.EAST).getBlockType(new Vector3i(0, position.y, position.z));
-        }
-
-        return chunk.getBlockType(new Vector3i(position.x + 1, position.y, position.z));
-    }
-
-    private BlockType getBlockWest(Vector3i position, NeighboringChunks surroundingChunks) {
-        if (!chunk.getBlocksRange().isPointInRange(new Vector3i(position.x - 1, position.y, position.z))) {
-            if (surroundingChunks.get(Direction.WEST) == null) {
-                return BlockType.AIR;
-            }
-            return surroundingChunks.get(Direction.WEST).getBlockType(new Vector3i(Chunk.SIZE-1, position.y, position.z));
-        }
-
-        return chunk.getBlockType(new Vector3i(position.x - 1, position.y, position.z));
-    }
-
     private void generateFace(Vector3i blockPos, Direction direction) {
         float x = blockPos.x;
         float y = blockPos.y;
