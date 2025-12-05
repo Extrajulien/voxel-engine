@@ -33,7 +33,7 @@ public class Chunk {
         blocks = new BlockType[SIZE][SIZE][SIZE];
         solidBlocks = 0;
         worldSpaceRange = createWorldSpaceRange();
-        modelMatrix = new Matrix4f().scale(SIZE).setTranslation(worldPosition.x() * SIZE + SIZE /2, worldPosition.y() * SIZE + SIZE /2, worldPosition.z() * SIZE + SIZE /2);
+        modelMatrix = makeModelMatrix();
         fill(BlockType.AIR);
     }
 
@@ -55,7 +55,13 @@ public class Chunk {
     }
 
     public static Vector3i positionToChunk(Vector3f worldPosition) {
-        return new Vector3i(worldPosition, RoundingMode.TRUNCATE).div(SIZE);
+        Vector3i pos = new Vector3i(worldPosition, RoundingMode.FLOOR);
+
+        pos.x = Math.floorDiv(pos.x, SIZE);
+        pos.y = Math.floorDiv(pos.y, SIZE);
+        pos.z = Math.floorDiv(pos.z, SIZE);
+
+        return pos;
     }
 
     /**
@@ -124,6 +130,14 @@ public class Chunk {
             new Range1d((long) worldPos.x * SIZE, (long) worldPos.x * SIZE + SIZE - 1),
             new Range1d((long) worldPos.y * SIZE, (long) worldPos.y * SIZE + SIZE - 1),
             new Range1d((long) worldPos.z * SIZE, (long) worldPos.z * SIZE + SIZE - 1)
+        );
+    }
+
+    private Matrix4f makeModelMatrix() {
+        return new Matrix4f().scale(SIZE).setTranslation(
+                worldPos.x() * SIZE + SIZE /2,
+                worldPos.y() * SIZE + SIZE /2,
+                worldPos.z() * SIZE + SIZE /2
         );
     }
 
