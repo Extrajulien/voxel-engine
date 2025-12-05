@@ -11,5 +11,6 @@ public enum Action {
     MOVE_WEST,
     SPRINT,
     TOGGLE_CAMERA_MODE,
+    TOGGLE_CHUNK_BOUNDING_BOX,
     INVENTORY_TOGGLE
 }

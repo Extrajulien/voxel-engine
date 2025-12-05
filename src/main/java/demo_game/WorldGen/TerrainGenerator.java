@@ -26,12 +26,16 @@ public class TerrainGenerator {
 
 
 
+
+
         ChunkPos pos = new ChunkPos(chunk.getChunkPos().x, 0, chunk.getChunkPos().z);
         if (!noiseHeightPerChunk.containsKey(pos)) {
 
             Noise2d noise = getNoiseFromRange(chunk.getWorldXZBlocksRange());
             noiseHeightPerChunk.put(pos, noise.getValuesRange());
         }
+
+
 
 
         if (noiseHeightPerChunk.get(pos).isIntersectingRange(chunk.getWorldSpaceYRange())) {

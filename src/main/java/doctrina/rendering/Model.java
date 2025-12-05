@@ -34,7 +34,7 @@ public class Model<U extends Enum<U> & Uniform> {
     }
 
     public void drawBoundingBox(Matrix4f modelMatrix, Matrix4f viewMatrix,Matrix4f projectionMatrix) {
-        glDisable(GL_DEPTH_TEST);
+        //glDisable(GL_DEPTH_TEST);
         material.use();
         material.setModelMatrix(modelMatrix);
         material.setViewMatrix(viewMatrix);

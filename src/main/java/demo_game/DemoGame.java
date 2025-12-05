@@ -3,12 +3,11 @@ package demo_game;
 import demo_game.Inputs.Action;
 import demo_game.Inputs.GameKMController;
 import demo_game.Player.Player;
-import demo_game.Uniforms.CubeUniform;
+import demo_game.Uniforms.PlayerUniform;
 import demo_game.WorldGen.World;
 import doctrina.Entities.Entity;
 import doctrina.Game;
 import doctrina.Input.*;
-import doctrina.Utils.Range1d;
 import doctrina.rendering.*;
 
 public class DemoGame extends Game {
@@ -22,12 +21,12 @@ public class DemoGame extends Game {
 
     @Override
     public void initialize() {
-        Shader<CubeUniform> shader = new Shader<>(CubeUniform.class, "vertex.glsl", "imageFragment.glsl");
+        Shader<PlayerUniform> shader = new Shader<>(PlayerUniform.class, "vertex.glsl", "imageFragment.glsl");
         shader.use();
         Texture dirtTex = new Texture("toaster.png");
-        Material<CubeUniform> dirt = new Material<>(shader, dirtTex);
+        Material<PlayerUniform> dirt = new Material<>(shader, dirtTex);
         Mesh cube = new Mesh.Builder().cube().build();
-        Model<CubeUniform> cubeModel = new Model<>(cube, dirt);
+        Model<PlayerUniform> cubeModel = new Model<>(cube, dirt);
         cubeEntity = new EntityTest(cubeModel);
 
         mouse = new Mouse(0.1f);
@@ -53,6 +52,11 @@ public class DemoGame extends Game {
         if (controller.isPressed(Action.TOGGLE_FULLSCREEN)) {
             isFullscreen = !isFullscreen;
             toggleFullscreen(isFullscreen);
+        }
+
+        if (controller.isPressed(Action.TOGGLE_CHUNK_BOUNDING_BOX)) {
+            boolean isShown = !world.isBoundingBoxShown();
+            world.setBoundingBoxShown(isShown);
         }
 
         player.update(deltaTime());

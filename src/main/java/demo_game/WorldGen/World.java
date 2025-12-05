@@ -1,16 +1,18 @@
 package demo_game.WorldGen;
 
 import demo_game.Player.Player;
+import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class World {
-    Map<ChunkPos, Chunk> chunks;
-    Map<ChunkPos, ChunkMesh> chunkMeshes;
-    TerrainGenerator terrainGenerator;
-    Vector3i playerChunk;
+    private boolean isBoundingBoxShown = false;
+    private Map<ChunkPos, Chunk> chunks;
+    private Map<ChunkPos, ChunkMesh> chunkMeshes;
+    private TerrainGenerator terrainGenerator;
+    private Vector3i playerChunk;
 
     public World(long seed, Player player) {
         chunks = new HashMap<>();
@@ -30,6 +32,31 @@ public class World {
     public void draw(Player player) {
         for (ChunkMesh chunk : chunkMeshes.values()) {
             chunk.draw(player);
+        }
+        if (isBoundingBoxShown) {
+            drawAllChunkBounds(player);
+        }
+    }
+
+    public void setBoundingBoxShown(boolean boundingBoxShown) {
+        isBoundingBoxShown = boundingBoxShown;
+    }
+
+    public boolean isBoundingBoxShown() {
+        return isBoundingBoxShown;
+    }
+
+    public void drawChunkBounds(ChunkPos pos, Player player) {
+        if (!chunks.containsKey(pos)) {
+            System.out.println("Chunk " + pos + " does not exist");
+            return;
+        }
+        chunks.get(pos).drawBounds(player);
+    }
+
+    private void drawAllChunkBounds(Player player) {
+        for (Chunk chunk : chunks.values()) {
+            chunk.drawBounds(player);
         }
     }
 

@@ -73,7 +73,7 @@ public class HitBox {
     }
 
     private void createMaterial() {
-        Shader<HitboxUniform> shader = new Shader<>(HitboxUniform.class, "vertex.glsl", "colorFragment.glsl");
+        Shader<HitboxUniform> shader = new Shader<>(HitboxUniform.class, "vertex.glsl", "hitboxFragment.glsl");
         material = new Material<>(shader);
     }
 

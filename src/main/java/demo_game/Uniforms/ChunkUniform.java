@@ -2,12 +2,11 @@ package demo_game.Uniforms;
 
 import doctrina.Uniform.Uniform;
 
-public enum CubeUniform implements Uniform {
-    ;
+public enum ChunkUniform implements Uniform {
+    LINE_COLOR("line_color");
 
     private final String name;
-
-    CubeUniform(String name) {
+    ChunkUniform(String name) {
         this.name = name;
     }
 

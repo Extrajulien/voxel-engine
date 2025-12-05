@@ -5,7 +5,7 @@ import demo_game.Inputs.Action;
 import demo_game.Inputs.Axis;
 import demo_game.Inventory;
 import demo_game.Models;
-import demo_game.Uniforms.CubeUniform;
+import demo_game.Uniforms.PlayerUniform;
 import doctrina.Entities.ControllableEntity;
 import doctrina.Input.Controller;
 import doctrina.Utils.Range1d;
@@ -16,14 +16,14 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public final class Player extends ControllableEntity<Action, Axis> {
-    private final int CHUNK_LOADING_RADIUS = 6;
+    private final int CHUNK_LOADING_RADIUS = 1;
     private final PlayerCamera camera;
     private final PlayerMovementHandler movementHandler;
     private final Inventory inventory;
     private final Vector3f currentSpeed;
     private float sprintSpeed = 32;
     private boolean isSprinting = false;
-    private final static Model<CubeUniform> model = Models.makePlayer();
+    private final static Model<PlayerUniform> model = Models.makePlayer();
 
     public Player(Controller<Action, Axis> controller) {
         super(model, new Vector3f(0.7f, 1.8f, 0.7f), controller);
