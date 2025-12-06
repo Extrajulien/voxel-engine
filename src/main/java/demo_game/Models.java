@@ -22,4 +22,13 @@ public class Models {
         Mesh cube = new Mesh.Builder().boundingBox().build();
         return new Model<>(cube, material);
     }
+
+    public static Model<EnemyUniform> makeEnemy() {
+        Shader<EnemyUniform> shader = new Shader<>(EnemyUniform.class, "vertex.glsl", "imageFragment.glsl");
+        shader.use();
+        Texture dirtTex = new Texture("toaster.png");
+        Material<EnemyUniform> dirt = new Material<>(shader, dirtTex);
+        Mesh cube = new Mesh.Builder().cube().build();
+        return new Model<>(cube, dirt);
+    }
 }

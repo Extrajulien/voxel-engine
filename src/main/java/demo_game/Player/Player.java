@@ -23,10 +23,9 @@ public final class Player extends ControllableEntity<Action, Axis> {
     private final Vector3f currentSpeed;
     private float sprintSpeed = 32;
     private boolean isSprinting = false;
-    private final static Model<PlayerUniform> model = Models.makePlayer();
 
     public Player(Controller<Action, Axis> controller) {
-        super(model, new Vector3f(0.7f, 1.8f, 0.7f), controller);
+        super(Models.makePlayer(), new Vector3f(0.7f, 1.8f, 0.7f), controller);
 
         this.camera = new PlayerCamera(this);
         this.movementHandler = new PlayerMovementHandler(this);
@@ -34,6 +33,7 @@ public final class Player extends ControllableEntity<Action, Axis> {
         currentSpeed = new Vector3f();
         hitbox.setColor(Color.WHITE);
         inventory = new Inventory();
+        this.controller.captureCursor();
     }
 
     public void move(Vector3f direction) {
