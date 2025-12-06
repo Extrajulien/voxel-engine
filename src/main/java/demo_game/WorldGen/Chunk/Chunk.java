@@ -35,6 +35,17 @@ public class Chunk {
         boundingBox.draw(player);
     }
 
+    public void drawWireframe(Player player) {
+        if (!isEmpty()) {
+            mesh.drawWireframe(player);
+        }
+    }
+
+    public void drawHighlighted(Player player) {
+        boundingBox.setColor(ChunkDebuggingConstants.CHUNK_HIGHLIGHT_COLOR.getValue());
+        boundingBox.draw(player);
+    }
+
     public void draw(Player player) {
         if (!isEmpty()) {
             mesh.draw(player);

@@ -45,6 +45,12 @@ public class Model<U extends Enum<U> & Uniform> {
         unBindVAO();
     }
 
+    public void drawWireFrame(Matrix4f modelMatrix, Matrix4f viewMatrix,Matrix4f projectionMatrix) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        draw(modelMatrix, viewMatrix, projectionMatrix);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+
     public Material<U> getMaterial() {
         return material;
     }

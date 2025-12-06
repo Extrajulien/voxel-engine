@@ -25,7 +25,7 @@ public class HitBox {
     public HitBox(Entity entity, Vector3f dimension, Vector3f color) {
         createMaterial();
         bounds = new Model<>(cube, material);
-        this.color = getColorFromRange(color);
+        this.color = color;
         attachColorToShader();
         this.position = entity.getPosition();
         this.dimension = dimension;
@@ -48,7 +48,7 @@ public class HitBox {
 
     public void setColor(Vector3f color) {
         material.use();
-        this.color = getColorFromRange(color);
+        this.color = color;
         attachColorToShader();
     }
 

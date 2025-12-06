@@ -37,6 +37,16 @@ public class ChunkMesh {
         }
     }
 
+    public void drawWireframe(Player player) {
+        if (chunkModel != null) {
+            chunkModel.drawWireFrame(
+                    modelMatrix,
+                    player.getCameraView().viewMatrix(),
+                    player.getCameraView().projectionMatrix()
+            );
+        }
+    }
+
     public void update(int dirtyMask, ChunkRegister register) {
         boolean isSelfUpdated = (dirtyMask & ChunkDirty.SELF) == ChunkDirty.SELF;
         boolean meshNotInit = mesh == null;

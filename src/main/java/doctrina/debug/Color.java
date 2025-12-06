@@ -17,13 +17,12 @@ public enum Color {
     BROWN     (new Vector3f(165f,  42f,  42f));
 
     final Vector3f color;
-    private final static int colorRange = 255;
 
     Color(Vector3f color) {
         this.color = color;
     }
 
     public Vector3f getValue() {
-        return color.div(colorRange);
+        return color;
     }
 }

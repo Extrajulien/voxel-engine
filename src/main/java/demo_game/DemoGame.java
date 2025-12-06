@@ -3,6 +3,7 @@ package demo_game;
 import demo_game.Inputs.Action;
 import demo_game.Inputs.GameKMController;
 import demo_game.Player.Player;
+import demo_game.WorldGen.Chunk.ChunkRenderingMode;
 import demo_game.WorldGen.World;
 import doctrina.Entities.Entity;
 import doctrina.Game;
@@ -16,6 +17,7 @@ public class DemoGame extends Game {
     private Entity cubeEntity;
     private World world;
     private GameKMController controller;
+    private ChunkRenderingMode currentMode;
 
     @Override
     public void initialize() {
@@ -26,6 +28,7 @@ public class DemoGame extends Game {
         world = new World(0, player);
         cubeEntity = new EntityTest();
         cubeEntity.moveTo(0,0,0);
+        currentMode = ChunkRenderingMode.NORMAL;
     }
 
     @Override
@@ -43,8 +46,7 @@ public class DemoGame extends Game {
         }
 
         if (controller.isPressed(Action.TOGGLE_CHUNK_RENDERING_MODE)) {
-            boolean isShown = !world.isBoundingBoxShown();
-            world.setBoundingBoxShown(isShown);
+            currentMode = currentMode.next();
         }
 
         player.update(deltaTime());
@@ -53,7 +55,7 @@ public class DemoGame extends Game {
 
     @Override
     public void draw() {
-        world.draw(player);
+        world.draw(player, currentMode);
         cubeEntity.draw(player.getCameraView());
         cubeEntity.drawHitBox(player.getCameraView());
 

@@ -25,9 +25,12 @@ public class World {
         }
     }
 
-    public void draw(Player player) {
-        for (Chunk chunk : register.getAllChunks()) {
-            chunk.draw(player);
+    public void draw(Player player, ChunkRenderingMode renderingMode) {
+        switch (renderingMode) {
+            case NORMAL -> drawNormal(player);
+            case HIGHLIGHT_PLAYER_CHUNK -> drawHighlighted(player);
+            case WIREFRAME_CHUNKS -> drawWireframe(player);
+            case CHUNK_LOADED_CHUNKS -> drawChunkLoadedBounds(player);
         }
     }
 
@@ -67,6 +70,33 @@ public class World {
             Chunk neighbour = neighbours.get(direction);
             if (neighbour != null) {
                 neighbour.markDirty(ChunkDirty.getDirtySide(direction));
+            }
+        }
+    }
+
+    private void drawWireframe(Player player) {
+        for (Chunk chunk : register.getAllChunks()) {
+            chunk.drawWireframe(player);
+        }
+    }
+
+    private void drawHighlighted(Player player) {
+        drawNormal(player);
+        register.getChunk(new ChunkPos(playerChunk)).drawHighlighted(player);
+    }
+
+    private void drawNormal(Player player) {
+        for (Chunk chunk : register.getAllChunks()) {
+            chunk.draw(player);
+        }
+    }
+
+    private void drawChunkLoadedBounds(Player player) {
+        drawNormal(player);
+        for (Vector3i pos : player.getChunkLoadingRange()) {
+            ChunkPos chunkPos = new ChunkPos(pos);
+            if (register.hasChunk(chunkPos)) {
+                register.getChunk(chunkPos).drawBounds(player);
             }
         }
     }

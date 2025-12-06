@@ -25,6 +25,7 @@ public class ChunkBoundingBox {
     }
 
     public void setColor(Vector3f color) {
+        bounds.getMaterial().use();
         bounds.getMaterial().setUniform(ChunkUniform.LINE_COLOR, color);
     }
 
