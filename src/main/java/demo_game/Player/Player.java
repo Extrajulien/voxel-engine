@@ -1,11 +1,10 @@
 package demo_game.Player;
 
-import demo_game.WorldGen.Chunk;
+import demo_game.WorldGen.Chunk.Chunk;
 import demo_game.Inputs.Action;
 import demo_game.Inputs.Axis;
 import demo_game.Inventory;
 import demo_game.Models;
-import demo_game.Uniforms.PlayerUniform;
 import doctrina.Entities.ControllableEntity;
 import doctrina.Input.Controller;
 import doctrina.Utils.Range1d;
@@ -16,7 +15,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public final class Player extends ControllableEntity<Action, Axis> {
-    private final int CHUNK_LOADING_RADIUS = 4;
+    private final int CHUNK_LOADING_RADIUS = 6;
     private final PlayerCamera camera;
     private final PlayerMovementHandler movementHandler;
     private final Inventory inventory;
@@ -64,7 +63,7 @@ public final class Player extends ControllableEntity<Action, Axis> {
     }
 
     private Vector3i getChunkPos() {
-        return Chunk.positionToChunk(position);
+        return Chunk.worldToChunkSpace(position);
     }
 
     public int getChunkLoadingRadius() {

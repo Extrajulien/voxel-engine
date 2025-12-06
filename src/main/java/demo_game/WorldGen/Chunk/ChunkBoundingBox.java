@@ -1,4 +1,4 @@
-package demo_game.WorldGen;
+package demo_game.WorldGen.Chunk;
 
 import demo_game.Models;
 import demo_game.Player.Player;
@@ -6,16 +6,15 @@ import demo_game.Uniforms.ChunkUniform;
 import doctrina.rendering.Model;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.joml.Vector3i;
 
 import static org.lwjgl.opengl.GL11C.glLineWidth;
 
 public class ChunkBoundingBox {
     private static final Model<ChunkUniform> bounds = Models.makeChunkBoundingBox();
     private final Matrix4f modelMatrix;
-    private final Vector3i worldPos;
+    private final ChunkPos worldPos;
 
-    public ChunkBoundingBox(Vector3i worldPos) {
+    public ChunkBoundingBox(ChunkPos worldPos) {
         this.worldPos = worldPos;
         modelMatrix = makeModelMatrix();
     }

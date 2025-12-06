@@ -1,6 +1,8 @@
 package demo_game.WorldGen;
 
 import demo_game.BlockType;
+import demo_game.WorldGen.Chunk.Chunk;
+import demo_game.WorldGen.Chunk.ChunkPos;
 import doctrina.Utils.Range1d;
 import doctrina.Utils.Range2d;
 import org.joml.SimplexNoise;
@@ -24,19 +26,12 @@ public class TerrainGenerator {
 
     public void CreateChunk(Chunk chunk) {
 
-
-
-
-
-        ChunkPos pos = new ChunkPos(chunk.getChunkPos().x, 0, chunk.getChunkPos().z);
+        ChunkPos pos = new ChunkPos(chunk.getChunkPos().x(), 0, chunk.getChunkPos().z());
         if (!noiseHeightPerChunk.containsKey(pos)) {
 
             Noise2d noise = getNoiseFromRange(chunk.getWorldXZBlocksRange());
             noiseHeightPerChunk.put(pos, noise.getValuesRange());
         }
-
-
-
 
         if (noiseHeightPerChunk.get(pos).isIntersectingRange(chunk.getWorldSpaceYRange())) {
             Noise2d noise = getNoiseFromRange(chunk.getWorldXZBlocksRange());
@@ -48,8 +43,6 @@ public class TerrainGenerator {
                 }
             }
         }
-
-
     }
 
     private boolean isChunkIntersectingSurface(Chunk chunk) {

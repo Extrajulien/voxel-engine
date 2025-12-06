@@ -7,7 +7,6 @@ import demo_game.WorldGen.World;
 import doctrina.Entities.Entity;
 import doctrina.Game;
 import doctrina.Input.*;
-import doctrina.rendering.*;
 
 public class DemoGame extends Game {
     Mouse mouse;
@@ -32,6 +31,7 @@ public class DemoGame extends Game {
     @Override
     public void update() {
         world.loadChunks(player);
+        world.updateChunks();
 
         if (controller.isPressed(Action.QUIT)) {
             stop();
@@ -42,7 +42,7 @@ public class DemoGame extends Game {
             toggleFullscreen(isFullscreen);
         }
 
-        if (controller.isPressed(Action.TOGGLE_CHUNK_BOUNDING_BOX)) {
+        if (controller.isPressed(Action.TOGGLE_CHUNK_RENDERING_MODE)) {
             boolean isShown = !world.isBoundingBoxShown();
             world.setBoundingBoxShown(isShown);
         }

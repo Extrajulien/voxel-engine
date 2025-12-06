@@ -1,4 +1,4 @@
-package demo_game.WorldGen;
+package demo_game.WorldGen.Chunk;
 
 import demo_game.BlockType;
 import demo_game.Player.Player;
@@ -15,38 +15,56 @@ public class Chunk {
 
     private final BlockType[][][] blocks;
     private final ChunkBoundingBox boundingBox;
-
-
-    private final Vector3i worldPos; // world pos is the x,y,z corner
+    private final ChunkMesh mesh;
+    private final ChunkPos chunkSpacePos; // world pos is the x,y,z corner
     private final Range3d worldSpaceRange;
+    private int dirtyMask;
     private long solidBlocks;
 
-    public Chunk(ChunkPos worldPosition) {
-        worldPos = new Vector3i(worldPosition.x(), worldPosition.y(), worldPosition.z());
+    public Chunk(ChunkPos chunkSpacePos, ChunkRegister register) {
+        register.addChunk(chunkSpacePos, this);
+        this.chunkSpacePos = chunkSpacePos;
         blocks = new BlockType[SIZE][SIZE][SIZE];
         solidBlocks = 0;
         worldSpaceRange = createWorldSpaceRange();
-        boundingBox = new ChunkBoundingBox(worldPos);
-        fill(BlockType.AIR);
+        boundingBox = new ChunkBoundingBox(this.chunkSpacePos);
+        mesh = new ChunkMesh(this);
     }
 
     public void drawBounds(Player player) {
         boundingBox.draw(player);
     }
 
+    public void draw(Player player) {
+        if (!isEmpty()) {
+            mesh.draw(player);
+        }
+    }
+
+    public void markDirty(int flag) {
+        this.dirtyMask |= flag;
+    }
+
+    public void updateMesh(ChunkRegister register) {
+        if (dirtyMask != ChunkDirty.NONE) {
+            mesh.update(dirtyMask, register);
+            dirtyMask = ChunkDirty.NONE;
+        }
+    }
+
     public int getWorldSpaceMinY() {
-        return worldPos.y * SIZE;
+        return chunkSpacePos.y() * SIZE;
     }
 
     public int getWorldSpaceMaxY() {
-        return worldPos.y * SIZE + SIZE - 1;
+        return chunkSpacePos.y() * SIZE + SIZE - 1;
     }
 
     public Range1d getWorldSpaceYRange() {
         return worldSpaceRange.rangeY();
     }
 
-    public static Vector3i positionToChunk(Vector3f worldPosition) {
+    public static Vector3i worldToChunkSpace(Vector3f worldPosition) {
         Vector3i pos = new Vector3i(worldPosition, RoundingMode.FLOOR);
 
         pos.x = Math.floorDiv(pos.x, SIZE);
@@ -56,11 +74,15 @@ public class Chunk {
         return pos;
     }
 
+    public static Vector3i chunkToWorldSpace(ChunkPos chunkPosition) {
+        return new Vector3i(chunkPosition.x() * SIZE, chunkPosition.y() * SIZE, chunkPosition.z() * SIZE);
+    }
+
     /**
      * returns the position of the chunk in Chunk space
      */
-    public Vector3i getChunkPos() {
-        return worldPos;
+    public ChunkPos getChunkPos() {
+        return chunkSpacePos;
     }
 
     public Range3d getBlocksRange() {
@@ -85,15 +107,21 @@ public class Chunk {
     }
 
     public BlockType getBlockType(int x, int y, int z) {
-        return blocks[x][y][z];
+        BlockType bT = blocks[x][y][z];
+        return bT == null ? BlockType.AIR : bT;
     }
 
     public void setBlockType(int x, int y, int z, BlockType blockType) {
-        if (blocks[x][y][z].isTransparent() && !blockType.isTransparent()) {
+        if (getBlockType(x, y, z) != blockType) {
+            markDirty(ChunkDirty.SELF);
+        }
+
+
+        if (getBlockType(x,y,z).isTransparent() && !blockType.isTransparent()) {
             ++solidBlocks;
         }
 
-        if (!blocks[x][y][z].isTransparent() && blockType.isTransparent()) {
+        if (!getBlockType(x,y,z).isTransparent() && blockType.isTransparent()) {
             --solidBlocks;
         }
 
@@ -106,8 +134,8 @@ public class Chunk {
 
     public Range2d getWorldXZBlocksRange() {
         return new Range2d(
-                new Range1d((long) worldPos.x * SIZE, (long) worldPos.x * SIZE + SIZE -1),
-                new Range1d((long) worldPos.z * SIZE, (long) worldPos.z * SIZE + SIZE -1)
+                new Range1d((long) chunkSpacePos.x() * SIZE, (long) chunkSpacePos.x() * SIZE + SIZE - 1),
+                new Range1d((long) chunkSpacePos.z() * SIZE, (long) chunkSpacePos.z() * SIZE + SIZE - 1)
         );
     }
 
@@ -119,9 +147,9 @@ public class Chunk {
 
     private Range3d createWorldSpaceRange() {
         return new Range3d(
-            new Range1d((long) worldPos.x * SIZE, (long) worldPos.x * SIZE + SIZE - 1),
-            new Range1d((long) worldPos.y * SIZE, (long) worldPos.y * SIZE + SIZE - 1),
-            new Range1d((long) worldPos.z * SIZE, (long) worldPos.z * SIZE + SIZE - 1)
+            new Range1d((long) chunkSpacePos.x() * SIZE, (long) chunkSpacePos.x() * SIZE + SIZE - 1),
+            new Range1d((long) chunkSpacePos.y() * SIZE, (long) chunkSpacePos.y() * SIZE + SIZE - 1),
+            new Range1d((long) chunkSpacePos.z() * SIZE, (long) chunkSpacePos.z() * SIZE + SIZE - 1)
         );
     }
 

@@ -1,4 +1,6 @@
-package demo_game.WorldGen;
+package demo_game.WorldGen.Chunk;
+
+import demo_game.WorldGen.Direction;
 
 public record NeighboringChunks(Chunk top, Chunk bottom, Chunk north, Chunk south, Chunk east, Chunk west) {
 
