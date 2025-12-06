@@ -45,6 +45,10 @@ public class Model<U extends Enum<U> & Uniform> {
         unBindVAO();
     }
 
+    public Material<U> getMaterial() {
+        return material;
+    }
+
     private void bindVAO() {
         glBindVertexArray(VAO);
     }

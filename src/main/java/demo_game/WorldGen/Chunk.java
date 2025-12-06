@@ -1,27 +1,20 @@
 package demo_game.WorldGen;
 
 import demo_game.BlockType;
-import demo_game.Models;
 import demo_game.Player.Player;
-import demo_game.Uniforms.ChunkUniform;
 import doctrina.Utils.Range1d;
 import doctrina.Utils.Range2d;
 import doctrina.Utils.Range3d;
-import doctrina.rendering.Model;
-import org.joml.Matrix4f;
 import org.joml.RoundingMode;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
-
-import static org.lwjgl.opengl.GL11C.glLineWidth;
 
 public class Chunk {
     private final static int SIZE_POWER_OF_2 = 4;
     public final static int SIZE = (int) Math.pow(2, SIZE_POWER_OF_2);
 
     private final BlockType[][][] blocks;
-    private final Model<ChunkUniform> bounds = Models.makeChunkBoundingBox();
-    private final Matrix4f modelMatrix;
+    private final ChunkBoundingBox boundingBox;
 
 
     private final Vector3i worldPos; // world pos is the x,y,z corner
@@ -33,13 +26,12 @@ public class Chunk {
         blocks = new BlockType[SIZE][SIZE][SIZE];
         solidBlocks = 0;
         worldSpaceRange = createWorldSpaceRange();
-        modelMatrix = makeModelMatrix();
+        boundingBox = new ChunkBoundingBox(worldPos);
         fill(BlockType.AIR);
     }
 
     public void drawBounds(Player player) {
-        glLineWidth(2.0f);
-        bounds.drawBoundingBox(modelMatrix, player.getCameraView().viewMatrix(), player.getCameraView().projectionMatrix());
+        boundingBox.draw(player);
     }
 
     public int getWorldSpaceMinY() {
@@ -130,14 +122,6 @@ public class Chunk {
             new Range1d((long) worldPos.x * SIZE, (long) worldPos.x * SIZE + SIZE - 1),
             new Range1d((long) worldPos.y * SIZE, (long) worldPos.y * SIZE + SIZE - 1),
             new Range1d((long) worldPos.z * SIZE, (long) worldPos.z * SIZE + SIZE - 1)
-        );
-    }
-
-    private Matrix4f makeModelMatrix() {
-        return new Matrix4f().scale(SIZE).setTranslation(
-                worldPos.x() * SIZE + SIZE /2,
-                worldPos.y() * SIZE + SIZE /2,
-                worldPos.z() * SIZE + SIZE /2
         );
     }
 
