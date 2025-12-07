@@ -2,6 +2,8 @@ package demo_game.Player;
 
 import demo_game.Inputs.Action;
 import demo_game.Inputs.Axis;
+import demo_game.debug.LogEntry;
+import demo_game.debug.Logger;
 import doctrina.Input.Controller;
 import org.joml.Vector3f;
 
@@ -63,6 +65,9 @@ public final class PlayerMovementHandler {
             direction.add(0,1,0);
         }
 
+        updateLog();
+
+
         // prevent division by zero
         if (!isMoving()) {
             movementDirection.zero();
@@ -81,5 +86,13 @@ public final class PlayerMovementHandler {
         if (!controller.isDown(Action.MOVE_NORTH)) {
             player.setSprinting(false);
         }
+    }
+
+
+    private void updateLog() {
+        if (controller.isPressed(Action.CHUNK_POS_LOG)) {
+            Logger.getInstance().refreshLog(LogEntry.CHUNK_POS);
+        }
+
     }
 }

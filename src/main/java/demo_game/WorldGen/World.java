@@ -2,6 +2,8 @@ package demo_game.WorldGen;
 
 import demo_game.Player.Player;
 import demo_game.WorldGen.Chunk.*;
+import demo_game.debug.LogEntry;
+import demo_game.debug.Logger;
 import org.joml.Vector3i;
 
 public class World {
@@ -18,11 +20,10 @@ public class World {
         CreateChunksNearPlayer(player);
     }
 
-    public void loadChunks(Player player) {
-        if (!playerChunk.equals(Chunk.worldToChunkSpace(player.getPosition()))) {
-            playerChunk.set(Chunk.worldToChunkSpace(player.getPosition()));
-            CreateChunksNearPlayer(player);
-        }
+    public void update(Player player, double deltaTime) {
+        loadChunks(player);
+        updateChunks();
+        log();
     }
 
     public void draw(Player player, ChunkRenderingMode renderingMode) {
@@ -34,12 +35,15 @@ public class World {
         }
     }
 
-    public void setBoundingBoxShown(boolean boundingBoxShown) {
-        isBoundingBoxShown = boundingBoxShown;
+    private void loadChunks(Player player) {
+        if (!playerChunk.equals(Chunk.worldToChunkSpace(player.getPosition()))) {
+            playerChunk.set(Chunk.worldToChunkSpace(player.getPosition()));
+            CreateChunksNearPlayer(player);
+        }
     }
 
-    public boolean isBoundingBoxShown() {
-        return isBoundingBoxShown;
+    private void log() {
+        Logger.getInstance().Log(LogEntry.CHUNK_POS, playerChunk);
     }
 
     private void CreateChunksNearPlayer(Player player) {
@@ -51,7 +55,7 @@ public class World {
         }
     }
 
-    public void updateChunks() {
+    private void updateChunks() {
         for (Chunk chunk : register.getAllChunks()) {
             chunk.updateMesh(register);
         }

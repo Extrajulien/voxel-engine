@@ -25,7 +25,7 @@ public class DemoGame extends Game {
         keyboard = new Keyboard();
         controller = new GameKMController(keyboard, mouse);
         player = new Player(controller);
-        world = new World(0, player);
+        world = new World(1, player);
         cubeEntity = new EntityTest();
         cubeEntity.moveTo(0,0,0);
         currentMode = ChunkRenderingMode.NORMAL;
@@ -33,8 +33,7 @@ public class DemoGame extends Game {
 
     @Override
     public void update() {
-        world.loadChunks(player);
-        world.updateChunks();
+        world.update(player, deltaTime());
 
         if (controller.isPressed(Action.QUIT)) {
             stop();

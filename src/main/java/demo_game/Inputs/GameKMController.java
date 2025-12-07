@@ -24,6 +24,7 @@ public class GameKMController extends KeyboardMouseController<Action, Axis> {
         addToKeyboardAction(Action.TOGGLE_FULLSCREEN, Key.F11);
         addToKeyboardAction(Action.CROUCH, Key.LEFT_SHIFT);
         addToKeyboardAction(Action.TOGGLE_CHUNK_RENDERING_MODE, Key.F3);
+        addToKeyboardAction(Action.CHUNK_POS_LOG, Key.F1);
     }
 
     @Override

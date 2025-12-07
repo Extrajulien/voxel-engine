@@ -11,9 +11,9 @@ import org.joml.Vector2i;
 import java.util.HashMap;
 
 public class TerrainGenerator {
-    private static final float RandomStrength = 15;
+    private static final float RandomStrength = 10;
     private long seed;
-    private static final Range1d NOISE_RANGE = new Range1d(-5,5);
+    private static final Range1d NOISE_RANGE = new Range1d(-5, 5);
 
     public TerrainGenerator(long seed) {
         if (seed == 0) {
@@ -21,21 +21,18 @@ public class TerrainGenerator {
         }
         this.seed = seed;
     }
-    private final static HashMap<ChunkPos, Range1d> noiseHeightPerChunk = new HashMap<>();
+    private final static HashMap<ChunkPos, Noise2d> noisePerChunk = new HashMap<>();
 
 
     public void CreateChunk(Chunk chunk) {
 
         ChunkPos pos = new ChunkPos(chunk.getChunkPos().x(), 0, chunk.getChunkPos().z());
-        if (!noiseHeightPerChunk.containsKey(pos)) {
-
-            Noise2d noise = getNoiseFromRange(chunk.getWorldXZBlocksRange());
-            noiseHeightPerChunk.put(pos, noise.getValuesRange());
+        if (!noisePerChunk.containsKey(pos)) {
+            createNoise(chunk, pos);
         }
 
-        if (noiseHeightPerChunk.get(pos).isIntersectingRange(chunk.getWorldSpaceYRange())) {
-            Noise2d noise = getNoiseFromRange(chunk.getWorldXZBlocksRange());
-
+        if (isChunkIntersectingNoise(chunk, pos)) {
+            Noise2d noise = noisePerChunk.get(pos);
             for (Vector2i vec2 : noise.getEntryRange()) {
                 if (chunk.getWorldSpaceYRange().isNumberInRange(noise.getValues()[vec2.x][vec2.y])) {
                     int y = Chunk.posWorldWrapToChunk(noise.getValues()[vec2.x][vec2.y]);
@@ -49,14 +46,22 @@ public class TerrainGenerator {
         return true;
     }
 
-    private Noise2d getNoiseFromRange(Range2d range) {
+    private void createNoise(Chunk chunk, ChunkPos pos) {
+        Noise2d noise = createNoiseFromRange(chunk.getWorldXZBlocksRange());
+        noisePerChunk.put(pos, noise);
+    }
+
+    private boolean isChunkIntersectingNoise(Chunk chunk, ChunkPos pos) {
+        return noisePerChunk.get(pos).getValuesRange().isIntersectingRange(chunk.getWorldSpaceYRange());
+    }
+
+    private Noise2d createNoiseFromRange(Range2d range) {
 
         int[][] noise = new int[Chunk.SIZE][Chunk.SIZE];
         for (Vector2i vec : range) {
             float fraction = SimplexNoise.noise(vec.x * seed * (RandomStrength / 1000), (vec.y * seed * RandomStrength / 1000));
             noise[Chunk.posWorldWrapToChunk(vec.x)][Chunk.posWorldWrapToChunk(vec.y)] = (int) (NOISE_RANGE.getLowerThreshold() + fraction * (NOISE_RANGE.getHigherThreshold() - NOISE_RANGE.getLowerThreshold()));
         }
-
         return new Noise2d(noise);
     }
 

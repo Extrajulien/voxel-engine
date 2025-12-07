@@ -14,7 +14,7 @@ public class Noise2d implements Iterable<Integer> {
     public Noise2d(int[][] values) {
         range = new Range2d(new Range1d(0, values.length-1), new Range1d(0, values[0].length-1));
         this.values = values;
-        valueRanges = getValueRanges();
+        valueRanges = createValueRanges();
     }
 
     public Range2d getEntryRange() {
@@ -31,9 +31,9 @@ public class Noise2d implements Iterable<Integer> {
 
 
 
-    private Range1d getValueRanges() {
-        int min = 0;
-        int max = 0;
+    private Range1d createValueRanges() {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
         for (int num : this) {
             if (num > max) {
                 max = num;
@@ -54,20 +54,19 @@ public class Noise2d implements Iterable<Integer> {
 
             @Override
             public boolean hasNext() {
-                return x < range.getMaxX();
+                return x <= range.getMaxX();
             }
 
             @Override
             public Integer next() {
-                int curX = x;
-                int curY = y;
+                int value = values[x][y];
 
                 ++y;
-                if (y >= range.getMaxY()) {
+                if (y > range.getMaxY()) {
                     y = (int) range.getMinY();
                     ++x;
                 }
-                return values[curX][curY];
+                return value;
             }
         };
     }
