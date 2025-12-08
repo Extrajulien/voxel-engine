@@ -8,7 +8,7 @@ public class Models {
     public static Model<PlayerUniform> makePlayer() {
         Shader<PlayerUniform> shader = new Shader<>(PlayerUniform.class, "vertex.glsl", "imageFragment.glsl");
         shader.use();
-        Texture dirtTex = new Texture("block/dirt.jpg");
+        Texture dirtTex = new Texture("block/dirt.png", true);
         Material<PlayerUniform> dirt = new Material<>(shader, dirtTex);
         Mesh cube = new Mesh.Builder().cube().build();
         return new Model<>(cube, dirt);
@@ -26,7 +26,7 @@ public class Models {
     public static Model<EnemyUniform> makeEnemy() {
         Shader<EnemyUniform> shader = new Shader<>(EnemyUniform.class, "vertex.glsl", "imageFragment.glsl");
         shader.use();
-        Texture dirtTex = new Texture("toaster.png");
+        Texture dirtTex = new Texture("toaster.png", false);
         Material<EnemyUniform> dirt = new Material<>(shader, dirtTex);
         Mesh cube = new Mesh.Builder().cube().build();
         return new Model<>(cube, dirt);

@@ -2,7 +2,7 @@ package demo_game;
 
 public enum BlockType {
     AIR(true,null),
-    DIRT(false, new String[] {"block/dirt.jpg"});
+    DIRT(false, new String[] {"block/dirt.png"});
 
     private final boolean isTransparent;
     private final String[] texturePaths;

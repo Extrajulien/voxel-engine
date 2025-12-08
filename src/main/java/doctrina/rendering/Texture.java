@@ -5,8 +5,10 @@ import static org.lwjgl.opengl.GL30C.glGenerateMipmap;
 
 public class Texture {
     private final int textureID;
+    private final boolean isBlockTexture;
 
-    public Texture(String fileName) {
+    public Texture(String fileName, boolean isBlockTexture) {
+        this.isBlockTexture = isBlockTexture;
         try (Image image = new Image(fileName)) {
             textureID = glGenTextures();
             bind();
@@ -30,7 +32,12 @@ public class Texture {
     }
 
     private void setScalingFilters() {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        if (isBlockTexture) {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        } else {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        }
+
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     }
 
