@@ -1,8 +1,8 @@
-package demo_game.WorldGen;
+package demo_game.World.Generation;
 
 import demo_game.BlockType;
-import demo_game.WorldGen.Chunk.Chunk;
-import demo_game.WorldGen.Chunk.ChunkPos;
+import demo_game.World.Chunk.Chunk;
+import demo_game.World.Chunk.ChunkPos;
 import doctrina.Utils.Range1d;
 import doctrina.Utils.Range2d;
 import org.joml.SimplexNoise;

@@ -1,4 +1,4 @@
-package demo_game.WorldGen.Chunk;
+package demo_game.World.Chunk;
 
 import demo_game.BlockType;
 import demo_game.Player.Player;
@@ -10,7 +10,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public class Chunk {
-    private final static int SIZE_POWER_OF_2 = 4;
+    private final static int SIZE_POWER_OF_2 = 2;
     public final static int SIZE = (int) Math.pow(2, SIZE_POWER_OF_2);
 
     private final BlockType[][][] blocks;

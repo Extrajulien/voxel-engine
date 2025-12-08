@@ -1,7 +1,7 @@
-package demo_game.WorldGen.Chunk;
+package demo_game.World.Chunk;
 
 import demo_game.BlockType;
-import demo_game.WorldGen.Direction;
+import demo_game.World.Direction;
 import doctrina.rendering.Mesh;
 import org.joml.Vector3i;
 

@@ -1,14 +1,12 @@
-package demo_game.WorldGen.Chunk;
+package demo_game.World.Chunk;
 
 import demo_game.BlockType;
 import demo_game.Player.Player;
 import demo_game.Uniforms.WorldUniform;
-import demo_game.WorldGen.Direction;
+import demo_game.World.Direction;
 import doctrina.rendering.*;
 import org.joml.Matrix4f;
 import org.joml.Vector3i;
-
-import java.util.ArrayList;
 
 public class ChunkMesh {
     private final static Texture dirtBlock = new Texture(BlockType.DIRT.getTexturePaths()[0], true);

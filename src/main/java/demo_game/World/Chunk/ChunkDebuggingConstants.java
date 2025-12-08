@@ -1,4 +1,4 @@
-package demo_game.WorldGen.Chunk;
+package demo_game.World.Chunk;
 
 import doctrina.debug.Color;
 

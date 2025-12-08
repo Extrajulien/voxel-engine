@@ -1,6 +1,6 @@
 package demo_game.Player;
 
-import demo_game.WorldGen.Chunk.Chunk;
+import demo_game.World.Chunk.Chunk;
 import demo_game.Inputs.Action;
 import demo_game.Inputs.Axis;
 import demo_game.Inventory;

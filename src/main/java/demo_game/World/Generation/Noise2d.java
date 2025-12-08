@@ -1,4 +1,4 @@
-package demo_game.WorldGen;
+package demo_game.World.Generation;
 
 import doctrina.Utils.Range1d;
 import doctrina.Utils.Range2d;

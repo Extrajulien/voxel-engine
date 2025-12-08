@@ -1,7 +1,8 @@
-package demo_game.WorldGen;
+package demo_game.World;
 
 import demo_game.Player.Player;
-import demo_game.WorldGen.Chunk.*;
+import demo_game.World.Chunk.*;
+import demo_game.World.Generation.TerrainGenerator;
 import demo_game.debug.LogEntry;
 import demo_game.debug.Logger;
 import org.joml.Vector3i;
