@@ -7,10 +7,9 @@ import demo_game.debug.Logger;
 import org.joml.Vector3i;
 
 public class World {
-    private boolean isBoundingBoxShown = false;
     private final ChunkRegister register;
-    private TerrainGenerator terrainGenerator;
-    private Vector3i playerChunk;
+    private final TerrainGenerator terrainGenerator;
+    private final Vector3i playerChunk;
 
     public World(long seed, Player player) {
 

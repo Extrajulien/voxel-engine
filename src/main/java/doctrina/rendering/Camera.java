@@ -6,12 +6,12 @@ import org.joml.Vector3f;
 
 public class Camera {
 
+    private final float FAR_PLANE = 10000f;
     private float orbitalRadius = 2;
     private float fpsCamYTranslation = 0f;
     private float fpsCamRadius = 1f;
     private float maxPitch = 85f;
     private float minPitch = -85f;
-    private final float farPlane = 10000f;
     private float fovY;
 
     private double yaw = -90;
@@ -57,6 +57,10 @@ public class Camera {
 
     public Vector3f getLookDirectionUnitVector() {
         return lookingDirection;
+    }
+
+    public Vector3f getXZLookingDirectionUnitVector() {
+        return new Vector3f(lookingDirection.x, 0, lookingDirection.z).normalize();
     }
 
     public void setSensitivity(double sensitivity) {
@@ -112,7 +116,7 @@ public class Camera {
     }
 
     private void computeProjectionMatrix() {
-        this.projectionMatrix.setPerspective(fovY, RenderingEngine.getAspectRatio(), 0.1f, farPlane);
+        this.projectionMatrix.setPerspective(fovY, RenderingEngine.getAspectRatio(), 0.1f, FAR_PLANE);
     }
 
     private void computeViewMatrix() {

@@ -24,6 +24,7 @@ public final class PlayerMovementHandler {
         updateSprintFromInput();
         updateCameraModeFromInputs();
         updateMovementDirection();
+        updateLog();
     }
 
     public Vector3f getMovementDirection() {
@@ -32,8 +33,7 @@ public final class PlayerMovementHandler {
 
     public boolean isMoving() {
         return controller.isDown(Action.MOVE_NORTH) ||  controller.isDown(Action.MOVE_SOUTH)
-                || controller.isDown(Action.MOVE_EAST) || controller.isDown(Action.MOVE_WEST)
-                || controller.isDown(Action.CROUCH) || controller.isDown(Action.JUMP);
+                || controller.isDown(Action.MOVE_EAST) || controller.isDown(Action.MOVE_WEST);
     }
 
     private void updateCameraModeFromInputs() {
@@ -43,38 +43,35 @@ public final class PlayerMovementHandler {
     }
 
     private void updateMovementDirection() {
+        boolean movingNorth =  controller.isDown(Action.MOVE_NORTH);
+        boolean movingSouth =  controller.isDown(Action.MOVE_SOUTH);
+        boolean movingEast =  controller.isDown(Action.MOVE_EAST);
+        boolean movingWest =  controller.isDown(Action.MOVE_WEST);
+        Vector3f xzLookingDirection = camera.getXZLookingDirectionUnitVector();
+        Vector3f eastDirection = new  Vector3f(xzLookingDirection).cross(camera.getWorldUp()).normalize();
+
+
         Vector3f direction = new Vector3f();
-        if (controller.isDown(Action.MOVE_NORTH)) {
-            direction.add(camera.getLookDirectionUnitVector());
+        if (movingNorth) {
+            direction.add(xzLookingDirection);
         }
-        if (controller.isDown(Action.MOVE_SOUTH)) {
-            direction.add(-camera.getLookDirectionUnitVector().x, 0, -camera.getLookDirectionUnitVector().z);
+        if (movingSouth) {
+            direction.add(-xzLookingDirection.x, 0, -xzLookingDirection.z);
         }
-        if (controller.isDown(Action.MOVE_EAST)) {
-            direction.add(camera.getLookDirectionUnitVector().cross(camera.getWorldUp()));
+        if (movingEast) {
+            direction.add(eastDirection);
         }
-        if (controller.isDown(Action.MOVE_WEST)) {
-            direction.add(camera.getLookDirectionUnitVector().cross(camera.getWorldUp()).negate());
+        if (movingWest) {
+            direction.add(eastDirection.negate());
         }
-
-        if (controller.isDown(Action.CROUCH)) {
-            direction.add(0, -1, 0);
-        }
-
-        if (controller.isDown(Action.JUMP)) {
-            direction.add(0,1,0);
-        }
-
-        updateLog();
-
 
         // prevent division by zero
-        if (!isMoving()) {
+        if (!isMoving() || direction.equals(0,0,0)) {
             movementDirection.zero();
             return;
         }
 
-        movementDirection.set(direction.x, direction.y, direction.z).normalize();
+        movementDirection.set(direction.x, 0, direction.z).normalize();
     }
 
     private void updateSprintFromInput() {
