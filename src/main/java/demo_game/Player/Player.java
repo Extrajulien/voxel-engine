@@ -6,7 +6,9 @@ import demo_game.Inputs.Axis;
 import demo_game.Inventory;
 import demo_game.Models;
 import doctrina.Entities.ControllableEntity;
+import doctrina.Entities.EntityMovementFlag;
 import doctrina.Input.Controller;
+import doctrina.Utils.BoundingBox;
 import doctrina.Utils.Range1d;
 import doctrina.Utils.Range3d;
 import doctrina.debug.Color;
@@ -15,39 +17,32 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public final class Player extends ControllableEntity<Action, Axis> {
-    private final int CHUNK_LOADING_RADIUS = 4;
+    private final int CHUNK_LOADING_RADIUS = 2;
     private final PlayerCamera camera;
     private final PlayerMovementHandler movementHandler;
     private final Inventory inventory;
-    private final Vector3f currentSpeed;
-    private float sprintSpeed = 32;
+    private float sprintSpeed = 80;
     private boolean isSprinting = false;
 
     public Player(Controller<Action, Axis> controller) {
-        super(Models.makePlayer(), new Vector3f(0.7f, 1.8f, 0.7f), controller);
+        super(Models.makePlayer(), new BoundingBox(new Vector3f(-0.35f,-0.9f,-0.35f), new Vector3f(0.35f,0.9f,0.35f)), controller);
 
         this.camera = new PlayerCamera(this);
         this.movementHandler = new PlayerMovementHandler(this);
         walkSpeed = 3;
-        currentSpeed = new Vector3f();
         hitbox.setColor(Color.WHITE);
         inventory = new Inventory();
         this.controller.captureCursor();
     }
 
-    public void move(Vector3f direction) {
-        super.move(direction);
-    }
-
     public void update(double deltaTime) {
-
+        super.update(deltaTime);
         movementHandler.update(deltaTime);
         handleInputs(deltaTime);
 
-
         if (!inventory.isOpen()) {
             updateSpeedFromMovement(deltaTime);
-            this.move(currentSpeed);
+            this.move();
             camera.update();
         }
 

@@ -4,6 +4,7 @@ import demo_game.Inputs.Action;
 import demo_game.Inputs.Axis;
 import demo_game.debug.LogEntry;
 import demo_game.debug.Logger;
+import doctrina.Entities.EntityMovementFlag;
 import doctrina.Input.Controller;
 import org.joml.Vector3f;
 
@@ -24,6 +25,7 @@ public final class PlayerMovementHandler {
         updateSprintFromInput();
         updateCameraModeFromInputs();
         updateMovementDirection();
+
         updateLog();
     }
 

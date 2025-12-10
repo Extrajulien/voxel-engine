@@ -10,7 +10,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public class Chunk {
-    private final static int SIZE_POWER_OF_2 = 2;
+    private final static int SIZE_POWER_OF_2 = 4;
     public final static int SIZE = (int) Math.pow(2, SIZE_POWER_OF_2);
 
     private final BlockType[][][] blocks;
@@ -153,6 +153,14 @@ public class Chunk {
 
     public static int posWorldWrapToChunk(int number) {
         return number & SIZE-1;
+    }
+
+    public static Vector3i posWorldWrapToChunk(Vector3i pos) {
+        return new Vector3i(
+                posWorldWrapToChunk(pos.x),
+                posWorldWrapToChunk(pos.y),
+                posWorldWrapToChunk(pos.z)
+        );
     }
 
 

@@ -19,6 +19,11 @@ public record Range3d(Range1d rangeX, Range1d rangeY, Range1d rangeZ) implements
                 && rangeZ.isNumberInRange(z);
     }
 
+    public boolean isIntersectingRange(Range3d other) {
+        return rangeX.isIntersectingRange(other.rangeX) || rangeY.isIntersectingRange(other.rangeY)
+                || rangeZ.isIntersectingRange(other.rangeZ);
+    }
+
     public long getMaxY() {
         return rangeY.getHigherThreshold();
     }
@@ -41,6 +46,14 @@ public record Range3d(Range1d rangeX, Range1d rangeY, Range1d rangeZ) implements
 
     public long getMinZ() {
         return rangeZ.getLowerThreshold();
+    }
+
+    public Vector3i getCenter() {
+        return new Vector3i(
+                (int)(rangeX.getHigherThreshold() - rangeX.getLowerThreshold()),
+                (int)(rangeY.getHigherThreshold() - rangeY.getLowerThreshold()),
+                (int)(rangeZ.getHigherThreshold() - rangeZ.getLowerThreshold())
+        );
     }
 
     @NotNull

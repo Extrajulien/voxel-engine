@@ -1,6 +1,9 @@
 package demo_game.World.Chunk;
 
+import demo_game.BlockType;
 import demo_game.World.Direction;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,6 +43,12 @@ public class ChunkRegister {
 
     public void addChunk(ChunkPos pos, Chunk chunk) {
         chunks.put(pos, chunk);
+    }
+
+    public BlockType getBlock(Vector3i blockPos) {
+        ChunkPos chunkPos = new ChunkPos(Chunk.worldToChunkSpace(new Vector3f(blockPos)));
+
+        return chunks.get(chunkPos).getBlockType(Chunk.posWorldWrapToChunk(blockPos));
     }
 
 

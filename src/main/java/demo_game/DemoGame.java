@@ -33,8 +33,10 @@ public class DemoGame extends Game {
 
     @Override
     public void update() {
-        world.update(player, deltaTime());
 
+        world.update(player, deltaTime());
+        world.updateCollision(player);
+        player.update(deltaTime());
         if (controller.isPressed(Action.QUIT)) {
             stop();
         }
@@ -48,18 +50,19 @@ public class DemoGame extends Game {
             currentMode = currentMode.next();
         }
 
-        player.update(deltaTime());
+
         controller.update();
     }
 
     @Override
     public void draw() {
         world.draw(player, currentMode);
+        world.drawCollisionBlocks(player);
         cubeEntity.draw(player.getCameraView());
         cubeEntity.drawHitBox(player.getCameraView());
 
         player.draw(player.getCameraView());
-        player.drawHitBox(player.getCameraView());
+        player.drawSpeedBox(player.getCameraView());
 
     }
 }

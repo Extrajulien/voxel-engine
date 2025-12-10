@@ -1,5 +1,6 @@
 package doctrina.Entities;
 
+import doctrina.Utils.BoundingBox;
 import doctrina.physic.HitBox;
 import doctrina.rendering.CameraView;
 import doctrina.rendering.Model;
@@ -9,11 +10,10 @@ import org.joml.Vector3f;
 public abstract class Entity {
     protected HitBox hitbox;
     private final Model model;
-
     protected Vector3f position;
     protected Matrix4f modelMatrix;
 
-    public Entity(Model model, Vector3f hitboxDimension) {
+    public Entity(Model model, BoundingBox hitboxDimension) {
         position = new Vector3f(0);
         modelMatrix = new Matrix4f();
         this.model = model;
@@ -41,11 +41,7 @@ public abstract class Entity {
         hitbox.update();
     }
 
-    public void enableGravity() {
-
-    }
-
-    public void setGravity(float unitSquareBySeconds) {
+    public void update(double deltaTime) {
 
     }
 }

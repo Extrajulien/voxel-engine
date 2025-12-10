@@ -5,17 +5,20 @@ import demo_game.World.Chunk.*;
 import demo_game.World.Generation.TerrainGenerator;
 import demo_game.debug.LogEntry;
 import demo_game.debug.Logger;
+import doctrina.Entities.Entity;
+import doctrina.Entities.MovableEntity;
 import org.joml.Vector3i;
 
 public class World {
     private final ChunkRegister register;
+    private final WorldCollider collider;
     private final TerrainGenerator terrainGenerator;
     private final Vector3i playerChunk;
 
     public World(long seed, Player player) {
-
         register = new ChunkRegister();
         terrainGenerator = new TerrainGenerator(seed);
+        collider = new WorldCollider();
         playerChunk = new Vector3i(Chunk.worldToChunkSpace(player.getPosition()));
         CreateChunksNearPlayer(player);
     }
@@ -26,6 +29,10 @@ public class World {
         log();
     }
 
+    public void updateCollision(MovableEntity entity) {
+        collider.getCheckEntityCollision(entity, register);
+    }
+
     public void draw(Player player, ChunkRenderingMode renderingMode) {
         switch (renderingMode) {
             case NORMAL -> drawNormal(player);
@@ -33,6 +40,10 @@ public class World {
             case WIREFRAME_CHUNKS -> drawWireframe(player);
             case CHUNK_LOADED_CHUNKS -> drawChunkLoadedBounds(player);
         }
+    }
+
+    public void drawCollisionBlocks(Player player) {
+        collider.drawBlocksHitbox(player.getCameraView().viewMatrix(), player.getCameraView().projectionMatrix());
     }
 
     private void loadChunks(Player player) {
@@ -64,9 +75,15 @@ public class World {
     private void createChunk(ChunkPos chunkPos) {
         Chunk chunk = new Chunk(chunkPos, register);
         terrainGenerator.CreateChunk(chunk);
+        updateChunkMesh(chunk);
+    }
+
+
+    private void updateChunkMesh(Chunk chunk) {
         chunk.updateMesh(register);
         updateNeighbours(chunk);
     }
+
 
     private void updateNeighbours(Chunk chunk) {
         NeighboringChunks neighbours = register.getNeighboringChunks(chunk.getChunkPos());

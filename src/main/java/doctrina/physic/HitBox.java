@@ -1,6 +1,7 @@
 package doctrina.physic;
 
 import doctrina.Entities.Entity;
+import doctrina.Utils.BoundingBox;
 import doctrina.debug.Color;
 import doctrina.Uniform.HitboxUniform;
 import doctrina.rendering.*;
@@ -10,30 +11,31 @@ import org.joml.Vector3f;
 import static org.lwjgl.opengl.GL11C.glLineWidth;
 
 public class HitBox {
-    protected Vector3f position;
-    protected Vector3f dimension;
+    private Vector3f position;
+    private BoundingBox bounds;
     private final static Mesh cube = new Mesh.Builder().boundingBox().build();
     private Material<HitboxUniform> material;
-    private final Model<HitboxUniform> bounds;
-    private Matrix4f modelMatrix;
+    private final Model<HitboxUniform> boundsModel;
+    private final Matrix4f hitboxModelMatrix;
     private Vector3f color;
 
-    public HitBox(Entity entity, Vector3f dimension) {
+    public HitBox(Entity entity, BoundingBox dimension) {
         this(entity, dimension, new Vector3f(255.0f,255.0f,255.0f));
     }
 
-    public HitBox(Entity entity, Vector3f dimension, Vector3f color) {
+    public HitBox(Entity entity, BoundingBox dimension, Vector3f color) {
         createMaterial();
-        bounds = new Model<>(cube, material);
+        hitboxModelMatrix = new Matrix4f();
+        boundsModel = new Model<>(cube, material);
         this.color = color;
         attachColorToShader();
         this.position = entity.getPosition();
-        this.dimension = dimension;
-        initializeModelMatrix();
+        this.bounds = dimension;
+        update();
     }
 
-    public void setDimension() {
-        this.dimension = new Vector3f(dimension);
+    public void setBounds(BoundingBox box) {
+        this.bounds = box;
     }
 
     public void moveToEntity(Entity entity) {
@@ -41,10 +43,16 @@ public class HitBox {
     }
 
     public void update() {
-        initializeModelMatrix();
+        updateHitboxModelMatrix();
     }
 
+    public BoundingBox getWorldBounds() {
+        return new BoundingBox(bounds).translate(position.x, position.y, position.z);
+    }
 
+    public void setBoundsSides() {
+
+    }
 
     public void setColor(Vector3f color) {
         material.use();
@@ -61,11 +69,7 @@ public class HitBox {
     public void drawBounds(Matrix4f viewMatrix, Matrix4f projectionMatrix) {
         glLineWidth(2.0f);
         material.use();
-        bounds.drawBoundingBox(modelMatrix, viewMatrix, projectionMatrix);
-    }
-
-    private Vector3f getColorFromRange(Vector3f color) {
-        return color.div(255);
+        boundsModel.drawBoundingBox(hitboxModelMatrix, viewMatrix, projectionMatrix);
     }
 
     private void attachColorToShader() {
@@ -77,8 +81,8 @@ public class HitBox {
         material = new Material<>(shader);
     }
 
-    private void initializeModelMatrix() {
-        this.modelMatrix = new Matrix4f().setTranslation(position);
-        this.modelMatrix.scale(dimension);
+    private void updateHitboxModelMatrix() {
+        this.hitboxModelMatrix.scaling(bounds.width(), bounds.height(), bounds.depth());
+        this.hitboxModelMatrix.setTranslation(new Vector3f(position).add(bounds.center()));
     }
 }

@@ -32,10 +32,16 @@ public class Range1d implements Iterable<Long> {
         return !(low > other.high || high < other.low);
     }
 
+    /**
+     * Is the range completely above the other
+     */
     public boolean isGreater(Range1d other) {
         return low > other.high;
     }
 
+    /**
+     * Is the range completely under the other
+     */
     public boolean isLower(Range1d other) {
         return high < other.low;
     }
