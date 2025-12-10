@@ -32,6 +32,13 @@ public class BoundingBox {
         this.maxZ = other.maxZ;
     }
 
+    public BoundingBox(Range3d otherBox) {
+        this(
+                otherBox.getMinX(), otherBox.getMaxX(), otherBox.getMinY(),
+                otherBox.getMaxY(), otherBox.getMinZ(), otherBox.getMaxZ()
+        );
+    }
+
     public BoundingBox(Vector3f min, Vector3f max) {
         this(min.x, max.x, min.y, max.y, min.z, max.z);
     }
