@@ -17,7 +17,7 @@ public abstract class Entity {
         position = new Vector3f(0);
         modelMatrix = new Matrix4f();
         this.model = model;
-        hitbox = new HitBox(this, hitboxDimension);
+        hitbox = new HitBox(hitboxDimension);
     }
 
     public void draw(CameraView data) {
@@ -38,7 +38,7 @@ public abstract class Entity {
     public final void moveTo(float x, float y, float z) {
         this.position.set(x,y,z);
         modelMatrix.setTranslation(position.x, position.y, position.z);
-        hitbox.update();
+        hitbox.update(position);
     }
 
     public void update(double deltaTime) {

@@ -1,13 +1,10 @@
 package doctrina.Entities;
 
-import demo_game.Models;
 import doctrina.Utils.BoundingBox;
 import doctrina.Utils.Range3d;
 import doctrina.physic.HitBox;
 import doctrina.rendering.CameraView;
-import doctrina.rendering.Mesh;
 import doctrina.rendering.Model;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public abstract class MovableEntity extends Entity {
@@ -25,9 +22,9 @@ public abstract class MovableEntity extends Entity {
     public MovableEntity(Model model, BoundingBox hitboxDimension) {
         super(model, hitboxDimension);
         speedBoxBounds = new BoundingBox(hitboxDimension);
-        speedXBox = new HitBox(this, speedBoxBounds);
-        speedYBox = new HitBox(this, speedBoxBounds);
-        speedZBox = new HitBox(this, speedBoxBounds);
+        speedXBox = new HitBox(speedBoxBounds);
+        speedYBox = new HitBox(speedBoxBounds);
+        speedZBox = new HitBox(speedBoxBounds);
         possibleMovements = new EntityMovementFlag();
         possibleMovements.enableAll();
         currentSpeed = new Vector3f();
@@ -48,11 +45,11 @@ public abstract class MovableEntity extends Entity {
     }
 
     public void drawSpeedBox(CameraView data) {
-        speedXBox.update();
+        speedXBox.update(position);
         speedXBox.drawBounds(data.viewMatrix(), data.projectionMatrix());
-        speedYBox.update();
+        speedYBox.update(position);
         speedYBox.drawBounds(data.viewMatrix(), data.projectionMatrix());
-        speedZBox.update();
+        speedZBox.update(position);
         speedZBox.drawBounds(data.viewMatrix(), data.projectionMatrix());
     }
 

@@ -19,19 +19,19 @@ public class HitBox {
     private final Matrix4f hitboxModelMatrix;
     private Vector3f color;
 
-    public HitBox(Entity entity, BoundingBox dimension) {
-        this(entity, dimension, new Vector3f(255.0f,255.0f,255.0f));
+    public HitBox(BoundingBox dimension) {
+        this(dimension, new Vector3f(255.0f,255.0f,255.0f));
     }
 
-    public HitBox(Entity entity, BoundingBox dimension, Vector3f color) {
+    public HitBox(BoundingBox dimension, Vector3f color) {
         createMaterial();
         hitboxModelMatrix = new Matrix4f();
         boundsModel = new Model<>(cube, material);
         this.color = color;
         attachColorToShader();
-        this.position = entity.getPosition();
+        this.position = new Vector3f();
         this.bounds = dimension;
-        update();
+        update(position);
     }
 
     public void setBounds(BoundingBox box) {
@@ -42,7 +42,8 @@ public class HitBox {
         this.position = entity.getPosition();
     }
 
-    public void update() {
+    public void update(Vector3f position) {
+        this.position.set(position);
         updateHitboxModelMatrix();
     }
 
