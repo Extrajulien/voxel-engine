@@ -6,7 +6,6 @@ import demo_game.Inputs.Axis;
 import demo_game.Inventory;
 import demo_game.Models;
 import doctrina.Entities.ControllableEntity;
-import doctrina.Entities.EntityMovementFlag;
 import doctrina.Input.Controller;
 import doctrina.Utils.BoundingBox;
 import doctrina.Utils.Range1d;

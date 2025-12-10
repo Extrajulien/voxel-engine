@@ -14,7 +14,7 @@ public abstract class MovableEntity extends Entity {
     private final BoundingBox speedBoxBounds;
     protected float walkSpeed;
     protected final Vector3f currentSpeed;
-    protected EntityMovementFlag possibleMovements;
+    protected EntityMovement possibleMovements;
     private boolean isPossibleMovementsUpdated;
     private float gravityStrength;
     protected float jumpHeight;
@@ -25,7 +25,7 @@ public abstract class MovableEntity extends Entity {
         speedXBox = new HitBox(speedBoxBounds);
         speedYBox = new HitBox(speedBoxBounds);
         speedZBox = new HitBox(speedBoxBounds);
-        possibleMovements = new EntityMovementFlag();
+        possibleMovements = new EntityMovement();
         possibleMovements.enableAll();
         currentSpeed = new Vector3f();
         isPossibleMovementsUpdated = true;
@@ -54,13 +54,13 @@ public abstract class MovableEntity extends Entity {
     }
 
     private void adjustSpeedFromPossibleDirection() {
-        if (!possibleMovements.canMoveInDirection(EntityMovementFlag.MovementDir.WEST)) {
+        if (!possibleMovements.isOn(EntityMovement.MovementDir.WEST)) {
             if (currentSpeed.x < 0) {
                 currentSpeed.setComponent(0, 0);
             }
         }
 
-        if (!possibleMovements.canMoveInDirection(EntityMovementFlag.MovementDir.SOUTH)) {
+        if (!possibleMovements.isOn(EntityMovement.MovementDir.SOUTH)) {
             if (currentSpeed.z > 0) {
                 currentSpeed.setComponent(2, 0);
             }
@@ -87,24 +87,24 @@ public abstract class MovableEntity extends Entity {
 
         //WEST
         if (speedXBox.getWorldBounds().intersectsX(otherBox.rangeX(), EPSILON)) {
-            possibleMovements.disableDirection(EntityMovementFlag.MovementDir.WEST);
+            possibleMovements.disable(EntityMovement.MovementDir.WEST);
             if (speedXBox.getWorldBounds().intersectsX(otherBox.rangeX())) {
                 currentSpeed.x = -(speedXBox.getWorldBounds().minX() - otherBox.getMaxX());
                 isCollided = true;
             }
         } else {
-            possibleMovements.enableDirection(EntityMovementFlag.MovementDir.WEST);
+            possibleMovements.enable(EntityMovement.MovementDir.WEST);
         }
 
         //SOUTH
         if (speedZBox.getWorldBounds().intersectsZ(otherBox.rangeZ(), EPSILON)) {
-            possibleMovements.disableDirection(EntityMovementFlag.MovementDir.SOUTH);
+            possibleMovements.disable(EntityMovement.MovementDir.SOUTH);
             if (speedZBox.getWorldBounds().intersectsZ(otherBox.rangeZ())) {
                 currentSpeed.z = -(speedZBox.getWorldBounds().minZ() - otherBox.getMaxZ());
                 isCollided = true;
             }
         } else {
-            possibleMovements.enableDirection(EntityMovementFlag.MovementDir.SOUTH);
+            possibleMovements.enable(EntityMovement.MovementDir.SOUTH);
         }
 
         if (isCollided) {
@@ -158,7 +158,7 @@ public abstract class MovableEntity extends Entity {
 
 
     public void jump() {
-        possibleMovements.disableDirection(EntityMovementFlag.MovementDir.IS_GROUNDED);
+
     }
 
     public void setGravity(float unitSquareBySeconds) {
