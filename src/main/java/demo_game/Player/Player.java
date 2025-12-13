@@ -2,7 +2,7 @@ package demo_game.Player;
 
 import demo_game.World.Chunk.Chunk;
 import demo_game.Inputs.Action;
-import demo_game.Inputs.Axis;
+import demo_game.Inputs.Analog;
 import demo_game.Inventory;
 import demo_game.Models;
 import doctrina.Entities.ControllableEntity;
@@ -15,7 +15,7 @@ import doctrina.rendering.*;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-public final class Player extends ControllableEntity<Action, Axis> {
+public final class Player extends ControllableEntity<Action, Analog> {
     private final int CHUNK_LOADING_RADIUS = 2;
     private final PlayerCamera camera;
     private final PlayerMovementHandler movementHandler;
@@ -23,7 +23,7 @@ public final class Player extends ControllableEntity<Action, Axis> {
     private float sprintSpeed = 80;
     private boolean isSprinting = false;
 
-    public Player(Controller<Action, Axis> controller) {
+    public Player(Controller<Action, Analog> controller) {
         super(Models.makePlayer(), new BoundingBox(new Vector3f(-0.35f,-0.9f,-0.35f), new Vector3f(0.35f,0.9f,0.35f)), controller);
 
         this.camera = new PlayerCamera(this);
@@ -108,7 +108,7 @@ public final class Player extends ControllableEntity<Action, Axis> {
         inventory.close(controller);
     }
 
-    Controller<Action, Axis> getController() {
+    Controller<Action, Analog> getController() {
         return controller;
     }
 
@@ -126,6 +126,4 @@ public final class Player extends ControllableEntity<Action, Axis> {
         modelMatrix.setRotationXYZ(0, yRotation , 0);
 
     }
-
-
 }

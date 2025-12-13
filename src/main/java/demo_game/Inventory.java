@@ -1,7 +1,7 @@
 package demo_game;
 
 import demo_game.Inputs.Action;
-import demo_game.Inputs.Axis;
+import demo_game.Inputs.Analog;
 import doctrina.Input.Controller;
 
 public class Inventory {
@@ -11,12 +11,12 @@ public class Inventory {
         return isOpen;
     }
 
-    public void open(Controller<Action, Axis> controller) {
+    public void open(Controller<Action, Analog> controller) {
         isOpen = true;
         controller.freeCursor();
     }
 
-    public void close(Controller<Action, Axis> controller) {
+    public void close(Controller<Action, Analog> controller) {
         isOpen = false;
         controller.captureCursor();
     }

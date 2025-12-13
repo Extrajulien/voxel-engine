@@ -2,7 +2,9 @@ package doctrina.Entities;
 
 import doctrina.Utils.BoundingBox;
 import doctrina.Utils.Range3d;
+import doctrina.physic.EntityMovement;
 import doctrina.physic.HitBox;
+import doctrina.physic.MovementDir;
 import doctrina.rendering.CameraView;
 import doctrina.rendering.Model;
 import org.joml.Vector3f;
@@ -54,13 +56,13 @@ public abstract class MovableEntity extends Entity {
     }
 
     private void adjustSpeedFromPossibleDirection() {
-        if (!possibleMovements.isOn(EntityMovement.MovementDir.WEST)) {
+        if (!possibleMovements.isOn(MovementDir.WEST)) {
             if (currentSpeed.x < 0) {
                 currentSpeed.setComponent(0, 0);
             }
         }
 
-        if (!possibleMovements.isOn(EntityMovement.MovementDir.SOUTH)) {
+        if (!possibleMovements.isOn(MovementDir.SOUTH)) {
             if (currentSpeed.z > 0) {
                 currentSpeed.setComponent(2, 0);
             }
@@ -81,30 +83,30 @@ public abstract class MovableEntity extends Entity {
     }
 
     private void checkCollisionDirection(Range3d otherBox) {
-        final float EPSILON = 0.2f;
+        final float EPSILON = 0.0f;
 
         boolean isCollided = false;
 
         //WEST
         if (speedXBox.getWorldBounds().intersectsX(otherBox.rangeX(), EPSILON)) {
-            possibleMovements.disable(EntityMovement.MovementDir.WEST);
+            possibleMovements.disable(MovementDir.WEST);
             if (speedXBox.getWorldBounds().intersectsX(otherBox.rangeX())) {
                 currentSpeed.x = -(speedXBox.getWorldBounds().minX() - otherBox.getMaxX());
                 isCollided = true;
             }
         } else {
-            possibleMovements.enable(EntityMovement.MovementDir.WEST);
+            possibleMovements.enable(MovementDir.WEST);
         }
 
         //SOUTH
         if (speedZBox.getWorldBounds().intersectsZ(otherBox.rangeZ(), EPSILON)) {
-            possibleMovements.disable(EntityMovement.MovementDir.SOUTH);
+            possibleMovements.disable(MovementDir.SOUTH);
             if (speedZBox.getWorldBounds().intersectsZ(otherBox.rangeZ())) {
                 currentSpeed.z = -(speedZBox.getWorldBounds().minZ() - otherBox.getMaxZ());
                 isCollided = true;
             }
         } else {
-            possibleMovements.enable(EntityMovement.MovementDir.SOUTH);
+            possibleMovements.enable(MovementDir.SOUTH);
         }
 
         if (isCollided) {

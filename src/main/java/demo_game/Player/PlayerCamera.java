@@ -1,14 +1,14 @@
 package demo_game.Player;
 
 import demo_game.Inputs.Action;
-import demo_game.Inputs.Axis;
+import demo_game.Inputs.Analog;
 import doctrina.Input.Controller;
 import doctrina.rendering.Camera;
 import doctrina.rendering.CameraMode;
 
 public final class PlayerCamera extends Camera {
 
-    private final Controller<Action, Axis> controller;
+    private final Controller<Action, Analog> controller;
 
     public PlayerCamera(Player player) {
         super(player, CameraMode.FPS);
@@ -20,8 +20,8 @@ public final class PlayerCamera extends Camera {
 
     @Override
     public void update() {
-        addYaw((float) controller.getAxis(Axis.LOOK_X));
-        addPitch((float) controller.getAxis(Axis.LOOK_Y));
+        addYaw((float) controller.getAxis(Analog.LOOK_X));
+        addPitch((float) controller.getAxis(Analog.LOOK_Y));
         super.update();
     }
 

@@ -1,7 +1,7 @@
 package demo_game.Player;
 
 import demo_game.Inputs.Action;
-import demo_game.Inputs.Axis;
+import demo_game.Inputs.Analog;
 import demo_game.debug.LogEntry;
 import demo_game.debug.Logger;
 import doctrina.Input.Controller;
@@ -9,7 +9,7 @@ import org.joml.Vector3f;
 
 public final class PlayerMovementHandler {
     private final Vector3f movementDirection;
-    private final Controller<Action, Axis> controller;
+    private final Controller<Action, Analog> controller;
     private final PlayerCamera camera;
     private final Player player;
 

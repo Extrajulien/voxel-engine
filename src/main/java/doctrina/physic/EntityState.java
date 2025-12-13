@@ -1,4 +1,4 @@
-package doctrina.Entities;
+package doctrina.physic;
 
 import doctrina.Utils.BitMask;
 

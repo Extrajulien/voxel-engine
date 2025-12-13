@@ -2,7 +2,7 @@ package demo_game.Inputs;
 
 import doctrina.Input.*;
 
-public class GameKMController extends KeyboardMouseController<Action, Axis> {
+public class GameKMController extends KeyboardMouseController<Action, Analog> {
 
     public GameKMController(Keyboard keyboard, Mouse mouse) {
         super(keyboard, mouse);
@@ -10,8 +10,8 @@ public class GameKMController extends KeyboardMouseController<Action, Axis> {
 
     @Override
     protected void setBindings() {
-        addToMouseAxis(Axis.LOOK_X, MouseAxis.DELTA_X);
-        addToMouseAxis(Axis.LOOK_Y, MouseAxis.DELTA_Y);
+        addToMouseAxis(Analog.LOOK_X, MouseAxis.DELTA_X);
+        addToMouseAxis(Analog.LOOK_Y, MouseAxis.DELTA_Y);
         addToKeyboardAction(Action.MOVE_NORTH, Key.W);
         addToKeyboardAction(Action.MOVE_SOUTH, Key.S);
         addToKeyboardAction(Action.MOVE_EAST, Key.D);

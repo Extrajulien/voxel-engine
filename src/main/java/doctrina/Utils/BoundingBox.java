@@ -1,5 +1,7 @@
 package doctrina.Utils;
 
+import doctrina.physic.Axis;
+import doctrina.physic.MovementDir;
 import org.joml.Vector3f;
 
 public class BoundingBox {
@@ -68,9 +70,6 @@ public class BoundingBox {
         return maxZ;
     }
 
-
-
-
     public Vector3f getMin() { return new Vector3f(minX, minY, minZ); }
     public Vector3f getMax() { return new Vector3f(maxX, maxY, maxZ); }
 
@@ -84,14 +83,45 @@ public class BoundingBox {
         return contains(p.x, p.y, p.z);
     }
 
+    public float getBorder(MovementDir dir) {
+        return switch (dir) {
+            case NORTH -> minZ;
+            case SOUTH -> maxZ;
+            case UP -> maxY;
+            case DOWN -> minY;
+            case WEST -> minX;
+            case EAST -> maxX;
+        };
+    }
+
+
+
     public boolean intersects(BoundingBox other) {
         return this.minX <= other.maxX && this.maxX >= other.minX &&
                 this.minY <= other.maxY && this.maxY >= other.minY &&
                 this.minZ <= other.maxZ && this.maxZ >= other.minZ;
     }
 
+    public boolean intersects(Range3d other) {
+        return this.minX <= other.getMaxX() && this.maxX >= other.getMinX() &&
+                this.minY <= other.getMaxY() && this.maxY >= other.getMinY() &&
+                this.minZ <= other.getMaxZ() && this.maxZ >= other.getMinZ();
+    }
+
+    public boolean intersects(Axis axis, Range1d other) {
+        return intersects(axis, other, 0);
+    }
+
+    public boolean intersects(Axis axis, Range1d other, double epsilon) {
+        return switch (axis) {
+            case X -> intersectsX(other, epsilon);
+            case Y -> intersectsY(other, epsilon);
+            case Z -> intersectsZ(other, epsilon);
+        };
+    }
+
     public boolean intersectsX(Range1d other) {
-        return this.minX <= other.getHigherThreshold() && this.maxX >= other.getLowerThreshold();
+        return intersectsX(other, 0);
     }
 
     public boolean intersectsX(Range1d other, double epsilon) {
@@ -99,7 +129,7 @@ public class BoundingBox {
     }
 
     public boolean intersectsY(Range1d other) {
-        return this.minY <= other.getHigherThreshold() && this.maxY >= other.getLowerThreshold();
+        return intersectsY(other, 0);
     }
 
     public boolean intersectsY(Range1d other, double epsilon) {
@@ -107,17 +137,11 @@ public class BoundingBox {
     }
 
     public boolean intersectsZ(Range1d other) {
-        return this.minZ <= other.getHigherThreshold() && this.maxZ >= other.getLowerThreshold();
+        return intersectsZ(other, 0);
     }
 
     public boolean intersectsZ(Range1d other, double epsilon) {
         return this.minZ <= other.getHigherThreshold() + epsilon && this.maxZ >= other.getLowerThreshold() - epsilon;
-    }
-
-    public boolean intersects(Range3d other) {
-        return this.minX <= other.getMaxX() && this.maxX >= other.getMinX() &&
-                this.minY <= other.getMaxY() && this.maxY >= other.getMinY() &&
-                this.minZ <= other.getMaxZ() && this.maxZ >= other.getMinZ();
     }
 
     public float width()  {

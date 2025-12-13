@@ -1,6 +1,5 @@
 package doctrina.physic;
 
-import doctrina.Entities.EntityMovement;
 import doctrina.Utils.BoundingBox;
 import doctrina.Utils.Range3d;
 import doctrina.rendering.CameraView;
@@ -36,7 +35,13 @@ public class CollisionCalculator {
     }
 
 
-    public void
+    public Vector3f getPossibleMovement() {
+        return new Vector3f();
+    }
+
+    public void update(Vector3f speed) {
+
+    }
 
 
     public void collide(Range3d otherBox) {
@@ -48,6 +53,18 @@ public class CollisionCalculator {
     }
 
 
+    private void checkCollisionDirection(BoundingBox other, MovementDir dir) {
+    }
+
+
+
+    private HitBox getSpeedBox(MovementDir dir) {
+        return switch (dir) {
+            case NORTH, SOUTH -> speedZBox;
+            case EAST, WEST -> speedXBox;
+            case UP, DOWN -> speedYBox;
+        };
+    }
 
 }
 
