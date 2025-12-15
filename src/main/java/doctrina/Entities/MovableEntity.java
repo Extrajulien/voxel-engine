@@ -16,7 +16,7 @@ public abstract class MovableEntity extends Entity {
 
     public MovableEntity(Model model, BoundingBox hitboxDimension) {
         super(model, hitboxDimension);
-        collider = new Collider(hitboxDimension);
+        collider = new Collider();
         currentSpeed = new Vector3f();
         walkSpeed = 1;
         jumpHeight = 1;
@@ -27,16 +27,16 @@ public abstract class MovableEntity extends Entity {
     }
 
     private void moveEntity(CollisionCandidates  candidates) {
-        if (currentSpeed.equals(0,0,0)) {
-            return;
-        }
-        this.position.add(collider.getAllowedX(currentSpeed, candidates));
+        float dx = collider.getAllowedX(currentSpeed.x, hitbox.getWorldBounds(), candidates);
+        this.position.add(dx, 0, 0);
         hitbox.update(position);
 
-        this.position.add(collider.getAllowedY(currentSpeed, candidates));
+        float dy = collider.getAllowedY(currentSpeed.y, hitbox.getWorldBounds(), candidates);
+        this.position.add(0, dy, 0);
         hitbox.update(position);
 
-        this.position.add(collider.getAllowedZ(currentSpeed, candidates));
+        float dz = collider.getAllowedZ(currentSpeed.z, hitbox.getWorldBounds(), candidates);
+        this.position.add(0, 0, dz);
         hitbox.update(position);
         modelMatrix.setTranslation(position);
     }

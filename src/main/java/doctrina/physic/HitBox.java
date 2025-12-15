@@ -44,7 +44,6 @@ public class HitBox {
 
     public void update(Vector3f position) {
         this.position.set(position);
-        bounds.moveTo(position);
         updateHitboxModelMatrix();
     }
 

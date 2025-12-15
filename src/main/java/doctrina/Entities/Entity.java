@@ -20,6 +20,10 @@ public abstract class Entity {
         hitbox = new HitBox(hitboxDimension);
     }
 
+    public BoundingBox getBounds() {
+        return new BoundingBox(hitbox.getWorldBounds());
+    }
+
     public void draw(CameraView data) {
         model.draw(modelMatrix, data.viewMatrix(), data.projectionMatrix());
     }

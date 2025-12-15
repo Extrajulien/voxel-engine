@@ -139,6 +139,18 @@ public class BoundingBox {
         };
     }
 
+    public boolean isYInRange(BoundingBox other) {
+        return !(maxY < other.minY() || minY > other.maxY());
+    }
+
+    public boolean isXInRange(BoundingBox other) {
+        return !(maxX < other.minX() || minX > other.maxX());
+    }
+
+    public boolean isZInRange(BoundingBox other) {
+        return !(maxZ < other.minZ() || minZ > other.maxZ());
+    }
+
 
 
     public boolean intersects(BoundingBox other) {

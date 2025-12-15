@@ -12,6 +12,7 @@ import doctrina.Utils.BoundingBox;
 import doctrina.Utils.RangeI1d;
 import doctrina.Utils.RangeI3d;
 import doctrina.debug.Color;
+import doctrina.physic.CollisionCandidates;
 import doctrina.rendering.*;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
@@ -35,7 +36,7 @@ public final class Player extends ControllableEntity<Action, Analog> {
         this.controller.captureCursor();
     }
 
-    public void update(double deltaTime, World world) {
+    public void update(double deltaTime, CollisionCandidates candidates) {
         super.update(deltaTime);
         movementHandler.update(deltaTime);
         handleInputs(deltaTime);
@@ -44,7 +45,7 @@ public final class Player extends ControllableEntity<Action, Analog> {
 
         if (!inventory.isOpen()) {
             updateSpeedFromMovement(deltaTime);
-            this.move(world.getCollisionCandidates(this));
+            this.move(candidates);
             camera.update();
         }
 

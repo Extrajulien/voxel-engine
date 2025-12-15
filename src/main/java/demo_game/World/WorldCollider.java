@@ -2,9 +2,7 @@ package demo_game.World;
 
 import demo_game.BlockData;
 import demo_game.BlockType;
-import demo_game.Models;
 import demo_game.Player.Player;
-import demo_game.Uniforms.ChunkUniform;
 import demo_game.World.Chunk.ChunkRegister;
 import doctrina.Entities.MovableEntity;
 import doctrina.Utils.BoundingBox;
@@ -13,15 +11,11 @@ import doctrina.Utils.RangeI3d;
 import doctrina.debug.Color;
 import doctrina.physic.CollisionCandidates;
 import doctrina.physic.HitBox;
-import doctrina.rendering.Model;
-import org.joml.Matrix4f;
 import org.joml.RoundingMode;
-import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public class WorldCollider {
     private static final int entityCollisionRadius = 2;
-    private static final int collisionDiameter = entityCollisionRadius * 2 + 1;
 
     public WorldCollider() {
     }
@@ -34,6 +28,7 @@ public class WorldCollider {
 
         for (BoundingBox candidate : candidates) {
             HitBox block = new HitBox(candidate);
+            block.update(candidate.center());
             block.setColor(Color.RED);
             block.drawBounds(player.getCameraView().viewMatrix(), player.getCameraView().projectionMatrix());
         }

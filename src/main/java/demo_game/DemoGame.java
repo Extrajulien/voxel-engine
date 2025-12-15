@@ -8,6 +8,7 @@ import demo_game.World.World;
 import doctrina.Entities.Entity;
 import doctrina.Game;
 import doctrina.Input.*;
+import doctrina.physic.CollisionCandidates;
 
 public class DemoGame extends Game {
     Mouse mouse;
@@ -35,7 +36,8 @@ public class DemoGame extends Game {
     public void update() {
 
         world.update(player, deltaTime());
-        player.update(deltaTime(), world);
+        CollisionCandidates candidates = world.getCollisionCandidates(player);
+        player.update(deltaTime(), candidates);
 
         if (controller.isPressed(Action.QUIT)) {
             stop();
