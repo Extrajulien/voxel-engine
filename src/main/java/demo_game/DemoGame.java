@@ -35,8 +35,8 @@ public class DemoGame extends Game {
     public void update() {
 
         world.update(player, deltaTime());
-        world.updateCollision(player);
-        player.update(deltaTime());
+        player.update(deltaTime(), world);
+
         if (controller.isPressed(Action.QUIT)) {
             stop();
         }
@@ -62,7 +62,6 @@ public class DemoGame extends Game {
         cubeEntity.drawHitBox(player.getCameraView());
 
         player.draw(player.getCameraView());
-        player.drawSpeedBox(player.getCameraView());
 
     }
 }

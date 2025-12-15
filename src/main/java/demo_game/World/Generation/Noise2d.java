@@ -1,27 +1,27 @@
 package demo_game.World.Generation;
 
-import doctrina.Utils.Range1d;
-import doctrina.Utils.Range2d;
+import doctrina.Utils.RangeI1d;
+import doctrina.Utils.RangeI2d;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
 public class Noise2d implements Iterable<Integer> {
-    private final Range2d range;
+    private final RangeI2d range;
     private final int[][] values;
-    private final Range1d valueRanges;
+    private final RangeI1d valueRanges;
 
     public Noise2d(int[][] values) {
-        range = new Range2d(new Range1d(0, values.length-1), new Range1d(0, values[0].length-1));
+        range = new RangeI2d(new RangeI1d(0, values.length-1), new RangeI1d(0, values[0].length-1));
         this.values = values;
         valueRanges = createValueRanges();
     }
 
-    public Range2d getEntryRange() {
+    public RangeI2d getEntryRange() {
         return range;
     }
 
-    public Range1d getValuesRange() {
+    public RangeI1d getValuesRange() {
         return valueRanges;
     }
 
@@ -31,7 +31,7 @@ public class Noise2d implements Iterable<Integer> {
 
 
 
-    private Range1d createValueRanges() {
+    private RangeI1d createValueRanges() {
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
         for (int num : this) {
@@ -42,7 +42,7 @@ public class Noise2d implements Iterable<Integer> {
                 min = num;
             }
         }
-        return new Range1d(min, max);
+        return new RangeI1d(min, max);
     }
 
     @NotNull

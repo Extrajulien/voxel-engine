@@ -7,11 +7,11 @@ import java.util.Iterator;
 /**
  * Represent two numbers that are threshold, <b>Both are Inclusive<b/>
  */
-public class Range1d implements Iterable<Long> {
+public class RangeI1d implements Iterable<Long> {
     private final long low;
     private final long high;
 
-    public Range1d(long lowerThreshold, long higherThreshold) {
+    public RangeI1d(long lowerThreshold, long higherThreshold) {
         low = lowerThreshold;
         high = higherThreshold;
     }
@@ -24,25 +24,25 @@ public class Range1d implements Iterable<Long> {
         return num >= low && num <= high;
     }
 
-    public boolean hasRange(Range1d other) {
+    public boolean hasRange(RangeI1d other) {
         return low <= other.low && high >= other.high;
     }
 
-    public boolean isIntersectingRange(Range1d other) {
+    public boolean isIntersectingRange(RangeI1d other) {
         return !(low > other.high || high < other.low);
     }
 
     /**
      * Is the range completely above the other
      */
-    public boolean isGreater(Range1d other) {
+    public boolean isGreater(RangeI1d other) {
         return low > other.high;
     }
 
     /**
      * Is the range completely under the other
      */
-    public boolean isLower(Range1d other) {
+    public boolean isLower(RangeI1d other) {
         return high < other.low;
     }
 

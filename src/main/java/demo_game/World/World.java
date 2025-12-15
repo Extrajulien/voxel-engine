@@ -5,8 +5,8 @@ import demo_game.World.Chunk.*;
 import demo_game.World.Generation.TerrainGenerator;
 import demo_game.debug.LogEntry;
 import demo_game.debug.Logger;
-import doctrina.Entities.Entity;
 import doctrina.Entities.MovableEntity;
+import doctrina.physic.CollisionCandidates;
 import org.joml.Vector3i;
 
 public class World {
@@ -29,8 +29,8 @@ public class World {
         log();
     }
 
-    public void updateCollision(MovableEntity entity) {
-        collider.getCheckEntityCollision(entity, register);
+    public CollisionCandidates getCollisionCandidates(MovableEntity entity) {
+        return collider.getEntityCollision(entity, register);
     }
 
     public void draw(Player player, ChunkRenderingMode renderingMode) {
@@ -43,7 +43,7 @@ public class World {
     }
 
     public void drawCollisionBlocks(Player player) {
-        collider.drawBlocksHitbox(player.getCameraView().viewMatrix(), player.getCameraView().projectionMatrix());
+        collider.drawBlocksHitbox(player, register);
     }
 
     private void loadChunks(Player player) {

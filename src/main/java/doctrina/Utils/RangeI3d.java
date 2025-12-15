@@ -8,7 +8,7 @@ import java.util.Iterator;
 /**
  * Represent 3 Ranges, <b>All ranges are Inclusive<b/>
  */
-public record Range3d(Range1d rangeX, Range1d rangeY, Range1d rangeZ) implements Iterable<Vector3i> {
+public record RangeI3d(RangeI1d rangeX, RangeI1d rangeY, RangeI1d rangeZ) implements Iterable<Vector3i> {
 
     public boolean isPointInRange(Vector3i num) {
         return isPointInRange(num.x, num.y, num.z);
@@ -19,7 +19,7 @@ public record Range3d(Range1d rangeX, Range1d rangeY, Range1d rangeZ) implements
                 && rangeZ.isNumberInRange(z);
     }
 
-    public boolean isIntersectingRange(Range3d other) {
+    public boolean isIntersectingRange(RangeI3d other) {
         return rangeX.isIntersectingRange(other.rangeX) || rangeY.isIntersectingRange(other.rangeY)
                 || rangeZ.isIntersectingRange(other.rangeZ);
     }

@@ -5,11 +5,12 @@ import demo_game.Inputs.Action;
 import demo_game.Inputs.Analog;
 import demo_game.Inventory;
 import demo_game.Models;
+import demo_game.World.World;
 import doctrina.Entities.ControllableEntity;
 import doctrina.Input.Controller;
 import doctrina.Utils.BoundingBox;
-import doctrina.Utils.Range1d;
-import doctrina.Utils.Range3d;
+import doctrina.Utils.RangeI1d;
+import doctrina.Utils.RangeI3d;
 import doctrina.debug.Color;
 import doctrina.rendering.*;
 import org.joml.Vector3f;
@@ -34,25 +35,28 @@ public final class Player extends ControllableEntity<Action, Analog> {
         this.controller.captureCursor();
     }
 
-    public void update(double deltaTime) {
+    public void update(double deltaTime, World world) {
         super.update(deltaTime);
         movementHandler.update(deltaTime);
         handleInputs(deltaTime);
 
+
+
         if (!inventory.isOpen()) {
             updateSpeedFromMovement(deltaTime);
+            collide(world.getCollisionCandidates(this));
             this.move();
             camera.update();
         }
 
     }
 
-    public Range3d getChunkLoadingRange() {
+    public RangeI3d getChunkLoadingRange() {
         Vector3i chunkPos = getChunkPos();
-        return new Range3d(
-                new Range1d(-CHUNK_LOADING_RADIUS + chunkPos.x, CHUNK_LOADING_RADIUS + chunkPos.x),
-                new Range1d(-CHUNK_LOADING_RADIUS + chunkPos.y, CHUNK_LOADING_RADIUS + chunkPos.y),
-                new Range1d(-CHUNK_LOADING_RADIUS + chunkPos.z, CHUNK_LOADING_RADIUS + chunkPos.z)
+        return new RangeI3d(
+                new RangeI1d(-CHUNK_LOADING_RADIUS + chunkPos.x, CHUNK_LOADING_RADIUS + chunkPos.x),
+                new RangeI1d(-CHUNK_LOADING_RADIUS + chunkPos.y, CHUNK_LOADING_RADIUS + chunkPos.y),
+                new RangeI1d(-CHUNK_LOADING_RADIUS + chunkPos.z, CHUNK_LOADING_RADIUS + chunkPos.z)
         );
     }
 

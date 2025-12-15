@@ -2,9 +2,9 @@ package demo_game.World.Chunk;
 
 import demo_game.BlockType;
 import demo_game.Player.Player;
-import doctrina.Utils.Range1d;
-import doctrina.Utils.Range2d;
-import doctrina.Utils.Range3d;
+import doctrina.Utils.RangeI1d;
+import doctrina.Utils.RangeI2d;
+import doctrina.Utils.RangeI3d;
 import org.joml.RoundingMode;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
@@ -17,7 +17,7 @@ public class Chunk {
     private final ChunkBoundingBox boundingBox;
     private final ChunkMesh mesh;
     private final ChunkPos chunkSpacePos; // world pos is the x,y,z corner
-    private final Range3d worldSpaceRange;
+    private final RangeI3d worldSpaceRange;
     private int dirtyMask;
     private long solidBlocks;
 
@@ -71,7 +71,7 @@ public class Chunk {
         return chunkSpacePos.y() * SIZE + SIZE - 1;
     }
 
-    public Range1d getWorldSpaceYRange() {
+    public RangeI1d getWorldSpaceYRange() {
         return worldSpaceRange.rangeY();
     }
 
@@ -96,9 +96,9 @@ public class Chunk {
         return chunkSpacePos;
     }
 
-    public Range3d getBlocksRange() {
-        return new Range3d(new Range1d(0, SIZE - 1), new Range1d(0, SIZE - 1),
-                new Range1d(0, SIZE - 1));
+    public RangeI3d getBlocksRange() {
+        return new RangeI3d(new RangeI1d(0, SIZE - 1), new RangeI1d(0, SIZE - 1),
+                new RangeI1d(0, SIZE - 1));
     }
     public void fill(BlockType fillerBlock) {
         for (Vector3i pos : getBlocksRange()) {
@@ -143,10 +143,10 @@ public class Chunk {
         setBlockType(pos.x, pos.y, pos.z, blockType);
     }
 
-    public Range2d getWorldXZBlocksRange() {
-        return new Range2d(
-                new Range1d((long) chunkSpacePos.x() * SIZE, (long) chunkSpacePos.x() * SIZE + SIZE - 1),
-                new Range1d((long) chunkSpacePos.z() * SIZE, (long) chunkSpacePos.z() * SIZE + SIZE - 1)
+    public RangeI2d getWorldXZBlocksRange() {
+        return new RangeI2d(
+                new RangeI1d((long) chunkSpacePos.x() * SIZE, (long) chunkSpacePos.x() * SIZE + SIZE - 1),
+                new RangeI1d((long) chunkSpacePos.z() * SIZE, (long) chunkSpacePos.z() * SIZE + SIZE - 1)
         );
     }
 
@@ -164,11 +164,11 @@ public class Chunk {
     }
 
 
-    private Range3d createWorldSpaceRange() {
-        return new Range3d(
-            new Range1d((long) chunkSpacePos.x() * SIZE, (long) chunkSpacePos.x() * SIZE + SIZE - 1),
-            new Range1d((long) chunkSpacePos.y() * SIZE, (long) chunkSpacePos.y() * SIZE + SIZE - 1),
-            new Range1d((long) chunkSpacePos.z() * SIZE, (long) chunkSpacePos.z() * SIZE + SIZE - 1)
+    private RangeI3d createWorldSpaceRange() {
+        return new RangeI3d(
+            new RangeI1d((long) chunkSpacePos.x() * SIZE, (long) chunkSpacePos.x() * SIZE + SIZE - 1),
+            new RangeI1d((long) chunkSpacePos.y() * SIZE, (long) chunkSpacePos.y() * SIZE + SIZE - 1),
+            new RangeI1d((long) chunkSpacePos.z() * SIZE, (long) chunkSpacePos.z() * SIZE + SIZE - 1)
         );
     }
 

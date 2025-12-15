@@ -34,11 +34,19 @@ public class BoundingBox {
         this.maxZ = other.maxZ;
     }
 
-    public BoundingBox(Range3d otherBox) {
+    public BoundingBox(RangeI3d otherBox) {
         this(
                 otherBox.getMinX(), otherBox.getMaxX(), otherBox.getMinY(),
                 otherBox.getMaxY(), otherBox.getMinZ(), otherBox.getMaxZ()
         );
+    }
+
+    public RangeD1d getAxisRange(Axis axis) {
+        return switch (axis) {
+            case X -> new RangeD1d(minX, maxX);
+            case Y -> new RangeD1d(minY, maxY);
+            case Z -> new RangeD1d(minZ, maxZ);
+        };
     }
 
     public BoundingBox(Vector3f min, Vector3f max) {
@@ -102,17 +110,17 @@ public class BoundingBox {
                 this.minZ <= other.maxZ && this.maxZ >= other.minZ;
     }
 
-    public boolean intersects(Range3d other) {
+    public boolean intersects(RangeI3d other) {
         return this.minX <= other.getMaxX() && this.maxX >= other.getMinX() &&
                 this.minY <= other.getMaxY() && this.maxY >= other.getMinY() &&
                 this.minZ <= other.getMaxZ() && this.maxZ >= other.getMinZ();
     }
 
-    public boolean intersects(Axis axis, Range1d other) {
+    public boolean intersects(Axis axis, RangeI1d other) {
         return intersects(axis, other, 0);
     }
 
-    public boolean intersects(Axis axis, Range1d other, double epsilon) {
+    public boolean intersects(Axis axis, RangeI1d other, double epsilon) {
         return switch (axis) {
             case X -> intersectsX(other, epsilon);
             case Y -> intersectsY(other, epsilon);
@@ -120,27 +128,27 @@ public class BoundingBox {
         };
     }
 
-    public boolean intersectsX(Range1d other) {
+    public boolean intersectsX(RangeI1d other) {
         return intersectsX(other, 0);
     }
 
-    public boolean intersectsX(Range1d other, double epsilon) {
+    public boolean intersectsX(RangeI1d other, double epsilon) {
         return this.minX <= other.getHigherThreshold() + epsilon && this.maxX >= other.getLowerThreshold() - epsilon;
     }
 
-    public boolean intersectsY(Range1d other) {
+    public boolean intersectsY(RangeI1d other) {
         return intersectsY(other, 0);
     }
 
-    public boolean intersectsY(Range1d other, double epsilon) {
+    public boolean intersectsY(RangeI1d other, double epsilon) {
         return this.minY <= other.getHigherThreshold() + epsilon && this.maxY >= other.getLowerThreshold() - epsilon;
     }
 
-    public boolean intersectsZ(Range1d other) {
+    public boolean intersectsZ(RangeI1d other) {
         return intersectsZ(other, 0);
     }
 
-    public boolean intersectsZ(Range1d other, double epsilon) {
+    public boolean intersectsZ(RangeI1d other, double epsilon) {
         return this.minZ <= other.getHigherThreshold() + epsilon && this.maxZ >= other.getLowerThreshold() - epsilon;
     }
 

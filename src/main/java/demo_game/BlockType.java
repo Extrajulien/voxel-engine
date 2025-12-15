@@ -1,19 +1,29 @@
 package demo_game;
 
 public enum BlockType {
-    AIR(true,null),
-    DIRT(false, new String[] {"block/dirt.png"});
+    AIR(new BlockData[] {BlockData.IS_TRANSPARENT},null),
+    DIRT(new BlockData[] {BlockData.IS_SOLID}, new String[] {"block/dirt.png"});
 
-    private final boolean isTransparent;
+
+    private final BlockFlags flags;
+
     private final String[] texturePaths;
 
-    BlockType(boolean isTransparent, String[] texturePaths) {
-        this.isTransparent = isTransparent;
+    BlockType(BlockData[] blockData, String[] texturePaths) {
+        flags = new BlockFlags();
+        for (BlockData data : blockData) {
+            flags.enable(data);
+        }
         this.texturePaths = texturePaths;
     }
 
     public boolean isTransparent() {
-        return isTransparent;
+        return flags.isOn(BlockData.IS_TRANSPARENT);
+    }
+
+
+    public boolean isOn(BlockData data) {
+        return flags.isOn(data);
     }
 
     public String[] getTexturePaths() {

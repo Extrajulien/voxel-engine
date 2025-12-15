@@ -5,12 +5,12 @@ import org.joml.Vector2i;
 
 import java.util.Iterator;
 
-public class Range2d implements Iterable<Vector2i> {
+public class RangeI2d implements Iterable<Vector2i> {
 
-    private final Range1d rangeX;
-    private final Range1d rangeY;
+    private final RangeI1d rangeX;
+    private final RangeI1d rangeY;
 
-    public Range2d(Range1d rangeX, Range1d rangeY) {
+    public RangeI2d(RangeI1d rangeX, RangeI1d rangeY) {
         this.rangeX = rangeX;
         this.rangeY = rangeY;
     }
@@ -19,11 +19,11 @@ public class Range2d implements Iterable<Vector2i> {
         return rangeX.isNumberInRange(num.x) && rangeY.isNumberInRange(num.y);
     }
 
-    public Range1d getRangeX() {
+    public RangeI1d getRangeX() {
         return rangeX;
     }
 
-    public Range1d getRangeY() {
+    public RangeI1d getRangeY() {
         return rangeY;
     }
 

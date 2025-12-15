@@ -3,8 +3,8 @@ package demo_game.World.Generation;
 import demo_game.BlockType;
 import demo_game.World.Chunk.Chunk;
 import demo_game.World.Chunk.ChunkPos;
-import doctrina.Utils.Range1d;
-import doctrina.Utils.Range2d;
+import doctrina.Utils.RangeI1d;
+import doctrina.Utils.RangeI2d;
 import org.joml.SimplexNoise;
 import org.joml.Vector2i;
 
@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class TerrainGenerator {
     private static final float RandomStrength = 10;
     private long seed;
-    private static final Range1d NOISE_RANGE = new Range1d(-5, 5);
+    private static final RangeI1d NOISE_RANGE = new RangeI1d(-5, 5);
 
     public TerrainGenerator(long seed) {
         if (seed == 0) {
@@ -55,7 +55,7 @@ public class TerrainGenerator {
         return noisePerChunk.get(pos).getValuesRange().isIntersectingRange(chunk.getWorldSpaceYRange());
     }
 
-    private Noise2d createNoiseFromRange(Range2d range) {
+    private Noise2d createNoiseFromRange(RangeI2d range) {
 
         int[][] noise = new int[Chunk.SIZE][Chunk.SIZE];
         for (Vector2i vec : range) {
@@ -67,12 +67,12 @@ public class TerrainGenerator {
 
 
     private boolean isChunkInNoiseRange(Chunk chunk) {
-        Range1d chunkYRange = new Range1d(chunk.getWorldSpaceMinY(), chunk.getWorldSpaceMaxY());
+        RangeI1d chunkYRange = new RangeI1d(chunk.getWorldSpaceMinY(), chunk.getWorldSpaceMaxY());
         return NOISE_RANGE.isIntersectingRange(chunkYRange);
     }
 
     private boolean isChunkUnderNoiseRange(Chunk chunk) {
-        Range1d chunkYRange = chunk.getWorldSpaceYRange();
+        RangeI1d chunkYRange = chunk.getWorldSpaceYRange();
         return NOISE_RANGE.isGreater(chunkYRange);
     }
 
