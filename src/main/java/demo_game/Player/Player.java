@@ -18,16 +18,16 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 public final class Player extends ControllableEntity<Action, Analog> {
-    private final int CHUNK_LOADING_RADIUS = 2;
+    private final int CHUNK_LOADING_RADIUS = 3;
     private final PlayerCamera camera;
     private final PlayerMovementHandler movementHandler;
     private final Inventory inventory;
-    private float sprintSpeed = 80;
-    private boolean isSprinting = false;
+    private float sprintSpeed = 10;
+    private PlayerStates states;
 
     public Player(Controller<Action, Analog> controller) {
         super(Models.makePlayer(), new BoundingBox(new Vector3f(-0.35f,-0.9f,-0.35f), new Vector3f(0.35f,0.9f,0.35f)), controller);
-
+        states = new PlayerStates();
         this.camera = new PlayerCamera(this);
         this.movementHandler = new PlayerMovementHandler(this);
         walkSpeed = 3;
@@ -99,7 +99,7 @@ public final class Player extends ControllableEntity<Action, Analog> {
 
     private void updateSpeedFromMovement(double deltaTime) {
         Vector3f direction = movementHandler.getMovementDirection();
-        float speed = isSprinting ? sprintSpeed : walkSpeed;
+        float speed = states.isOn(PlayerState.IS_SPRINTING) ? sprintSpeed : walkSpeed;
         currentSpeed.set(direction).mul(speed * (float) deltaTime);
     }
 
@@ -120,8 +120,13 @@ public final class Player extends ControllableEntity<Action, Analog> {
         return camera;
     }
 
-    void setSprinting(boolean sprinting) {
-        isSprinting = sprinting;
+    void setState(PlayerState state, boolean value) {
+        if (value) {
+            states.enable(state);
+            return;
+        }
+
+        states.disable(state);
     }
 
     private void rotatePlayerModelWithCamera() {

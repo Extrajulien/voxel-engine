@@ -77,12 +77,12 @@ public final class PlayerMovementHandler {
 
     private void updateSprintFromInput() {
         if (controller.isPressed(Action.SPRINT)) {
-            player.setSprinting(true);
+            player.setState(PlayerState.IS_SPRINTING, true);
             return;
         }
 
         if (!controller.isDown(Action.MOVE_NORTH)) {
-            player.setSprinting(false);
+            player.setState(PlayerState.IS_SPRINTING, false);
         }
     }
 
