@@ -5,7 +5,6 @@ import demo_game.Inputs.Action;
 import demo_game.Inputs.Analog;
 import demo_game.Inventory;
 import demo_game.Models;
-import demo_game.World.World;
 import doctrina.Entities.ControllableEntity;
 import doctrina.Input.Controller;
 import doctrina.Utils.BoundingBox;
@@ -22,12 +21,14 @@ public final class Player extends ControllableEntity<Action, Analog> {
     private final PlayerCamera camera;
     private final PlayerMovementHandler movementHandler;
     private final Inventory inventory;
+
     private float sprintSpeed = 10;
-    private PlayerStates states;
+    private final float jumpForce = 0.08f;
+    private final float airMovementSpeedMultiplier = 1.4f;
 
     public Player(Controller<Action, Analog> controller) {
         super(Models.makePlayer(), new BoundingBox(new Vector3f(-0.35f,-0.9f,-0.35f), new Vector3f(0.35f,0.9f,0.35f)), controller);
-        states = new PlayerStates();
+        position.add(0,15,0);
         this.camera = new PlayerCamera(this);
         this.movementHandler = new PlayerMovementHandler(this);
         walkSpeed = 3;
@@ -45,7 +46,7 @@ public final class Player extends ControllableEntity<Action, Analog> {
 
         if (!inventory.isOpen()) {
             updateSpeedFromMovement(deltaTime);
-            this.move(candidates);
+            this.move(candidates, deltaTime);
             camera.update();
         }
 
@@ -99,8 +100,18 @@ public final class Player extends ControllableEntity<Action, Analog> {
 
     private void updateSpeedFromMovement(double deltaTime) {
         Vector3f direction = movementHandler.getMovementDirection();
-        float speed = states.isOn(PlayerState.IS_SPRINTING) ? sprintSpeed : walkSpeed;
-        currentSpeed.set(direction).mul(speed * (float) deltaTime);
+        float speed = getState(EntityState.IS_SPRINTING) ? sprintSpeed : walkSpeed;
+        currentSpeed.x = direction.x * (speed * (float) deltaTime);
+        currentSpeed.z = direction.z * (speed * (float) deltaTime);
+
+        if (!getState(EntityState.IS_GROUNDED)) {
+            currentSpeed.x *= airMovementSpeedMultiplier;
+            currentSpeed.z *= airMovementSpeedMultiplier;
+        }
+
+
+
+        currentSpeed.add(0,direction.y,0);
     }
 
     private void openInventory() {
@@ -120,14 +131,12 @@ public final class Player extends ControllableEntity<Action, Analog> {
         return camera;
     }
 
-    void setState(PlayerState state, boolean value) {
-        if (value) {
-            states.enable(state);
-            return;
-        }
 
-        states.disable(state);
+    float getJumpForce() {
+        return jumpForce;
     }
+
+
 
     private void rotatePlayerModelWithCamera() {
         Vector3f lookingDirectionXZ = new Vector3f(camera.getLookDirectionUnitVector().x, 0, camera.getLookDirectionUnitVector().z).normalize();

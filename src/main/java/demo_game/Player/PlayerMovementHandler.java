@@ -21,9 +21,11 @@ public final class PlayerMovementHandler {
     }
 
     public void update(double deltaTime) {
+
         updateSprintFromInput();
         updateCameraModeFromInputs();
         updateMovementDirection();
+        updateJumpStateFromInput();
 
         updateLog();
     }
@@ -34,7 +36,7 @@ public final class PlayerMovementHandler {
 
     public boolean isMoving() {
         return controller.isDown(Action.MOVE_NORTH) ||  controller.isDown(Action.MOVE_SOUTH)
-                || controller.isDown(Action.MOVE_EAST) || controller.isDown(Action.MOVE_WEST);
+                || controller.isDown(Action.MOVE_EAST) || controller.isDown(Action.MOVE_WEST) || !player.getState(EntityState.IS_GROUNDED);
     }
 
     private void updateCameraModeFromInputs() {
@@ -44,10 +46,10 @@ public final class PlayerMovementHandler {
     }
 
     private void updateMovementDirection() {
-        boolean movingNorth =  controller.isDown(Action.MOVE_NORTH);
-        boolean movingSouth =  controller.isDown(Action.MOVE_SOUTH);
-        boolean movingEast =  controller.isDown(Action.MOVE_EAST);
-        boolean movingWest =  controller.isDown(Action.MOVE_WEST);
+        boolean movingNorth = controller.isDown(Action.MOVE_NORTH);
+        boolean movingSouth = controller.isDown(Action.MOVE_SOUTH);
+        boolean movingEast  = controller.isDown(Action.MOVE_EAST);
+        boolean movingWest  = controller.isDown(Action.MOVE_WEST);
         Vector3f xzLookingDirection = camera.getXZLookingDirectionUnitVector();
         Vector3f eastDirection = new  Vector3f(xzLookingDirection).cross(camera.getWorldUp()).normalize();
 
@@ -77,12 +79,19 @@ public final class PlayerMovementHandler {
 
     private void updateSprintFromInput() {
         if (controller.isPressed(Action.SPRINT)) {
-            player.setState(PlayerState.IS_SPRINTING, true);
+            player.setState(EntityState.IS_SPRINTING, true);
             return;
         }
 
         if (!controller.isDown(Action.MOVE_NORTH)) {
-            player.setState(PlayerState.IS_SPRINTING, false);
+            player.setState(EntityState.IS_SPRINTING, false);
+        }
+    }
+
+    private void updateJumpStateFromInput() {
+        if (player.getState(EntityState.IS_GROUNDED) && controller.isDown(Action.JUMP)) {
+            player.setState(EntityState.IS_GROUNDED, false);
+            movementDirection.add(0,player.getJumpForce(),0);
         }
     }
 

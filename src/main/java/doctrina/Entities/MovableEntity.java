@@ -1,39 +1,48 @@
 package doctrina.Entities;
 
+import demo_game.Player.EntityState;
+import demo_game.Player.EntityStates;
 import doctrina.Utils.BoundingBox;
+import doctrina.Utils.FloatUtils;
 import doctrina.physic.*;
-import doctrina.rendering.CameraView;
 import doctrina.rendering.Model;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 public abstract class MovableEntity extends Entity {
     protected float walkSpeed;
     protected final Vector3f currentSpeed;
-    private Collider collider;
-    private float gravityStrength;
-    protected float jumpHeight;
+    private final Collider collider;
+    private float gravityStrength = 0.35f;
+    private final EntityStates states;
 
     public MovableEntity(Model model, BoundingBox hitboxDimension) {
         super(model, hitboxDimension);
         collider = new Collider();
+        states = new EntityStates();
         currentSpeed = new Vector3f();
         walkSpeed = 1;
-        jumpHeight = 1;
     }
 
-    public void move(CollisionCandidates  candidates) {
-        moveEntity(candidates);
+    public void move(CollisionCandidates  candidates, double deltaTime) {
+        moveEntity(candidates, deltaTime);
     }
 
-    private void moveEntity(CollisionCandidates  candidates) {
+    private void moveEntity(CollisionCandidates  candidates, double deltaTime) {
         float dx = collider.getAllowedX(currentSpeed.x, hitbox.getWorldBounds(), candidates);
         this.position.add(dx, 0, 0);
         hitbox.update(position);
 
+        applyGravity(deltaTime);
         float dy = collider.getAllowedY(currentSpeed.y, hitbox.getWorldBounds(), candidates);
         this.position.add(0, dy, 0);
         hitbox.update(position);
+
+        if (currentSpeed.y <= 0 && FloatUtils.nearlyEqual(dy, 0, 0.00001f)) {
+            states.enable(EntityState.IS_GROUNDED);
+            currentSpeed.y = 0;
+        } else {
+            states.disable(EntityState.IS_GROUNDED);
+        }
 
         float dz = collider.getAllowedZ(currentSpeed.z, hitbox.getWorldBounds(), candidates);
         this.position.add(0, 0, dz);
@@ -41,21 +50,22 @@ public abstract class MovableEntity extends Entity {
         modelMatrix.setTranslation(position);
     }
 
-    public void drawSpeedBox(CameraView data) {
-
-    }
-
-    public void update(double deltaTime) {
-
+    private void applyGravity(double deltaTime) {
+        currentSpeed.add(0,-gravityStrength * (float) deltaTime,0);
     }
 
 
-    public void jump() {
 
+    public void setState(EntityState state, boolean value) {
+        if (value) {
+            states.enable(state);
+            return;
+        }
+        states.disable(state);
     }
 
-    public void setGravity(float unitSquareBySeconds) {
-        gravityStrength = unitSquareBySeconds;
+    public boolean getState(EntityState state) {
+        return states.isOn(state);
     }
 
 }
