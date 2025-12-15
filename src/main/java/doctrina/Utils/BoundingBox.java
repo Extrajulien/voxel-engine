@@ -12,6 +12,16 @@ public class BoundingBox {
     private float maxY;
     private float maxZ;
 
+
+    private final float originalMinX;
+    private final float originalMinY;
+    private final float originalMinZ;
+    private final float originalMaxX;
+    private final float originalMaxY;
+    private final float originalMaxZ;
+
+
+
     public BoundingBox(float minX, float maxX, float minY,
                        float maxY, float minZ, float maxZ) {
         if (minX > maxX || minY > maxY || minZ > maxZ) {
@@ -23,6 +33,14 @@ public class BoundingBox {
         this.maxX = maxX;
         this.maxY = maxY;
         this.maxZ = maxZ;
+
+
+        this.originalMinX = minX;
+        this.originalMinY = minY;
+        this.originalMinZ = minZ;
+        this.originalMaxX = maxX;
+        this.originalMaxY = maxY;
+        this.originalMaxZ = maxZ;
     }
 
     public BoundingBox(BoundingBox other) {
@@ -32,6 +50,13 @@ public class BoundingBox {
         this.maxX = other.maxX;
         this.maxY = other.maxY;
         this.maxZ = other.maxZ;
+
+        this.originalMinX = minX;
+        this.originalMinY = minY;
+        this.originalMinZ = minZ;
+        this.originalMaxX = maxX;
+        this.originalMaxY = maxY;
+        this.originalMaxZ = maxZ;
     }
 
     public BoundingBox(RangeI3d otherBox) {
@@ -51,6 +76,18 @@ public class BoundingBox {
 
     public BoundingBox(Vector3f min, Vector3f max) {
         this(min.x, max.x, min.y, max.y, min.z, max.z);
+    }
+
+    public void moveTo(Vector3f position) {
+        minX = position.x + originalMinX;
+        maxX = position.x + originalMaxX;
+
+        minY = position.y + originalMinY;
+        maxY = position.y + originalMaxY;
+
+        minZ = position.z + originalMinZ;
+        maxZ = position.z + originalMaxZ;
+
     }
 
     public float minX() {

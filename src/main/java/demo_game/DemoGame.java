@@ -57,10 +57,9 @@ public class DemoGame extends Game {
     @Override
     public void draw() {
         world.draw(player, currentMode);
-        world.drawCollisionBlocks(player);
         cubeEntity.draw(player.getCameraView());
         cubeEntity.drawHitBox(player.getCameraView());
-
+        player.drawHitBox(player.getCameraView());
         player.draw(player.getCameraView());
 
     }

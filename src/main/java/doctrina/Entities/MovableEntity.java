@@ -22,12 +22,22 @@ public abstract class MovableEntity extends Entity {
         jumpHeight = 1;
     }
 
-    public void move() {
-        moveEntity();
+    public void move(CollisionCandidates  candidates) {
+        moveEntity(candidates);
     }
 
-    private void moveEntity() {
-        this.position.add(currentSpeed);
+    private void moveEntity(CollisionCandidates  candidates) {
+        if (currentSpeed.equals(0,0,0)) {
+            return;
+        }
+        this.position.add(collider.getAllowedX(currentSpeed, candidates));
+        hitbox.update(position);
+
+        this.position.add(collider.getAllowedY(currentSpeed, candidates));
+        hitbox.update(position);
+
+        this.position.add(collider.getAllowedZ(currentSpeed, candidates));
+        hitbox.update(position);
         modelMatrix.setTranslation(position);
     }
 
@@ -37,11 +47,6 @@ public abstract class MovableEntity extends Entity {
 
     public void update(double deltaTime) {
 
-    }
-
-    public void collide(CollisionCandidates  candidates) {
-        Vector3d allowedSpeed = collider.collide(currentSpeed, candidates);
-        currentSpeed.set(allowedSpeed.x, allowedSpeed.y, allowedSpeed.z);
     }
 
 

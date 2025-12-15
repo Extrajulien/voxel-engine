@@ -30,7 +30,7 @@ public class HitBox {
         this.color = color;
         attachColorToShader();
         this.position = new Vector3f();
-        this.bounds = dimension;
+        this.bounds = new BoundingBox(dimension);
         update(position);
     }
 
@@ -44,6 +44,7 @@ public class HitBox {
 
     public void update(Vector3f position) {
         this.position.set(position);
+        bounds.moveTo(position);
         updateHitboxModelMatrix();
     }
 
@@ -84,6 +85,6 @@ public class HitBox {
 
     private void updateHitboxModelMatrix() {
         this.hitboxModelMatrix.scaling(bounds.width(), bounds.height(), bounds.depth());
-        this.hitboxModelMatrix.setTranslation(new Vector3f(position).add(bounds.center()));
+        this.hitboxModelMatrix.setTranslation(new Vector3f(position));
     }
 }

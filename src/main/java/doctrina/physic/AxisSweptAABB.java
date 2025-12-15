@@ -19,6 +19,8 @@ public class AxisSweptAABB {
 
     public void refreshRangeFromSpeed(BoundingBox boundingBox, Vector3f speed) {
         if (speed.get(axis.getValue()) == 0) {
+            min = 0;
+            max = 0;
             return;
         }
         if (speed.get(axis.getValue()) > 0) {
@@ -42,6 +44,9 @@ public class AxisSweptAABB {
     }
 
     public void updatePossibleSpeed(BoundingBox other) {
+        if (min == max) {
+            return;
+        }
         if (isSpeedSignPositive) {
             if (other.getAxisRange(axis).min() < max) {
                 max = other.getAxisRange(axis).min();
@@ -56,9 +61,9 @@ public class AxisSweptAABB {
 
     public double getPossibleSpeed() {
         if (isSpeedSignPositive) {
-            return max;
+            return max - min;
         }
-        return min;
+        return min - max;
     }
 
 

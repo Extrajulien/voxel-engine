@@ -14,7 +14,6 @@ public class Collider {
     private final BoundingBox ownerBoundingBox;
 
 
-
     public Collider(BoundingBox originalSize) {
         ownerBoundingBox = originalSize;
         speedXBox = new AxisSweptAABB(Axis.X, originalSize);
@@ -22,49 +21,49 @@ public class Collider {
         speedZBox = new AxisSweptAABB(Axis.Z, originalSize);
     }
 
-    public Vector3d collide(Vector3f inputSpeed, CollisionCandidates collisionCandidates) {
-        updateSpeedBox(inputSpeed);
+
+    public Vector3f getAllowedX(Vector3f inputSpeed, CollisionCandidates collisionCandidates) {
+        speedXBox.refreshRangeFromSpeed(ownerBoundingBox, inputSpeed);
         for (BoundingBox boundingBox : collisionCandidates) {
-            checkCollisionDirection(boundingBox);
+            if (speedXBox.isIntersecting(boundingBox) && isYInRange(boundingBox) && isZInRange(boundingBox)) {
+                speedXBox.updatePossibleSpeed(boundingBox);
+            }
         }
-        return new Vector3d(speedXBox.getPossibleSpeed(), speedYBox.getPossibleSpeed(), speedZBox.getPossibleSpeed());
+        return new Vector3f((float) speedXBox.getPossibleSpeed(), 0, 0);
     }
 
-
-    private void checkCollisionDirection(BoundingBox other) {
-        if (speedXBox.isIntersecting(other) && speedYBox.isIntersecting(other) && speedZBox.isIntersecting(other)) {
-            speedXBox.updatePossibleSpeed(other);
-            speedYBox.updatePossibleSpeed(other);
-            speedZBox.updatePossibleSpeed(other);
+    public Vector3f getAllowedY(Vector3f inputSpeed, CollisionCandidates collisionCandidates) {
+        speedYBox.refreshRangeFromSpeed(ownerBoundingBox, inputSpeed);
+        for (BoundingBox boundingBox : collisionCandidates) {
+            if (speedYBox.isIntersecting(boundingBox) && isXInRange(boundingBox) && isZInRange(boundingBox)) {
+                speedYBox.updatePossibleSpeed(boundingBox);
+            }
         }
+        return new Vector3f(0, (float) speedYBox.getPossibleSpeed(), 0);
+    }
+
+    public Vector3f getAllowedZ(Vector3f inputSpeed, CollisionCandidates collisionCandidates) {
+        speedZBox.refreshRangeFromSpeed(ownerBoundingBox, inputSpeed);
+        for (BoundingBox boundingBox : collisionCandidates) {
+            if (speedZBox.isIntersecting(boundingBox) && isXInRange(boundingBox) && isYInRange(boundingBox)) {
+                speedZBox.updatePossibleSpeed(boundingBox);
+            }
+        }
+        return new Vector3f(0, 0, (float) speedZBox.getPossibleSpeed());
     }
 
 
 
-    private AxisSweptAABB getSpeedBox(MovementDir dir) {
-        return switch (dir.getAxis()) {
-            case X -> speedXBox;
-            case Y -> speedYBox;
-            case Z -> speedZBox;
-        };
+    private boolean isYInRange(BoundingBox other) {
+        return !(ownerBoundingBox.maxY() < other.minY() || ownerBoundingBox.minY() > other.maxY());
     }
 
-
-    private MovementDir getDirectionOnAxis(Vector3f speed, Axis axis) {
-        return switch (axis) {
-            case X -> speed.x > 0 ? MovementDir.EAST : speed.x < 0 ? MovementDir.WEST : null;
-            case Y -> speed.y > 0 ? MovementDir.UP : speed.y < 0 ? MovementDir.DOWN : null;
-            case Z -> speed.z > 0 ? MovementDir.SOUTH : speed.z < 0 ? MovementDir.NORTH : null;
-        };
+    private boolean isXInRange(BoundingBox other) {
+        return !(ownerBoundingBox.maxX() < other.minX() || ownerBoundingBox.minX() > other.maxX());
     }
 
-
-
-
-    private void updateSpeedBox(Vector3f currentSpeed) {
-        speedXBox.refreshRangeFromSpeed(ownerBoundingBox, currentSpeed);
-        speedYBox.refreshRangeFromSpeed(ownerBoundingBox, currentSpeed);
-        speedZBox.refreshRangeFromSpeed(ownerBoundingBox, currentSpeed);
+    private boolean isZInRange(BoundingBox other) {
+        return !(ownerBoundingBox.maxZ() < other.minZ() || ownerBoundingBox.minZ() > other.maxZ());
     }
 
 

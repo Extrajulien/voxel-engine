@@ -44,8 +44,7 @@ public final class Player extends ControllableEntity<Action, Analog> {
 
         if (!inventory.isOpen()) {
             updateSpeedFromMovement(deltaTime);
-            collide(world.getCollisionCandidates(this));
-            this.move();
+            this.move(world.getCollisionCandidates(this));
             camera.update();
         }
 
