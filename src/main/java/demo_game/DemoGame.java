@@ -9,6 +9,7 @@ import doctrina.Entities.Entity;
 import doctrina.Game;
 import doctrina.Input.*;
 import doctrina.physic.CollisionCandidates;
+import org.joml.Vector3i;
 
 public class DemoGame extends Game {
     Mouse mouse;

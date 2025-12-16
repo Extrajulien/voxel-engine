@@ -85,6 +85,15 @@ public class Chunk {
         return pos;
     }
 
+    public static Vector3i worldToChunkSpace(Vector3i worldPosition) {
+        Vector3i pos = new Vector3i(worldPosition);
+        pos.x = Math.floorDiv(pos.x, SIZE);
+        pos.y = Math.floorDiv(pos.y, SIZE);
+        pos.z = Math.floorDiv(pos.z, SIZE);
+
+        return pos;
+    }
+
     public static Vector3i chunkToWorldSpace(ChunkPos chunkPosition) {
         return new Vector3i(chunkPosition.x() * SIZE, chunkPosition.y() * SIZE, chunkPosition.z() * SIZE);
     }

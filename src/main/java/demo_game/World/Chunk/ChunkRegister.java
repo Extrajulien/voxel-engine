@@ -51,6 +51,25 @@ public class ChunkRegister {
         return chunks.get(chunkPos).getBlockType(Chunk.posWorldWrapToChunk(blockPos));
     }
 
+    public void setBlock(Vector3i blockPos, BlockType blockType) {
+        ChunkPos chunkPos = new ChunkPos(Chunk.worldToChunkSpace(blockPos));
+        if (hasChunk(chunkPos)) {
+            chunks.get(chunkPos).setBlockType(Chunk.posWorldWrapToChunk(blockPos), blockType);
+            chunks.get(chunkPos).markDirty(ChunkDirty.SELF);
+        }
+    }
+
+
+    public void markNeighboursDirty(ChunkPos self) {
+        NeighboringChunks neighbours = getNeighboringChunks(self);
+        for (Direction direction : Direction.values()) {
+            Chunk neighbour = neighbours.get(direction);
+            if (neighbour != null) {
+                neighbour.markDirty(ChunkDirty.getDirtySide(direction));
+            }
+        }
+    }
+
 
 
 

@@ -1,17 +1,23 @@
 package demo_game.World;
 
+import demo_game.BlockType;
 import demo_game.Player.Player;
+import demo_game.RaycastHit;
 import demo_game.World.Chunk.*;
 import demo_game.World.Generation.TerrainGenerator;
 import demo_game.debug.LogEntry;
 import demo_game.debug.Logger;
 import doctrina.Entities.MovableEntity;
+import doctrina.Utils.Ray;
 import doctrina.physic.CollisionCandidates;
+import org.joml.RoundingMode;
+import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-public class World {
+public class World implements WorldQuery,  WorldAction {
     private final ChunkRegister register;
     private final WorldCollider collider;
+    private final WorldRenderer renderer;
     private final TerrainGenerator terrainGenerator;
     private final Vector3i playerChunk;
 
@@ -19,6 +25,7 @@ public class World {
         register = new ChunkRegister();
         terrainGenerator = new TerrainGenerator(seed);
         collider = new WorldCollider();
+        renderer = new WorldRenderer();
         playerChunk = new Vector3i(Chunk.worldToChunkSpace(player.getPosition()));
         CreateChunksNearPlayer(player);
     }
@@ -34,12 +41,7 @@ public class World {
     }
 
     public void draw(Player player, ChunkRenderingMode renderingMode) {
-        switch (renderingMode) {
-            case NORMAL -> drawNormal(player);
-            case HIGHLIGHT_PLAYER_CHUNK -> drawHighlighted(player);
-            case WIREFRAME_CHUNKS -> drawWireframe(player);
-            case CHUNK_LOADED_CHUNKS -> drawChunkLoadedBounds(player);
-        }
+        renderer.draw(player, renderingMode, register);
     }
 
     public void drawCollisionBlocks(Player player) {
@@ -81,44 +83,21 @@ public class World {
 
     private void updateChunkMesh(Chunk chunk) {
         chunk.updateMesh(register);
-        updateNeighbours(chunk);
+        register.markNeighboursDirty(chunk.getChunkPos());
     }
 
-
-    private void updateNeighbours(Chunk chunk) {
-        NeighboringChunks neighbours = register.getNeighboringChunks(chunk.getChunkPos());
-        for (Direction direction : Direction.values()) {
-            Chunk neighbour = neighbours.get(direction);
-            if (neighbour != null) {
-                neighbour.markDirty(ChunkDirty.getDirtySide(direction));
-            }
-        }
+    @Override
+    public void breakBlock(Vector3i pos) {
+        register.setBlock(pos, BlockType.AIR);
     }
 
-    private void drawWireframe(Player player) {
-        for (Chunk chunk : register.getAllChunks()) {
-            chunk.drawWireframe(player);
-        }
+    @Override
+    public void placeBlock(Vector3i pos, BlockType blockType) {
+        register.setBlock(pos, blockType);
     }
 
-    private void drawHighlighted(Player player) {
-        drawNormal(player);
-        register.getChunk(new ChunkPos(playerChunk)).drawHighlighted(player);
-    }
-
-    private void drawNormal(Player player) {
-        for (Chunk chunk : register.getAllChunks()) {
-            chunk.draw(player);
-        }
-    }
-
-    private void drawChunkLoadedBounds(Player player) {
-        drawNormal(player);
-        for (Vector3i pos : player.getChunkLoadingRange()) {
-            ChunkPos chunkPos = new ChunkPos(pos);
-            if (register.hasChunk(chunkPos)) {
-                register.getChunk(chunkPos).drawBounds(player);
-            }
-        }
+    @Override
+    public RaycastHit raycast(Ray ray, float maxDistance) {
+        return null;
     }
 }

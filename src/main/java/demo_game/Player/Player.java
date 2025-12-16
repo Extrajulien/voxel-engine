@@ -109,8 +109,6 @@ public final class Player extends ControllableEntity<Action, Analog> {
             currentSpeed.z *= airMovementSpeedMultiplier;
         }
 
-
-
         currentSpeed.add(0,direction.y,0);
     }
 
