@@ -8,16 +8,29 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public abstract class Entity {
-    protected HitBox hitbox;
+    protected final HitBox hitbox;
     private final Model model;
-    protected Vector3f position;
-    protected Matrix4f modelMatrix;
+    protected final Vector3f position;
+    private final Matrix4f modelMatrix;
+    private final Vector3f scalingFactor;
+    private final Vector3f rotation;
+
 
     public Entity(Model model, BoundingBox hitboxDimension) {
         position = new Vector3f(0);
         modelMatrix = new Matrix4f();
         this.model = model;
         hitbox = new HitBox(hitboxDimension);
+        scalingFactor = new Vector3f(1,1,1);
+        rotation = new Vector3f();
+    }
+
+    public void scaleModel(float x, float y, float z) {
+        scalingFactor.set(x,y,z);
+    }
+
+    public void rotateModel(float x, float y, float z) {
+        rotation.set(x,y,z);
     }
 
     public BoundingBox getBounds() {
@@ -25,7 +38,13 @@ public abstract class Entity {
     }
 
     public void draw(CameraView data) {
+        modelMatrix.identity();
+        modelMatrix.translate(position);
+        modelMatrix.scale(scalingFactor);
+        modelMatrix.rotateXYZ(rotation.x, rotation.y, rotation.z);
+
         model.draw(modelMatrix, data.viewMatrix(), data.projectionMatrix());
+
     }
 
     public void drawHitBox(CameraView data) {
@@ -41,7 +60,6 @@ public abstract class Entity {
     }
     public final void moveTo(float x, float y, float z) {
         this.position.set(x,y,z);
-        modelMatrix.setTranslation(position.x, position.y, position.z);
         hitbox.update(position);
     }
 

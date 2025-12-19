@@ -36,6 +36,7 @@ public final class Player extends ControllableEntity<Action, Analog> {
 
     public Player(Controller<Action, Analog> controller) {
         super(Models.makePlayer(), new BoundingBox(new Vector3f(-0.35f,-0.9f,-0.35f), new Vector3f(0.35f,0.9f,0.35f)), controller);
+
         position.add(0,15,0);
         this.camera = new PlayerCamera(this);
         this.movementHandler = new PlayerMovementHandler(this);
@@ -100,7 +101,10 @@ public final class Player extends ControllableEntity<Action, Analog> {
     @Override
     public void draw(CameraView data) {
         if (camera.getMode() != CameraMode.FPS) {
+
             rotatePlayerModelWithCamera();
+            scaleModel(0.7f, 1.8f, 0.7f);
+
             super.draw(data);
         }
     }
@@ -177,7 +181,7 @@ public final class Player extends ControllableEntity<Action, Analog> {
     private void rotatePlayerModelWithCamera() {
         Vector3f lookingDirectionXZ = new Vector3f(camera.getLookDirectionUnitVector().x, 0, camera.getLookDirectionUnitVector().z).normalize();
         float yRotation =  (float) Math.atan2(lookingDirectionXZ.x, lookingDirectionXZ.z);
-        modelMatrix.setRotationXYZ(0, yRotation , 0);
+        rotateModel(0, yRotation , 0);
 
     }
 }

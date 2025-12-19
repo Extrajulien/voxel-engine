@@ -47,7 +47,6 @@ public abstract class MovableEntity extends Entity {
         float dz = collider.getAllowedZ(currentSpeed.z, hitbox.getWorldBounds(), candidates);
         this.position.add(0, 0, dz);
         hitbox.update(position);
-        modelMatrix.setTranslation(position);
     }
 
     private void applyGravity(double deltaTime) {
