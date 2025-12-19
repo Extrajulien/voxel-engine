@@ -25,6 +25,7 @@ public class GameKMController extends KeyboardMouseController<Action, Analog> {
         addToKeyboardAction(Action.CROUCH, Key.LEFT_SHIFT);
         addToKeyboardAction(Action.TOGGLE_CHUNK_RENDERING_MODE, Key.F3);
         addToKeyboardAction(Action.CHUNK_POS_LOG, Key.F1);
+        addToKeyboardAction(Action.RAYCASTING_LOG, Key.F2);
         addToMouseAction(Action.PLACE_BLOCK, MouseButton.RIGHT);
         addToMouseAction(Action.BREAK_BLOCK, MouseButton.LEFT);
     }

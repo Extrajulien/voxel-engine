@@ -1,5 +1,7 @@
 package doctrina.rendering;
 
+import demo_game.debug.LogEntry;
+import demo_game.debug.Logger;
 import doctrina.Entities.Entity;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -56,7 +58,7 @@ public class Camera {
     }
 
     public Vector3f getLookDirectionUnitVector() {
-        return lookingDirection;
+        return new Vector3f(lookingDirection);
     }
 
     public Vector3f getXZLookingDirectionUnitVector() {
@@ -73,6 +75,8 @@ public class Camera {
 
     public void update() {
         updateValues();
+        Logger.getInstance().Log(LogEntry.CAMERA_COMPONENT, lookingDirection);
+        Logger.getInstance().Log(LogEntry.CAMERA_POSITION, position);
     }
 
     public void setFpsCamYTranslation(float fpsCamYTranslation) {
@@ -108,6 +112,10 @@ public class Camera {
         if (pitch >= maxPitch) {
             pitch = maxPitch;
         }
+    }
+
+    public Vector3f getPosition() {
+        return new Vector3f(position);
     }
 
     public void setVerticalFOV(float angleDegrees) {

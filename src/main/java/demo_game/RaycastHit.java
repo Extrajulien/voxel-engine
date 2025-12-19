@@ -1,6 +1,6 @@
 package demo_game;
 
-import org.joml.Vector3f;
+import org.joml.Vector3i;
 
-public record RaycastHit(boolean hit, Vector3f position, Vector3f normal, BlockType blockType) {
+public record RaycastHit(boolean hit, Vector3i position, Vector3i normal, BlockType blockType) {
 }

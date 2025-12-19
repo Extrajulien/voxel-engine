@@ -28,6 +28,8 @@ public class ChunkMesher {
     }
 
     public void create(ChunkRegister register) {
+        vertices.clear();
+        indices.clear();
         for (Vector3i pos : chunk.getBlocksRange()) {
             BlockType block = chunk.getBlockType(pos);
             if (!block.isTransparent()) {

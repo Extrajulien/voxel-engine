@@ -101,5 +101,11 @@ public final class PlayerMovementHandler {
             Logger.getInstance().refreshLog(LogEntry.CHUNK_POS);
         }
 
+        if (controller.isPressed(Action.RAYCASTING_LOG)) {
+            Logger.getInstance().refreshLog(LogEntry.CAMERA_COMPONENT);
+            Logger.getInstance().refreshLog(LogEntry.CAMERA_POSITION);
+            Logger.getInstance().refreshLog(LogEntry.RAYCASTING_TARGET);
+        }
+
     }
 }

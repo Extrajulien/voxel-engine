@@ -38,7 +38,7 @@ public class DemoGame extends Game {
 
         world.update(player, deltaTime());
         CollisionCandidates candidates = world.getCollisionCandidates(player);
-        player.update(deltaTime(), candidates);
+        player.update(deltaTime(), candidates, world);
 
         if (controller.isPressed(Action.QUIT)) {
             stop();
@@ -62,6 +62,7 @@ public class DemoGame extends Game {
         world.draw(player, currentMode);
         cubeEntity.draw(player.getCameraView());
         cubeEntity.drawHitBox(player.getCameraView());
+        player.drawLookedAtBlockEdge(player.getCameraView(), world);
         player.drawHitBox(player.getCameraView());
         player.draw(player.getCameraView());
 

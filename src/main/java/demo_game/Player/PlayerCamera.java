@@ -5,6 +5,7 @@ import demo_game.Inputs.Analog;
 import doctrina.Input.Controller;
 import doctrina.rendering.Camera;
 import doctrina.rendering.CameraMode;
+import org.joml.Vector3f;
 
 public final class PlayerCamera extends Camera {
 

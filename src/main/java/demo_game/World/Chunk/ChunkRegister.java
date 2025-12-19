@@ -55,7 +55,6 @@ public class ChunkRegister {
         ChunkPos chunkPos = new ChunkPos(Chunk.worldToChunkSpace(blockPos));
         if (hasChunk(chunkPos)) {
             chunks.get(chunkPos).setBlockType(Chunk.posWorldWrapToChunk(blockPos), blockType);
-            chunks.get(chunkPos).markDirty(ChunkDirty.SELF);
         }
     }
 
