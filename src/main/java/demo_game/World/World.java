@@ -9,6 +9,7 @@ import demo_game.debug.LogEntry;
 import demo_game.debug.Logger;
 import doctrina.Entities.MovableEntity;
 import doctrina.Utils.Ray;
+import doctrina.physic.Axis;
 import doctrina.physic.CollisionCandidates;
 import org.joml.RoundingMode;
 import org.joml.Vector3f;
@@ -112,7 +113,7 @@ public class World implements WorldQuery,  WorldAction {
         float yRayLength = 0;
         float zRayLength = 0;
 
-        int hitAxis;
+        Axis hitAxis;
 
         Vector3i grid = new Vector3i();
 
@@ -134,15 +135,15 @@ public class World implements WorldQuery,  WorldAction {
             if (xRayLength < yRayLength && xRayLength < zRayLength) {
                 xRayLength += xDelta;
                 grid.x += stepX;
-                hitAxis = 0;
+                hitAxis = Axis.X;
             } else if (yRayLength < zRayLength) {
                 yRayLength += yDelta;
                 grid.y += stepY;
-                hitAxis = 1;
+                hitAxis = Axis.Y;
             } else {
                 zRayLength += zDelta;
                 grid.z += stepZ;
-                hitAxis = 2;
+                hitAxis = Axis.Z;
             }
 
             float t = Math.min(Math.min(xRayLength, yRayLength),  zRayLength);
@@ -157,9 +158,11 @@ public class World implements WorldQuery,  WorldAction {
         Vector3i currentBlockPos = new Vector3i(grid).add(new Vector3i(ray.position(), RoundingMode.FLOOR));
 
         // the block face that was intersected
-        Vector3i blockNormalSide = (hitAxis == 0 ? new Vector3i(-stepX,0,0)
-        : hitAxis == 1 ? new Vector3i(0,-stepY,0)
-                       : new Vector3i(0,0,-stepZ));
+        Vector3i blockNormalSide = switch (hitAxis) {
+            case X -> new Vector3i(-stepX, 0, 0);
+            case Y -> new Vector3i(0, -stepY, 0);
+            case Z -> new Vector3i(0, 0, -stepZ);
+        };
 
 
         return new RaycastHit(!register.getBlock(currentBlockPos).isTransparent(),
