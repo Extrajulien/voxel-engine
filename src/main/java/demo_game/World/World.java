@@ -126,9 +126,9 @@ public class World implements WorldQuery,  WorldAction {
         int stepY = sign.y();
         int stepZ = sign.z();
 
-        xRayLength += xDelta * rayStartOffset.x();
-        yRayLength += yDelta * rayStartOffset.y();
-        zRayLength += zDelta * rayStartOffset.z();
+        xRayLength += rayStartOffset.x();
+        yRayLength += rayStartOffset.y();
+        zRayLength += rayStartOffset.z();
 
         while (true) {
             if (xRayLength < yRayLength && xRayLength < zRayLength) {
@@ -147,12 +147,11 @@ public class World implements WorldQuery,  WorldAction {
 
             float t = Math.min(Math.min(xRayLength, yRayLength),  zRayLength);
             if (t > maxDistance) break;
-            Logger.getInstance().Log(LogEntry.RAYCASTING_TARGET, grid);
-            //Logger.getInstance().Log(LogEntry.RAYCASTING_DDA_RAY_LENGTHS, new Vector3f(xRayLength, yRayLength, zRayLength));
-            //Logger.getInstance().Log(LogEntry.RAYCASTING_TARGET, grid);
+
 
             if (!register.getBlock(new Vector3i(grid).add(new Vector3i(ray.position(), RoundingMode.FLOOR))).isTransparent()) break;
         }
+        Logger.getInstance().Log(LogEntry.RAYCASTING_TARGET, grid);
 
 
         Vector3i currentBlockPos = new Vector3i(grid).add(new Vector3i(ray.position(), RoundingMode.FLOOR));
